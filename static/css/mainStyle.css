@@ -177,6 +177,9 @@ a{
     margin-right: auto;
 }
 
+.row{
+    padding: 0;
+}
 
 
 .logoContainer{
@@ -287,4 +290,17 @@ footer{
     footer{
         margin-top:25vh;
     }
+    .service{
+        padding-left: auto;
+  
+    }
+
+    .email{
+        padding-left: auto;
+    }
+
+    .imgLogo {
+        transform: translate(0,0);
+    }
+
 }
