@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-   site: 'https://insdash.github.io',
+   site: 'https://insdash.ch',
   // repo name
   base: '/',
   integrations: [
