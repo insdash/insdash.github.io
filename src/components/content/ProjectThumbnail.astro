@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata}>(
+  '/src/content/projects/**/*.{png,jpg}',
+  { eager: true }
+);
+
+const getProjectImage = (slug: string) => {
+  let entry = Object.entries(images).find(([path]) =>
+    path.includes(`/src/content/projects/${slug}/${slug}.png`)
+  );
+  if (!entry) {
+    entry = Object.entries(images).find(([path]) =>
+      path.includes(`/src/content/projects/${slug}/${slug}.jpg`)
+    );
+  }
+  return entry ? entry[1].default : null;
+};
+
+const mainImage = getProjectImage(project.slug);
+
+---
+
+<div class="relative group thumbnail overflow-hidden">
+  <!-- Image -->
+  <img
+    src={mainImage?.src}
+    alt={project.data.title}
+    class="transition-transform duration-300 ease-in-out group-hover:scale-101 items-center"
+  />
+
+  <!-- Overlay with text -->
+  <div class="glassHover">
+    <h3 class="text-[var(--background-color)] drop-shadow-[1px_1px_2px_var(--color-caption-secondary)]">
+      {project.data.title}
+    </h3>
+  </div>
+</div>
+
+
+<style>
+  @reference "@/styles/global.css";
+
+  .thumbnail{
+    @apply w-full max-w-full;   
+  }
+
+  /* .glassHover{
+    @apply absolute inset-0 flex flex-col items-center justify-center
+    bg-gradient-to-t from-white/20 via-white/10 to-white/5
+    backdrop-blur-md border border-white/25
+    rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100;
+  } */
+
+
+  body.light_mode .glassHover {
+    @apply absolute inset-0 flex flex-col items-center justify-center
+    bg-gradient-to-t from-black/5 via-black/2 to-transparent
+    border border-black/10 backdrop-blur-md
+    rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100;
+  }
+
+
+  body.dark_mode .glassHover {
+    @apply absolute inset-0 flex flex-col items-center justify-center
+    bg-gradient-to-t from-white/20 via-white/10 to-white/5
+    backdrop-blur-md border border-white/25
+    rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100;
+  }
+
+</style>
