@@ -1,0 +1,306 @@
+:root{
+    --text-color: black;
+    --text-hover: #70ACDA;
+    --text-descript:#C2C2C2;
+    --text-message:#e6e6e6;
+    --boder-color:white;
+    --caption-color:#2C2C2E;
+    --work-backgorund: rgba(242, 242, 242, .2);
+}
+
+
+/* font color */
+html{
+    font-family: 'Josefin Sans', sans-serif;
+    font-size:16px;
+}
+
+::selection {
+    background-color: #007AFF;
+    color: white;
+}
+
+
+/* 
+*************
+Theme
+*************
+*/
+/* theme */
+body {
+    background-color: white;
+    --text-color: black;
+    --text-hover: #70ACDA;
+    --boder-color:white;
+    text-align: center;
+    font-weight: 300;
+}
+  
+
+/* system color */
+body.dark-theme {
+    background-color: #020407;
+    --text-color: white;
+    --text-descript:#707070;
+    --text-hover: #70ACDA;
+    --text-message:#3a3a3c;
+    --boder-color:#020407;
+    --caption-color:#e6e6e6;
+    --work-backgorund: rgba(242, 242, 242, .1);
+}
+
+
+@media (prefers-color-scheme: dark) {
+    body { 
+        background-color: #020407;
+        --text-color: white;
+        --text-descript:#707070;
+        --text-hover: #70ACDA;
+        --boder-color:#020407;
+        --text-message:#3a3a3c;
+        --caption-color:#e6e6e6;
+        --work-backgorund: rgba(242, 242, 242, .1);
+    }
+
+    body.light-theme {
+        background-color: white;
+        --text-color: black;
+        --text-descript:#C2C2C2;
+        --text-hover: #70ACDA;
+        --text-message:#e6e6e6;
+        --boder-color:white;
+        --caption-color:#2C2C2E;
+        --work-backgorund: rgba(242, 242, 242, .2);
+    }
+}
+
+
+
+
+
+/*
+a {
+    color: #2a99b6;
+}
+
+a:hover {
+    color: #33bbdf;
+}
+
+header, footer, div.page {
+    width: 760px;
+    margin: 0 auto;
+    background: #daeef3;
+    padding: 20px 30px;
+}
+
+header h1 {
+    color: #169bbd;
+    margin: 0;
+    font-weight: normal;
+    font-size: 42px;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 8px 0 0;
+    padding: 0;
+}
+
+div.page {
+    background: #f1fbfe;
+}
+*/
+
+
+h1{
+    font-size: 3rem;
+    color: var(--text-color);
+}
+
+h2{
+    font-size: 2rem;
+    color: var(--text-color);
+}
+
+p{
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+a{
+    color: var(--text-color);
+}
+
+
+
+/* MODE*/
+.mode{
+    padding:0.5rem 0rem 0.5rem 0rem;
+    text-align: right;
+}
+
+.mode .material-icons{
+    font-size: 0.8rem;
+    margin-bottom: 0.1rem;
+    padding: 0rem;
+}
+
+
+.mode-button{
+    padding: 0.2rem;
+    color: var(--text-color);
+    border-radius: 6px;
+    border: 1px solid var(--boder-color);
+    background: var(--text-message); 
+}
+
+.mode-button:hover{
+    color: var(--boder-color);
+    background: var(--text-hover);
+    box-shadow: 0.1rem 0.1rem var(--text-color);
+}
+
+
+
+
+/* coming soon*/
+.comingSoon{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.row{
+    padding: 0;
+}
+
+
+.logoContainer{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logoContainer ul li{
+    list-style-type: none;
+}
+
+
+.imgLogo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.service{
+    margin: auto;
+}
+
+
+.service p{
+ 
+}
+
+.none{
+    display: block;
+}
+
+
+
+.material-icons{
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 1rem 0 1rem;
+}
+
+.material-icons:hover{
+    color: var(--text-hover);
+    text-shadow: 0.1rem 0.1rem var(--text-color);
+}
+
+
+/*footer */
+
+footer{
+    display: block;
+    width: 100%;
+    z-index: 1;
+}   
+
+
+
+
+
+
+
+@media only screen and (min-width: 75em){
+    .comingSoon{
+        margin-top: 8vh;
+        margin-bottom: 1rem;
+    }
+
+    .imgLogo {
+        justify-content: right;
+        transform: translate(25%,0);
+    }
+
+    .service{
+        text-align: left;
+        padding-left: 2rem;
+    }
+
+    footer{
+        position: fixed;
+        bottom: 0; 
+
+    }
+
+    .email{
+        text-align: left;
+        align-items: center;
+        padding-left: 2rem;
+    }
+    
+}
+
+@media only screen and (min-width: 64em) {
+    footer{
+        margin-top:25vh;
+    }
+}
+
+
+@media only screen and (min-width: 48em) {
+    footer{
+        margin-top:25vh;
+    }
+}
+
+
+@media all and (max-width: 900px){
+ 
+    footer{
+        margin-top:25vh;
+    }
+    .service{
+        padding-left: auto;
+  
+    }
+
+    .email{
+        padding-left: auto;
+    }
+
+    .imgLogo {
+        transform: translate(0,0);
+    }
+
+}
