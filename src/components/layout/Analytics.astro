@@ -1,32 +1,21 @@
 ---
 import Button from '@/components/UI/Button.astro';
+
 interface Props {
   measurementId: string;
   requireConsent?: boolean;
 }
 
-const {
-  measurementId,
-  requireConsent = false
-} = Astro.props;
-
-
-
-// Add Google Analytics types for TS
-// declare global {
-//   interface Window {
-//     dataLayer: any[];
-//     gtag: (...args: any[]) => void;
-//   }
-// }
+const { measurementId, requireConsent = true } = Astro.props;
 ---
+
 <div
   id="cookie-banner"
   data-ga-id={measurementId}
   data-require-consent={requireConsent}
-  class="flex flex-col justify-center items-center fixed inset-0 bg-[var(--color-caption-primary)]/80 text-[var(--color-caption-secondary)] p-4 rounded shadow-lg z-50 hidden"
+  class="flex flex-col justify-center items-center fixed inset-0 bg-[var(--color-caption-primary)]/80 text-[var(--color-caption-secondary)] p-4 rounded shadow-lg z-50 hidden opacity-0 transition-opacity"
 >
-  <p class="text-sm">
+  <p class="text-sm text-center">
     This site uses Google Analytics to understand usage. You can choose whether to allow analytics cookies.
   </p>
   <br />
@@ -37,56 +26,57 @@ const {
 </div>
 
 <script is:inline>
-document.addEventListener('DOMContentLoaded', function() {
-  const overlay = document.getElementById('cookie-banner');
-  if (!overlay) return;
+(() => {
+  const banner = document.getElementById("cookie-banner");
+  if (!banner) return;
 
-  const requireConsent = overlay.dataset.requireConsent === 'true';
-  const consent = localStorage.getItem('analytics_consent');
-  const measurementId = overlay.dataset.gaId;
-  
+  const requireConsent = banner.dataset.requireConsent === "true";
+  const measurementId = banner.dataset.gaId;
+  const savedConsent = localStorage.getItem("analytics_consent");
 
-  function showOverlay() {
-    overlay.classList.remove('hidden');
-    requestAnimationFrame(() => overlay.classList.add('opacity-100'));
+  function loadGA() {
+    if (!measurementId || window.gtagLoaded) return;
+    window.gtagLoaded = true;
+
+    // Load GA via Partytown
+    const script = document.createElement("script");
+    script.type = "text/partytown";
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+    script.onload = () => {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function(...args) { window.dataLayer.push(args); };
+
+      // Initialize GA after loading
+      gtag('js', new Date());
+      gtag('config', measurementId, { anonymize_ip: true });
+    };
+    document.head.appendChild(script);
   }
 
-  function loadGoogleAnalytics() {
-    // console.log('[Analytics] measurementId:', measurementId);
-    // console.log('[Analytics is loading...]');
-    if (!measurementId) return;
-    if (window.gtag) return;
+  function accept() {
+    localStorage.setItem("analytics_consent", "accepted");
+    loadGA();
+    banner?.remove();
+  }
 
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + measurementId;
-    document.head.appendChild(script);
-
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { window.dataLayer.push(arguments); }
-    window.gtag = window.gtag || gtag;
-
-    gtag('js', new Date());
-    gtag('config', measurementId, { anonymize_ip: true });
+  function reject() {
+    localStorage.setItem("analytics_consent", "rejected");
+    banner?.remove();
   }
 
   if (requireConsent) {
-    if (!consent) showOverlay();
-    else if (consent === 'accepted') loadGoogleAnalytics();
-
-    document.getElementById('acceptCookies')?.addEventListener('click', function() {
-      localStorage.setItem('analytics_consent', 'accepted');
-      overlay.remove();
-      loadGoogleAnalytics();
-    });
-
-    document.getElementById('rejectCookies')?.addEventListener('click', function() {
-      localStorage.setItem('analytics_consent', 'rejected');
-      overlay.remove();
-    });
+    if (!savedConsent) {
+      banner.classList.remove("hidden");
+      requestAnimationFrame(() => banner.classList.add("opacity-100"));
+    } else if (savedConsent === "accepted") {
+      loadGA();
+    }
+    document.getElementById("acceptCookies")?.addEventListener("click", accept);
+    document.getElementById("rejectCookies")?.addEventListener("click", reject);
   } else {
-    loadGoogleAnalytics();
-    overlay.remove();
+    // Auto-load GA if consent is not required
+    loadGA();
   }
-});
+})();
 </script>

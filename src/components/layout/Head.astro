@@ -1,7 +1,5 @@
 ---
 import SEO from '@/components/layout/SEO.astro';
-import Analytics from '@/components/layout/Analytics.astro';
-
 import type { SeoData } from '@/ts/type.ts';
 
 const { title, description, image, url, keywords } = Astro.props as SeoData;
@@ -13,31 +11,54 @@ const canonicalUrl = `${baseUrl}${pageUrl.startsWith('/') ? pageUrl : `/${pageUr
 //@type: SoftwareSourceCode - further can define in each project.
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "CreativeWork",
+  "@type": "ComputerProgram",
   "name": title ?? 'insdash',
   "description": description ?? '',
   "url": canonicalUrl,
   "image": image,
   "keywords": keywords,
   "author": {
-    "@type": "Website",
+    "@type": "Company",
     "name": "insdash",
-    "url": baseUrl
+    "url": baseUrl,
+    "sameAs": [
+      "https://insdash.github.io/"
+    ],
+    "title": "Frontend Developer & Interaction Designer",
+    "knowsAbout": [
+      "Frontend Development",
+      "Interaction Design",
+      "UI/UX Design",
+      "Responsive Web Design",
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Vue.js",
+      "Node.js",
+      "Accessibility (a11y)",
+      "User Experience",
+      "Prototyping",
+      "Web Performance Optimization",
+      "Cross-Browser Compatibility",
+      "Design Systems"
+    ], 
   }
 };
 ---
 
 <script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
-    const pref = localStorage.getItem("mode") || "tonality";
+  document.addEventListener('DOMContentLoaded', () => {
+    const pref = localStorage.getItem('mode') || 'tonality';
     const applied =
-      pref === "light_mode"
-        ? "light_mode"
-        : pref === "dark_mode"
-          ? "dark_mode"
-          : window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark_mode"
-            : "light_mode";
+      pref === 'light_mode'
+        ? 'light_mode'
+        : pref === 'dark_mode'
+          ? 'dark_mode'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark_mode'
+            : 'light_mode';
 
     document.body.className = applied;
     const meta = document.querySelector('meta[name="color-scheme"]');
@@ -53,8 +74,13 @@ const jsonLd = {
   <meta name="copyright" content="insdash" />
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" type="image/svg+xml" href="./insdash.svg" />
-  <link rel="icon" type="image/png" sizes="32x32" href="./insdash.png">
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="./images/logo/insdash_dark.png"
+  />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <SEO
     title={title}
     description={description}
@@ -82,8 +108,18 @@ const jsonLd = {
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
   />
   <!-- GA -->
-  <Analytics measurementId="G-795EK5W2DW" requireConsent={false}/>
-
-  <!-- <meta name="generator" content={Astro.generator} /> -->
-  
+  <script
+    is:inline
+    type="text/partytown"
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-XPJ7PBRN07">
+  </script>
+  <script is:inline type="text/partytown">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-795EK5W2DW', { anonymize_ip: true });
+  </script>
 </head>

@@ -1,16 +1,8 @@
 ---
 import Tag from '@/components/UI/Tag.astro';
 const {
-  description = 'Dive into diverse research and focus on interactivity to enhance the design process and delight the user experience',
+  description = 'We build scalable systems grounded in comprehensive research, applying interactive design principles to optimize workflows and deliver efficient, user-centric solutions.',
 } = Astro.props;
-
-const tags = [
-  'Interaction Design',
-  'UX/UI & Product Design',
-  'Human-Robot Collaboration',
-  'Digital Fabrication',
-  'Architecture',
-];
 
 const skills = [
   'Web & App Development',
@@ -24,12 +16,12 @@ const skills = [
 <script></script>
 
 <div class="intro">
-  <p class="intro_item">Hi there!</p><br /><p class="intro_item">It is </p>
+  <p class="intro_item">Hi there!</p><br /><p class="intro_item">This is </p>
   <h3 class="intro_item">insdash</h3>
   <br />
   <h4 class="intro_item">Here is what we do</h4>
   <p class="intro_item">
-    Dive into diverse research and focus on interactivity to enhance the design process and delight the user experience.
+    {description}
   </p>
   <div class="mt-[2rem]">
     <Tag tags={skills} />
