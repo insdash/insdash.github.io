@@ -112,13 +112,11 @@ const jsonLd = {
     is:inline
     type="text/partytown"
     async
-    src="https://www.googletagmanager.com/gtag/js?id=G-XPJ7PBRN07">
+    src="https://www.googletagmanager.com/gtag/js?id=G-795EK5W2DW">
   </script>
   <script is:inline type="text/partytown">
     window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+    function gtag(...args) { dataLayer.push(args); }
     gtag('js', new Date());
     gtag('config', 'G-795EK5W2DW', { anonymize_ip: true });
   </script>
