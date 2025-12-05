@@ -4,7 +4,7 @@ import type { SeoData } from '@/ts/type.ts';
 
 const { title, description, image, url, keywords } = Astro.props as SeoData;
 
-const baseUrl = import.meta.env.SITE || 'https://yingshiuan.github.io';
+const baseUrl = import.meta.env.SITE || 'https://insdash.github.io';
 const pageUrl = url ?? Astro.url.pathname;
 const canonicalUrl = `${baseUrl}${pageUrl.startsWith('/') ? pageUrl : `/${pageUrl}`}`;
 
