@@ -177,8 +177,11 @@ const baseUrl = import.meta.env.BASE_URL;
     @apply top-0 left-0 right-0 fixed z-[100] bg-main/90 backdrop-blur-sm;
   }
 
+  /* Sized by the token that offsets <main>, so the bar always fills the space
+     reserved for it. Sized by its content it was 56px against a 64px offset on
+     desktop, and grew whenever a nav item showed its pill. */
   .theme-bar {
-    @apply flex justify-between items-center py-0 px-[5rem];
+    @apply flex justify-between items-center h-[var(--header-h)] px-[5rem];
   }
 
   .theme-link {
@@ -218,7 +221,7 @@ const baseUrl = import.meta.env.BASE_URL;
        `background: none` while the links stayed white, so legibility depended
        on NavBar's `z-[-99]` element painting behind a transparent parent. */
     .theme-bar {
-      @apply px-[2rem] py-[0.5rem] gap-2;
+      @apply px-[2rem] gap-2;
     }
 
     /* Solid on a phone, as it looked while NavBar's fixed panel painted behind

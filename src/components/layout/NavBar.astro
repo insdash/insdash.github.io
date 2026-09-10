@@ -95,8 +95,10 @@ const isCurrent = (href: string) =>
     @apply flex-1;
   }
 
+  /* The border is always there, transparent until the pill shows it. Adding it
+     only on hover grew the item by 2px, and the header with it. */
   .item {
-    @apply w-full text-center py-[0.5rem];
+    @apply w-full text-center py-[0.5rem] border border-transparent;
   }
 
   .item:hover {
