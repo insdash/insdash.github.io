@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Layout from '@/layouts/Layout.astro';
 import ProjectContent from '@/components/grids/ProjectContent.astro';
 import ContactSection from '@/components/layout/ContactSection.astro';
@@ -18,6 +19,25 @@ if (!project) throw new Error(`Project not found for id: ${Astro.params.id}`);
 
 const baseUrl = import.meta.env.BASE_URL;
 
+// Link previews draw a 1200×630 card. The thumbnail used to go out as it was —
+// menuGen's square, Yang's a 760 KB PNG — and each platform cropped or shrank
+// it its own way. Cutting it to that shape here and re-encoding it gives every
+// case study a card the same size as the default one.
+const shareSource = project.data.thumbnail ?? project.data.image;
+const shareImage = shareSource
+  ? await getImage({
+      src: shareSource,
+      width: 1200,
+      height: 630,
+      fit: 'cover',
+      format: 'jpg',
+      quality: 80,
+      // JPEG has no transparency. Mockups on a transparent ground flatten to the
+      // default card's near-black rather than whatever the encoder picks.
+      background: '#020407',
+    })
+  : undefined;
+
 ---
 
 {/* The case-study pages shipped with a title and nothing else — no meta
@@ -27,7 +47,7 @@ const baseUrl = import.meta.env.BASE_URL;
 <Layout
   title={project.data.seoTitle ?? project.data.title}
   description={project.data.info}
-  image={(project.data.thumbnail ?? project.data.image)?.src}>
+  image={shareImage?.src}>
   {/* Markdown body content */}
   <article class="prose">
     <ProjectContent project={project} baseUrl={baseUrl} />

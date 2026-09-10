@@ -70,6 +70,8 @@ generator"). Keep it in step when a case study is added or removed.
    both in the frontmatter (`image`, `hoverImage`, `thumbnail`) and in the body.
    Astro converts and resizes them at build — a 1.2MB PNG screenshot ships as a
    ~130KB WebP — so commit the source file rather than a hand-converted copy.
+   The link-preview card is cut from `thumbnail` to 1200×630 at build, so keep
+   the subject near the middle of a thumbnail that is not already wide.
 3. Video cannot go through Astro's image pipeline. Put it in
    `public/media/projects/<slug>/` and reference it with an absolute path
    (`/media/projects/<slug>/clip.mp4`).
