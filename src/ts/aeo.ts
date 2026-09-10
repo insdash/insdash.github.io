@@ -79,7 +79,6 @@ const KNOWS_ABOUT = [
   'Postgres Schema Design',
   'Software Maintenance',
   'Print and Information Design',
-  '3D Product Visualisation',
   'Accessibility (a11y)',
 ];
 

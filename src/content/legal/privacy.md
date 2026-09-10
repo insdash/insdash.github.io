@@ -5,7 +5,7 @@ keywords: 'insdash privacy policy, cookies, Google Analytics consent, FADP, GDPR
 eyebrow: 'Privacy'
 heading: 'What this site collects, and what it does not.'
 lead: 'This is a studio website. There are no accounts, no forms and no newsletter — the only thing here that could track you is one analytics tag, and it stays switched off until you say otherwise.'
-updated: '27 August 2026'
+updated: '10 September 2026'
 ---
 
 ## The short version
@@ -34,13 +34,12 @@ receives and logs the request: IP address, time, page, browser, referring page.
 That happens before any of our code runs, we cannot switch it off, and GitHub
 does not pass those logs on to us.
 
-**Fonts and icons.** Every page loads typefaces from Google Fonts
-(`fonts.googleapis.com`, `fonts.gstatic.com`) and icon styles from Cloudflare's
-cdnjs (`cdnjs.cloudflare.com`). Your browser requests those files directly, so
-your IP address reaches Google and Cloudflare on every page view, whatever you
-answered about analytics. This one is on us rather than on you: serving the
-files from our own domain would remove both third parties, and it is on the
-list.
+**Fonts and icons.** Every page loads its typefaces and its icon font from
+Google Fonts (`fonts.googleapis.com`, `fonts.gstatic.com`). Your browser
+requests those files directly, so your IP address reaches Google on every page
+view, whatever you answered about analytics. This one is on us rather than on
+you: serving the files from our own domain would remove that third party, and it
+is on the list.
 
 ## Analytics, and the choice you were given
 
@@ -117,8 +116,8 @@ bar. If you would rather not load them, do not open those pages.
 Hosting, analytics, fonts, icons and mail are all United States providers.
 Switzerland recognises transfers to US companies certified under the Swiss–US
 Data Privacy Framework, and the EU–US framework covers visitors from the EEA on
-the same basis. Google, GitHub (Microsoft) and Cloudflare are certified under
-those frameworks.
+the same basis. Google and GitHub (Microsoft) are certified under those
+frameworks.
 
 ## Your rights
 

@@ -58,8 +58,8 @@ The services catalogue in the structured data is built from `services.md`, so it
 needs no manual edit.
 
 The `description` in `src/pages/projects/index.astro` names the kinds of work
-on the site ("menu systems, scheduling software and 3D product animation"). Keep
-it in step when a case study is added or removed.
+on the site ("menu systems, scheduling software and a print-ready menu
+generator"). Keep it in step when a case study is added or removed.
 
 ## Adding a case study
 
