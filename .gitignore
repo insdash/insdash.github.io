@@ -28,3 +28,7 @@ pnpm-debug.log*
 
 # accessibility audit output
 a11y-report/
+
+# internal notes, kept locally and out of the public repo
+/NOTE.md
+/docs/ARCHITECTURE.md
