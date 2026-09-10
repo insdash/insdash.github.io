@@ -10,7 +10,6 @@
     "a11y": "astro build && node scripts/a11y.mjs"
   },
   "dependencies": {
-    "@astrojs/partytown": "^2.1.7",
     "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.2",
