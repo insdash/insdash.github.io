@@ -1,6 +1,6 @@
 ---
 title: 'About'
-description: 'insdash is a two-person design and development studio in Zürich, working across domains and across cultures — for international businesses operating in Switzerland, and Swiss businesses selling outward.'
+description: 'insdash is a two-person design and development studio in Zürich, working for international businesses in Switzerland and Swiss businesses selling outward.'
 keywords: 'design studio Zürich, software for small companies, KMU Software Zürich, independent studio, design and development studio, international clients Switzerland'
 eyebrow: 'About'
 heading: "Who you'll be working with."

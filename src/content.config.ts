@@ -26,6 +26,13 @@ const projects = defineCollection({
       hoverImage: image().optional(),
       // Detail-page hero. Falls back to `image` when omitted.
       thumbnail: image().optional(),
+      // The <title> and share title, for a project whose name does not say what
+      // the work was: "Room and Class Scheduling" names a feature, not a job for
+      // a client. Only the head reads it; the h1, cards and breadcrumb keep
+      // `title`. " | insdash | Zürich" is appended, so aim for ~40 characters.
+      seoTitle: z.string().optional(),
+      // The card blurb and the meta description. Search results cut it off
+      // after ~155 characters.
       info: z.string(),
       description: z.string(),
       // Project details. These are named for what a client reads them as, not

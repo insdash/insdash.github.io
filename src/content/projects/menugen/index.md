@@ -16,6 +16,7 @@ tags: ['Web App', 'Product', 'Design → Build']
 image: './menu-generator-c.png'
 hoverImage: './menu-generator.webp'
 thumbnail: './menu-generator-c.png'
+seoTitle: 'menuGen, a print-ready menu generator'
 info: 'A web app that turns structured menu data into a print-ready PDF. Deployed at menugen.insdash.ch, and the source is public.'
 description: 'A Fatt hired us to design a menu. Doing that job showed us the problem underneath it — even in Canva, every change is still layout work — so we built the tool that removes the layout step entirely. menuGen takes structured menu data and produces a print-ready PDF, with the on-screen preview matching the printed page exactly.'
 scope: 'Product, design and development'

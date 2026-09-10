@@ -14,6 +14,7 @@ tags: ['UI/UX', 'Design']
 image: './afatt_c.png'
 hoverImage: './afatt-menu.webp'
 thumbnail: './afatt.jpg'
+seoTitle: 'Multilingual menu design for a restaurant'
 info: 'Inclusive, dietary-friendly, multilingual menu with intuitive layout for customers to enjoy Malaysian Chinese Home Favourites.'
 description: 'We designed a scalable, modular menu system for a Zürich restaurant — multilingual content, dietary tagging and a reusable layout, delivered in Figma and Canva so the restaurant team could maintain dishes, translations and labels themselves without recreating a layout. They still use it. Doing this job is what exposed the repeating problem behind it, and menuGen came afterwards for the general case.'
 scope: 'Menu system, multilingual content structure, dietary tagging, production files the client maintains'

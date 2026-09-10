@@ -22,9 +22,10 @@ const baseUrl = import.meta.env.BASE_URL;
 
 {/* The case-study pages shipped with a title and nothing else — no meta
     description, so search and social both fell back to guessing from the body.
-    `info` is the one-line summary the cards already use. */}
+    `info` is the one-line summary the cards already use. `seoTitle`, where a
+    project has one, says what the work was when the project's name does not. */}
 <Layout
-  title={project.data.title}
+  title={project.data.seoTitle ?? project.data.title}
   description={project.data.info}
   image={(project.data.thumbnail ?? project.data.image)?.src}>
   {/* Markdown body content */}

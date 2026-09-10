@@ -1,6 +1,6 @@
 ---
 title: 'Privacy'
-description: 'What insdash.ch collects, what it does not, and how to change your mind about analytics. A studio website with no accounts, no forms, and one analytics tag that stays off until you allow it.'
+description: 'What insdash.ch collects and what it does not: no accounts, no forms, and one analytics tag that stays off until you allow it.'
 keywords: 'insdash privacy policy, cookies, Google Analytics consent, FADP, GDPR, Zürich studio'
 eyebrow: 'Privacy'
 heading: 'What this site collects, and what it does not.'
