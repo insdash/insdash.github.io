@@ -93,4 +93,7 @@ Created by [insdash](https://github.com/insdash/) & [Ying-Shiuan Chen](https://g
 
 ## License
 
-[MIT](LICENSE)
+The code is released under the [MIT License](LICENSE). The site's content is
+not: the text and images, the insdash name and logo, and the client work shown
+in the case studies are not licensed for reuse. [LICENSE](LICENSE) says exactly
+what each covers.
