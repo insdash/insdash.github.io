@@ -39,14 +39,16 @@ const ogImage = rawImage.startsWith('http')
 {noindex && <meta name="robots" content="noindex, follow" />}
 {description && <meta name="description" content={description} />}
 {keywordString && <meta name="keywords" content={keywordString} />}
-<link rel="canonical" href={canonicalUrl} />
+{/* A noindex page has no preferred URL to declare. The 404 is served at
+    whatever path was missed, so its canonical named /404/, which does not exist. */}
+{!noindex && <link rel="canonical" href={canonicalUrl} />}
 
 {/* Open Graph / Social Preview */}
 <meta property="og:site_name" content={site.name} />
 {/* en_GB rather than en_US: the copy is written in British spelling. */}
 <meta property="og:locale" content="en_GB" />
 <meta property="og:title" content={fullTitle} />
-<meta property="og:url" content={canonicalUrl} />
+{!noindex && <meta property="og:url" content={canonicalUrl} />}
 <meta property="og:image" content={ogImage} />
 {description && <meta property="og:description" content={description} />}
 
