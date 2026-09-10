@@ -76,7 +76,6 @@ const KNOWS_ABOUT = [
   'Build vs Buy Analysis',
   'Requirements Gathering',
   'Information Architecture',
-  'E-commerce Development',
   'Postgres Schema Design',
   'Software Maintenance',
   'Print and Information Design',

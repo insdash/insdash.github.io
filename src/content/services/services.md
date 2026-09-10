@@ -7,7 +7,7 @@
 # Head and SEO
 title: 'Services'
 description: 'What insdash does: design, build, or both. Every engagement starts with a scoping conversation and a written estimate — and if buying beats building, we say so.'
-keywords: 'design services Zürich, web application development, product design, build vs buy, Postgres, e-commerce Shopify, software maintenance Zürich'
+keywords: 'design services Zürich, web application development, product design, build vs buy, Postgres, software maintenance Zürich'
 
 # The homepage intro shows this blurb, plus the service names further down.
 homeBlurb: 'A design and development studio in Zürich. We take a project from the first conversation to the thing running in production — and when a design job turns out to need software, we are the ones who build the software.'
@@ -93,10 +93,7 @@ services:
   - name: 'Data & integrations'
     items:
       - 'Postgres schema design, migrations and access rules'
-      - 'Payments, order capture and fulfilment, solved as one chain'
-      - 'E-commerce on Shopify and SHOPLINE'
       - 'Authentication, roles and permissions'
-      - 'Working with your manufacturing or logistics partner, so the plan matches what can actually be produced'
 
   - name: 'Maintenance & handover'
     items:
