@@ -1,0 +1,127 @@
+---
+import { getEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import { analytics } from '@/ts/site';
+
+// All page copy lives in src/content/legal/privacy.md — edit the prose there,
+// not here. Links in that file are root-relative, which is correct while `base`
+// is '/' in astro.config.mjs.
+const privacy = await getEntry('legal', 'privacy');
+
+if (!privacy) throw new Error('Missing content collection entry: legal/privacy.md');
+
+const { title, description, keywords, eyebrow, heading, lead, updated } =
+  privacy.data;
+
+// The policy names the analytics property twice — once in prose, once as the
+// `_ga_…` cookie. Hardcoding the ID in a legal document means it quietly starts
+// describing a property we no longer use, so the markdown writes
+// `{measurementId}` and it is filled in here from the same constant the tag in
+// Layout.astro reads.
+//
+// That means substituting into the rendered HTML rather than using <Content />,
+// which cannot take a variable. If a future Astro stops exposing `rendered`,
+// this throws rather than silently serving a policy with no body.
+const rendered = privacy.rendered?.html;
+
+if (!rendered) {
+  throw new Error(
+    'legal/privacy.md has no rendered HTML — Astro changed how content collections expose it'
+  );
+}
+
+const body = rendered.replaceAll('{measurementId}', analytics.measurementId);
+
+// A policy that still carries the placeholder is a policy that names no
+// property at all, so fail the build rather than publish one.
+if (body.includes('{measurementId}')) {
+  throw new Error('legal/privacy.md still contains an unsubstituted {measurementId}');
+}
+---
+
+<Layout title={title} description={description} keywords={keywords}>
+  <section class="legal">
+    <div class="legal_head">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{heading}</h1>
+      <p class="lead">{lead}</p>
+      <p class="legal_updated">Last updated {updated}</p>
+    </div>
+
+    <div class="legal_body" set:html={body} />
+  </section>
+</Layout>
+
+<style>
+  @reference "@/styles/global.css";
+
+  .legal {
+    @apply px-[2.5rem] my-[var(--space-section)] mx-auto max-w-[80rem];
+  }
+
+  /* Narrower than the page maximum on purpose: this is the one page on the
+     site that is read as continuous prose rather than scanned, and full-width
+     lines of it are punishing. */
+  .legal_head,
+  .legal_body {
+    @apply max-w-[48rem];
+  }
+
+  .legal_body {
+    @apply mt-[var(--space-section)];
+  }
+
+  .legal_updated {
+    @apply font-mono text-meta uppercase mt-6;
+    color: var(--color-text-caption);
+  }
+
+  /* The body is rendered from markdown, so its elements are outside this
+     component's scope — these rules have to be :global(). */
+  .legal_body :global(h2) {
+    @apply mt-12 mb-4;
+  }
+
+  .legal_body :global(p),
+  .legal_body :global(li) {
+    @apply my-4;
+  }
+
+  .legal_body :global(a) {
+    @apply underline underline-offset-4;
+  }
+
+  .legal_body :global(a:hover) {
+    color: var(--color-text-hover);
+  }
+
+  .legal_body :global(ul) {
+    @apply list-none p-0 m-0 flex flex-col gap-2;
+  }
+
+  .legal_body :global(ul li) {
+    @apply before:content-['—'] before:mr-2;
+  }
+
+  /* The cookie table is the widest thing on the page. `display: block` turns it
+     into its own scroll container so a narrow screen scrolls the table rather
+     than the whole document sideways. */
+  .legal_body :global(table) {
+    @apply block max-w-full overflow-x-auto my-8 text-sm border-collapse;
+  }
+
+  .legal_body :global(th),
+  .legal_body :global(td) {
+    @apply text-left align-top py-2 pr-6;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text-primary) 25%, transparent);
+  }
+
+  .legal_body :global(th) {
+    @apply font-mono text-meta uppercase font-normal;
+    color: var(--color-text-caption);
+  }
+
+  .legal_body :global(code) {
+    @apply font-mono text-sm;
+  }
+</style>

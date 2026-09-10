@@ -1,0 +1,165 @@
+---
+
+const { baseUrl } = Astro.props;
+
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+// "Home" comes out — the wordmark in Header already links there — which frees a
+// slot for Contact without growing the mobile toggle nav. The label is "Work"
+// while the URL stays /projects: the XML sitemap, ContentFooter's button and any
+// external link all point there, and GitHub Pages offers no redirects.
+// Rule: the page title matches the nav label; the URL may differ from both.
+const links: NavLink[] = [
+  { label: 'Work', href: `${baseUrl}projects` },
+  { label: 'Services', href: `${baseUrl}services` },
+  { label: 'About', href: `${baseUrl}about` },
+  { label: 'Contact', href: `${baseUrl}#contact` },
+];
+---
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.querySelector<HTMLElement>('.navbarToggle');
+    const items = document.querySelectorAll<HTMLElement>('.item');
+
+    toggleBtn?.addEventListener('click', () => {
+      items.forEach((item) => {
+        item.classList.toggle('show');
+      });
+      toggleBtn.classList.toggle('hide');
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+  const currentPath = window.location.pathname.replace(/\/$/, '');
+  const items = document.querySelectorAll<HTMLLIElement>('#navbar .item');
+
+  items.forEach(item => {
+    const link = item.querySelector('a')!;
+    const linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/$/, '');
+    if (linkPath === currentPath) {
+      item.classList.add('active-link'); // add to li instead of a
+    }
+  });
+});
+</script>
+
+<nav id="mynav">
+  <ul id="navbar">
+    <li class="navbarToggle">
+      <button aria-label="Toggle menu">
+        <i class="material-symbols-outlined menu-icon">menu</i>
+        <i class="material-symbols-outlined close-icon hidden">close</i>
+      </button>
+    </li>
+
+    {links.map((link) => (
+      <li class="item">
+        <a href={link.href}>{link.label}</a>
+      </li>
+    ))}
+   
+  </ul>
+</nav>
+
+<style>
+  @reference "@/styles/global.css";
+
+  /* ===========================
+   Base (mobile first)
+   =========================== */
+
+  nav {
+    @apply w-full px-6 bg-main fixed top-0 left-0 z-[-99];
+  }
+
+  ul {
+    @apply list-none flex flex-col items-start m-0 py-[0.5rem];
+  }
+
+  .logo {
+    @apply flex-1;
+  }
+
+  .item {
+    @apply hidden w-full text-center py-[0.5rem];
+  }
+
+  .item:hover {
+    @apply rounded-full bg-gradient-to-t from-white/20 via-white/10 to-white/5
+      backdrop-blur-md border border-white/25;
+  }
+
+  .item a {
+    @apply text-white ;
+  }
+
+  .item.show {
+    @apply block;
+  }
+
+  .navbarToggle {
+    @apply self-end;
+  }
+
+  .navbarToggle button {
+    @apply border-none text-white text-2xl cursor-pointer;
+  }
+
+  /* --- Icon toggle logic --- */
+  .navbarToggle .close-icon {
+    @apply hidden;
+  }
+
+  .navbarToggle.hide .menu-icon {
+    @apply hidden;
+  }
+
+  .navbarToggle.hide .close-icon {
+    @apply block;
+  }
+
+  /* Active border */
+  .active-link {
+    @apply rounded-full bg-gradient-to-t from-white/20 via-white/10 to-white/5
+    backdrop-blur-md border border-white/25;
+  }
+
+  /* ===========================
+   Larger screens (>=900px)
+   =========================== */
+
+  @media (min-width: 900px) {
+    nav {
+      @apply max-w-[80rem] mx-auto z-[99] bg-transparent static flex justify-center items-center;
+    }
+
+    ul {
+      @apply flex-row p-[0.5rem];
+      /* rounded-[1rem] bg-[#2C2C2C] border border-white/25  */
+    }
+
+    li {
+      @apply px-4 py-0;
+    }
+
+    .item {
+      @apply block w-auto;
+    }
+
+    /* .item a {
+      @apply text-white hover:text-[var(--color-text-hover)] hover:text-shadow-[0.05rem_0.05rem_var(--color-text-primary)];
+    } */
+
+    .navbarToggle {
+      @apply hidden;
+    }
+    .footer_container,
+    .item {
+      @apply text-white;
+    }
+  }
+</style>

@@ -2,81 +2,344 @@
 import Button from '@/components/UI/Button.astro';
 
 interface Props {
-  measurementId: string;
+  /** GA4 measurement ID, e.g. G-XXXXXXXXXX. Omit to disable GA4. */
+  measurementId?: string;
+  /** GTM container ID, e.g. GTM-XXXXXXX. Omit to disable GTM. */
+  gtmId?: string;
+  /** Show the consent dialog and keep analytics storage denied until accepted. */
   requireConsent?: boolean;
 }
 
-const { measurementId, requireConsent = true } = Astro.props;
+const { measurementId, gtmId, requireConsent = true } = Astro.props;
+
+const enabled = import.meta.env.PROD;
+
+// For the policy link in the bar. Root-relative would be right while `base` is
+// '/', but this component is mounted on every page and the bar has to keep
+// working if that ever changes.
+const base = import.meta.env.BASE_URL;
+
+// The tags themselves never load in `dev`, but the consent dialog can be
+// previewed there on its own — `PUBLIC_CONSENT_PREVIEW=true npm run dev` — so
+// it can be styled with HMR instead of through a full build. GA4 and GTM stay
+// off, so nothing is reported either way.
+const consentPreview =
+  import.meta.env.DEV && import.meta.env.PUBLIC_CONSENT_PREVIEW === 'true';
+const hasTag = !!measurementId || !!gtmId;
+const showConsent = (enabled && hasTag && requireConsent) || consentPreview;
+
+// The store below is what reads and writes the choice; the consent default
+// and the bar both go through it, so the expiry and the storage guards live
+// in one place.
+const needsStore = (enabled && hasTag) || showConsent;
+
+// Built as strings and handed to `set:html` rather than passed through
+// `define:vars`, which rewrites the script and drops attributes off it. The
+// values here are ours, not user input, so there is nothing to escape.
+
+// Consent Mode defaults, kept separate from the GA4 config because GTM needs
+// them just as much: whichever tag is in play, this has to run first. The
+// stored choice is read before the default is set, so a returning visitor is
+// initialised with what they already chose rather than being denied and then
+// corrected.
+const consentDefault = `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: ${requireConsent ? "window.privacyChoice.read() === 'accepted' ? 'granted' : 'denied'" : "'granted'"},
+  });
+`;
+
+// `gtag` and `dataLayer` come from the defaults script above, which is always
+// emitted alongside this one.
+const gtagInit = `
+  gtag('js', new Date());
+  gtag('config', ${JSON.stringify(measurementId ?? '')}, { anonymize_ip: true });
+`;
 ---
 
-<div
-  id="cookie-banner"
-  data-ga-id={measurementId}
-  data-require-consent={requireConsent}
-  class="flex flex-col justify-center items-center fixed inset-0 bg-[var(--color-caption-primary)]/80 text-[var(--color-caption-secondary)] p-4 rounded shadow-lg z-50 hidden opacity-0 transition-opacity"
->
-  <p class="text-sm text-center">
-    This site uses Google Analytics to understand usage. You can choose whether to allow analytics cookies.
-  </p>
-  <br />
-  <div class="flex justify-center items-center gap-4">
-    <Button id="acceptCookies" label="Accept" color="blue" variant="solid" size="md" />
-    <Button id="rejectCookies" label="Reject" color="gray" variant="outline" size="md" />
+{needsStore && (
+  <script is:inline>
+    // The one place that touches storage. Every read can throw — Chrome and
+    // Brave raise SecurityError when site data is blocked — so callers get a
+    // plain "accepted" / "rejected" / null and never have to guard.
+    (() => {
+      const KEY = "analytics_consent";
+      // Six months. Long enough not to nag, short enough that a choice made
+      // once does not stand for ever: consent is not open-ended under the
+      // GDPR or the revised FADP, and an aged-out choice simply asks again.
+      const MAX_AGE = 1000 * 60 * 60 * 24 * 183;
+      const valid = (c) => c === "accepted" || c === "rejected";
+
+      const store = {
+        // "accepted", "rejected", or null when there is no live choice.
+        read() {
+          let raw = null;
+          try {
+            raw = localStorage.getItem(KEY);
+          } catch {
+            // Storage is blocked; behave as if nothing was ever stored.
+            return null;
+          }
+          if (!raw) return null;
+
+          // Values written before this carried the bare choice and no date.
+          // The choice still stands — discarding it would be the rudest read
+          // of an expiry — but its age is unknown, so the six months start
+          // from this upgrade.
+          if (valid(raw)) {
+            store.save(raw);
+            return raw;
+          }
+
+          let parsed = null;
+          try {
+            parsed = JSON.parse(raw);
+          } catch {
+            // Corrupt or hand-edited; fall through and ask again.
+          }
+          if (!parsed || !valid(parsed.choice) || typeof parsed.ts !== "number") {
+            store.clear();
+            return null;
+          }
+          if (Date.now() - parsed.ts > MAX_AGE) {
+            store.clear();
+            return null;
+          }
+          return parsed.choice;
+        },
+
+        save(choice) {
+          try {
+            localStorage.setItem(KEY, JSON.stringify({ choice, ts: Date.now() }));
+          } catch {
+            // Nothing to persist to. The choice still applies to this page
+            // view; the bar comes back on the next load, which is honest.
+          }
+        },
+
+        clear() {
+          try {
+            localStorage.removeItem(KEY);
+          } catch {
+            // Nothing stored to remove.
+          }
+        },
+      };
+
+      window.privacyChoice = store;
+    })();
+  </script>
+)}
+
+{enabled && hasTag && <script is:inline set:html={consentDefault} />}
+
+{enabled && measurementId && (
+  <>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
+    <script is:inline set:html={gtagInit} />
+  </>
+)}
+
+{enabled && gtmId && (
+  <>
+    <script is:inline define:vars={{ gtmId }}>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], // eslint-disable-line no-var
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer',gtmId);
+    </script>
+    <noscript>
+      <iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+        title="Google Tag Manager"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"></iframe>
+    </noscript>
+  </>
+)}
+
+{/* The id is deliberately not `cookie-banner`, `cookie-notice` or similar:
+    those are generic cosmetic-filter targets in Fanboy's Cookiemonster list,
+    which ships in uBlock Origin, AdGuard, Brave Shields and Safari blockers.
+    `###cookie-banner` hides this on every site, so blocked visitors could never
+    accept. `privacy-choice` matches no generic rule. The aria-label is fine as
+    it is — the one generic rule touching it also requires a .cc-dialog class. */}
+{showConsent && (
+  <div
+    id="privacy-choice"
+    role="region"
+    aria-label="Cookie consent"
+    class="fixed bottom-0 inset-x-0 z-[110] hidden opacity-0 transition-opacity border-t-1 border-[var(--color-text-primary)]/70 bg-[var(--background-color)]/70 backdrop-blur-md text-[var(--color-text-primary)] shadow-lg"
+  >
+    <div class="mx-auto max-w-5xl flex flex-col sm:flex-row sm:items-center gap-4 p-4">
+      <p class="text-sm flex-1">
+        This site uses Google Analytics to understand usage. Choose whether to 
+        allow analytics cookies — you can change this at any time under Cookie
+        settings in the footer. Our <a
+          href={`${base}privacy`}
+          class="underline underline-offset-4 hover:text-[var(--color-text-hover)]"
+          >privacy policy</a
+        > says what is collected either way.<span id="privacy-choice-state"></span>
+      </p>
+      {/* Both buttons carry the same weight on purpose. A solid Accept next
+          to an outline Reject nudges towards consent, which is the deceptive
+          pattern the EDPB calls out — the two choices have to look equal, and
+          so must withdrawing later, which is these same two buttons. */}
+      <div class="flex items-center gap-3 shrink-0">
+        <Button id="acceptCookies" label="Accept" color="accent" variant="outline" size="sm" />
+        <Button id="rejectCookies" label="Reject" color="accent" variant="outline" size="sm" />
+      </div>
+    </div>
   </div>
-</div>
+)}
 
-<script is:inline>
-(() => {
-  const banner = document.getElementById("cookie-banner");
-  if (!banner) return;
+{consentPreview && (
+  <script is:inline>
+    // Dev-only: `?consent=reset` clears the stored choice so the bar reappears
+    // without a trip to the console. Gated on `consentPreview`, so this script
+    // is never emitted in a production build. Runs before the bar script below,
+    // which is the one that reads the key.
+    (() => {
+      if (new URLSearchParams(location.search).get("consent") === "reset") {
+        window.privacyChoice?.clear();
+      }
+    })();
+  </script>
+)}
 
-  const requireConsent = banner.dataset.requireConsent === "true";
-  const measurementId = banner.dataset.gaId;
-  const savedConsent = localStorage.getItem("analytics_consent");
+{showConsent && (
+  <script is:inline>
+    (() => {
+      const banner = document.getElementById("privacy-choice");
+      const store = window.privacyChoice;
+      if (!banner || !store) return;
 
-  function loadGA() {
-    if (!measurementId || window.gtagLoaded) return;
-    window.gtagLoaded = true;
+      const state = document.getElementById("privacy-choice-state");
+      const accept = document.getElementById("acceptCookies");
+      const reject = document.getElementById("rejectCookies");
 
-    // Load GA via Partytown
-    const script = document.createElement("script");
-    script.type = "text/partytown";
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-    script.onload = () => {
+      // Same dataLayer, same thread as the tag, so this update applies to the
+      // live page rather than waiting for the next load. It has to push a real
+      // `arguments` object: gtag only reads entries of that shape, and an array
+      // is silently treated as a data push instead of a command.
       window.dataLayer = window.dataLayer || [];
-      window.gtag = function(...args) { window.dataLayer.push(args); };
+      function gtag() { window.dataLayer.push(arguments); }  // eslint-disable-line prefer-rest-params
 
-      // Initialize GA after loading
-      gtag('js', new Date());
-      gtag('config', measurementId, { anonymize_ip: true });
-    };
-    document.head.appendChild(script);
-  }
+      // Withdrawal has to be real, not just a flag. A consent update stops new
+      // writes but leaves the `_ga` cookies already on the device, so expire
+      // them here. They are set on the registrable domain, which this cannot
+      // know, so the name is expired against the host and each parent of it;
+      // the ones that do not match simply do nothing.
+      const clearAnalyticsCookies = () => {
+        const parts = location.hostname.split(".");
+        const hosts = [location.hostname];
+        for (let i = 1; i < parts.length - 1; i++) hosts.push(parts.slice(i).join("."));
+        document.cookie.split(";").forEach((entry) => {
+          const name = entry.split("=")[0].trim();
+          if (!/^_(ga|gid|gat)/.test(name)) return;
+          const dead = "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+          document.cookie = name + dead;
+          hosts.forEach((host) => {
+            document.cookie = name + dead + "; domain=" + host;
+            document.cookie = name + dead + "; domain=." + host;
+          });
+        });
+      };
 
-  function accept() {
-    localStorage.setItem("analytics_consent", "accepted");
-    loadGA();
-    banner?.remove();
-  }
+      const setConsent = (granted) => {
+        gtag("consent", "update", {
+          analytics_storage: granted ? "granted" : "denied",
+        });
+        if (!granted) clearAnalyticsCookies();
+      };
 
-  function reject() {
-    localStorage.setItem("analytics_consent", "rejected");
-    banner?.remove();
-  }
+      const onEscape = (e) => {
+        if (e.key === "Escape") hide();
+      };
 
-  if (requireConsent) {
-    if (!savedConsent) {
-      banner.classList.remove("hidden");
-      requestAnimationFrame(() => banner.classList.add("opacity-100"));
-    } else if (savedConsent === "accepted") {
-      loadGA();
-    }
-    document.getElementById("acceptCookies")?.addEventListener("click", accept);
-    document.getElementById("rejectCookies")?.addEventListener("click", reject);
-  } else {
-    // Auto-load GA if consent is not required
-    loadGA();
-  }
-})();
-</script>
+      const hide = () => {
+        banner.classList.add("hidden");
+        banner.classList.remove("opacity-100");
+        document.body.style.paddingBottom = "";
+        document.removeEventListener("keydown", onEscape);
+      };
+
+      // `reopened` is the difference between the bar arriving uninvited and
+      // the visitor asking for it, which changes both what it says and
+      // whether it may take focus.
+      const show = (reopened) => {
+        if (state) {
+          const current = reopened ? store.read() : null;
+          state.textContent = !current
+            ? ""
+            : current === "accepted"
+              ? " Analytics is currently allowed."
+              : " Analytics is currently off.";
+        }
+
+        banner.classList.remove("hidden");
+        requestAnimationFrame(() => banner.classList.add("opacity-100"));
+
+        // The bar is fixed to the bottom, so without this it sits on top of
+        // whatever is at the end of the page — including a focused link tabbed
+        // to while the bar is still up (WCAG 2.2, Focus Not Obscured).
+        document.body.style.paddingBottom = `${banner.offsetHeight}px`;
+
+        // On the first visit, deliberately no autofocus: the bar does not block
+        // the page, so pulling focus out of the document on load would
+        // interrupt someone already reading or tabbing. Reopening is a request,
+        // so there focus follows the click and Escape backs out again.
+        if (reopened) {
+          document.addEventListener("keydown", onEscape);
+          accept?.focus();
+        }
+      };
+
+      const decide = (choice) => {
+        store.save(choice);
+        setConsent(choice === "accepted");
+        hide();
+      };
+
+      accept?.addEventListener("click", () => decide("accepted"));
+      reject?.addEventListener("click", () => decide("rejected"));
+
+      // Any `data-cookie-settings` control on the page reopens the bar — the
+      // footer ships one. They arrive hidden and are revealed here, so the
+      // control never shows on a build where there is nothing for it to open.
+      //
+      // This waits for the parser. <Analytics> sits at the top of <body> and
+      // these scripts are `is:inline`, so they run long before the footer is
+      // parsed — querying for the triggers now would find none of them. The
+      // bar itself is markup from this same component, immediately above, so
+      // showing it below does not have to wait.
+      const wireTriggers = () => {
+        document.querySelectorAll("[data-cookie-settings]").forEach((el) => {
+          el.hidden = false;
+          const wrap = el.parentElement;
+          if (wrap && wrap.hasAttribute("hidden")) wrap.hidden = false;
+          el.addEventListener("click", () => show(true));
+        });
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", wireTriggers);
+      } else {
+        wireTriggers();
+      }
+
+      // A live stored choice was already applied as the consent default (see
+      // consentDefault), so re-sending it as an update here would be redundant.
+      // Nothing stored means no choice yet, or one that has aged past six
+      // months — either way, ask.
+      if (!store.read()) show(false);
+    })();
+  </script>
+)}

@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -7,72 +8,48 @@ interface Props {
 
 const { project } = Astro.props;
 
-const images = import.meta.glob<{ default: ImageMetadata}>(
-  '/src/content/projects/**/*.{png,jpg}',
-  { eager: true }
-);
-
-const getProjectImage = (slug: string) => {
-  let entry = Object.entries(images).find(([path]) =>
-    path.includes(`/src/content/projects/${slug}/${slug}.png`)
-  );
-  if (!entry) {
-    entry = Object.entries(images).find(([path]) =>
-      path.includes(`/src/content/projects/${slug}/${slug}.jpg`)
-    );
-  }
-  return entry ? entry[1].default : null;
-};
-
-const mainImage = getProjectImage(project.slug);
-
+const mainImage = project.data.thumbnail ?? project.data.image;
 ---
 
+{mainImage && (
 <div class="relative group thumbnail overflow-hidden">
-  <!-- Image -->
-  <img
-    src={mainImage?.src}
+  {/* Image */}
+  <Image
+    src={mainImage}
     alt={project.data.title}
-    class="transition-transform duration-300 ease-in-out group-hover:scale-101 items-center"
+    widths={[640, 1024, 1600]}
+    sizes="(min-width: 900px) 80rem, 100vw"
+    class="w-full aspect-16/10 object-cover object-center transition-transform duration-300 ease-in-out group-hover:scale-105"
   />
 
-  <!-- Overlay with text -->
+  {/* Overlay with text */}
   <div class="glassHover">
-    <h3 class="text-[var(--background-color)] drop-shadow-[1px_1px_2px_var(--color-caption-secondary)]">
+    <span
+      aria-hidden="true"
+      class="text-h3 font-semibold text-(--background-color) drop-shadow-[1px_1px_2px_var(--color-caption-secondary)]"
+    >
       {project.data.title}
-    </h3>
+    </span>
   </div>
 </div>
-
+)}
 
 <style>
   @reference "@/styles/global.css";
 
-  .thumbnail{
-    @apply w-full max-w-full;   
+  .thumbnail {
+    @apply w-full overflow-hidden;
   }
 
-  /* .glassHover{
+  /* Both rules here were scoped to `html.light_mode` / `html.dark_mode` while the
+     theme class sat on <body>, so neither matched and `.glassHover` had no base
+     rule at all — the overlay div was entirely unstyled and its title sat as bare
+     text on the image. One rule now, with the dark half as a variant. */
+  .glassHover {
     @apply absolute inset-0 flex flex-col items-center justify-center
-    bg-gradient-to-t from-white/20 via-white/10 to-white/5
-    backdrop-blur-md border border-white/25
-    rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100;
-  } */
-
-
-  body.light_mode .glassHover {
-    @apply absolute inset-0 flex flex-col items-center justify-center
-    bg-gradient-to-t from-black/5 via-black/2 to-transparent
+    bg-linear-to-t from-black/5 via-black/2 to-transparent
     border border-black/10 backdrop-blur-md
-    rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100;
+    rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100
+    dark:from-white/20 dark:via-white/10 dark:to-white/5 dark:border-white/25;
   }
-
-
-  body.dark_mode .glassHover {
-    @apply absolute inset-0 flex flex-col items-center justify-center
-    bg-gradient-to-t from-white/20 via-white/10 to-white/5
-    backdrop-blur-md border border-white/25
-    rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100;
-  }
-
 </style>

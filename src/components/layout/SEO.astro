@@ -1,40 +1,48 @@
 ---
 import type { SeoData } from '@/ts/type.ts';
 
-const { title, description, image, url, keywords } = Astro.props as SeoData;
+const { title, description, image, url, keywords, noindex } = Astro.props as SeoData;
 const fullTitle = `${title} | insdash | Zürich`;
-const ogImage = image ?? './images/logo/insdash_dark.png';
 
 const keywordString = Array.isArray(keywords)
   ? keywords.join(', ')
   : (keywords ?? '');
 
-const baseUrl = import.meta.env.SITE || 'https://insdash.github.io';
+const site = (import.meta.env.SITE || 'https://insdash.ch').replace(
+  /\/$/,
+  ''
+);
+const base = import.meta.env.BASE_URL;
 const pageUrl = url ?? Astro.url.pathname;
 
 // Check if pageUrl already starts with http
 const canonicalUrl = pageUrl.startsWith('http')
   ? pageUrl
-  : `${baseUrl}${pageUrl.startsWith('/') ? pageUrl : `/${pageUrl}`}`;
-  
+  : `${site}${pageUrl.startsWith('/') ? pageUrl : `/${pageUrl}`}`;
+
+// Social crawlers don't resolve relative URLs, so og:/twitter: images have to
+// be absolute. Accepts './foo.png', '/foo.png' or an already-absolute URL.
+const rawImage = image ?? `${base}images/logo/insdash_dark.png`;
+const ogImage = rawImage.startsWith('http')
+  ? rawImage
+  : `${site}/${rawImage.replace(/^\.?\//, '')}`;
 ---
 
 <title>{fullTitle}</title>
-<meta property="og:image" content={ogImage} />
-<meta property="og:url" content={canonicalUrl} />
+{/* The human sitemap duplicates the XML one; it should not be indexed. */}
+{noindex && <meta name="robots" content="noindex, follow" />}
 {description && <meta name="description" content={description} />}
 {keywordString && <meta name="keywords" content={keywordString} />}
-{url && <link rel="canonical" href={canonicalUrl} />}
+<link rel="canonical" href={canonicalUrl} />
 
-<!-- Open Graph / Social Preview -->
+{/* Open Graph / Social Preview */}
 <meta property="og:title" content={fullTitle} />
-{url && <meta property="og:url" content={url} />}
-<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={ogImage} />
 {description && <meta property="og:description" content={description} />}
-{image && <meta property="og:image" content={image} />}
 
-<!-- Twitter Card -->
+{/* Twitter Card */}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 {description && <meta name="twitter:description" content={description} />}
-{image && <meta name="twitter:image" content={image} />}
+<meta name="twitter:image" content={ogImage} />

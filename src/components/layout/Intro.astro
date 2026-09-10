@@ -1,38 +1,42 @@
 ---
+import { getEntry } from 'astro:content';
 import Tag from '@/components/UI/Tag.astro';
-const {
-  description = 'We build scalable systems grounded in comprehensive research, applying interactive design principles to optimize workflows and deliver efficient, user-centric solutions.',
-} = Astro.props;
 
-const skills = [
-  'Web & App Development',
-  'UI/UX Design & Services',
-  'AR/VR Development and prototyping',
-  'Branding & Visual Design',
-  '3D & Motion Services',
-];
+interface Props {
+  description?: string;
+}
+
+// Both the blurb and the tags come from src/content/services/services.md, so
+// editing that file is enough to change what the intro advertises.
+const entry = await getEntry('services', 'services');
+
+if (!entry)
+  throw new Error('Missing content collection entry: services/services.md');
+
+const { description = entry.data.homeBlurb } = Astro.props as Props;
+
+const services = entry.data.services.map((s) => s.name);
 ---
 
 <script></script>
 
 <div class="intro">
-  <p class="intro_item">Hi there!</p><br /><p class="intro_item">This is </p>
-  <h3 class="intro_item">insdash</h3>
-  <br />
-  <h4 class="intro_item">Here is what we do</h4>
-  <p class="intro_item">
+  {/* The page had no h1 at all, and the brand name was an h3 with the section
+      head an h4 — levels chosen for size rather than structure. The wordmark is
+      a wordmark, so it stops being a heading; the positioning line becomes the h1. */}
+  <p class="eyebrow">insdash — Zürich</p>
+  <h1 class="intro_headline">We design it and we build it.</h1>
+  <p class="intro_item lead">
     {description}
   </p>
+  <h2 class="intro_item">Here is what we do</h2>
   <div class="mt-[2rem]">
-    <Tag tags={skills} />
+    <Tag tags={services} />
   </div>
 
 </div>
 
 <div class="intro">
-  <!-- <p>
-    {description}
-  </p> -->
   <div class="flex justify-end items-end"><p class="intro_item"><span class="material-symbols-outlined">location_on</span>Based in Zürich</p></div>
 </div>
 
@@ -41,16 +45,20 @@ const skills = [
 <style>
   @reference "@/styles/global.css";
   .intro {
-    @apply px-[2.5rem] my-[12rem] mx-auto;
+    @apply px-[2.5rem] my-[var(--space-section)] mx-auto;
   }
 
   .intro_item {
-    @apply pt-[0.1rem] m-0;
+    @apply m-0;
+  }
+
+  .intro_headline {
+    @apply text-display font-medium mt-2 mb-6;
   }
 
   @media (min-width: 900px) {
     .intro {
-      @apply my-[4rem] max-w-[80rem];
+      @apply max-w-[80rem];
     }
   }
 </style>

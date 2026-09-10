@@ -3,6 +3,14 @@ import Button from '@/components/UI/Button.astro';
 
 const { project, baseUrl } = Astro.props;
 
+// "Project Credit: insdash" read as the studio crediting itself on its own
+// self-initiated work. Say what the link actually leads to instead.
+const selfInitiated = /self[-\s]?initiated/i.test(project.data.type ?? '');
+const clientLabel = selfInitiated
+  ? 'Self-initiated by insdash'
+  : `Client: ${project.data.client}`;
+const linkHint = selfInitiated ? 'See it live…' : 'Go to the website…';
+
 ---
 
 <section>
@@ -10,10 +18,20 @@ const { project, baseUrl } = Astro.props;
             <div class="mb-[2rem]">
                   {project.data.completed}
             </div>
-            <div class="group relative inline-block">
-                  <a href={project.data.creditLink} class="item_link">Project Credit: {project.data.credit}</a>
-                  <span class="item_link_hover">Go to the Website...</span>
-            </div>
+     
+            {project.data.clientLink ? (
+                  <div class="group relative inline-block">
+                        <a
+                              href={project.data.clientLink}
+                              class="item_link"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${clientLabel} (opens in a new tab)`}>{clientLabel}</a>
+                        <span class="item_link_hover">{linkHint}</span>
+                  </div>
+            ) : (
+                  <div>{clientLabel}</div>
+            )}
 
             <div class="flex justify-end">
                   <Button

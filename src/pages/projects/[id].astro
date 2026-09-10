@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import ProjectContent from '@/components/grids/ProjectContent.astro';
+import ContactSection from '@/components/layout/ContactSection.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({
+    params: { id: p.id },
+  }));
+}
+
+const projects = await getCollection('projects');
+const project = projects.find((p) => p.id === Astro.params.id);
+
+if (!project) throw new Error(`Project not found for id: ${Astro.params.id}`);
+
+const baseUrl = import.meta.env.BASE_URL;
+
+---
+
+{/* The case-study pages shipped with a title and nothing else — no meta
+    description, so search and social both fell back to guessing from the body.
+    `info` is the one-line summary the cards already use. */}
+<Layout
+  title={project.data.title}
+  description={project.data.info}
+  image={(project.data.thumbnail ?? project.data.image)?.src}>
+  {/* Markdown body content */}
+  <article class="prose">
+    <ProjectContent project={project} baseUrl={baseUrl} />
+  </article>
+
+  {/* The case study is the most persuasive page on the site and used to end on
+      "Check more projects…", which loops a warm reader back into browsing.
+      Every other page type already carries this. */}
+  <ContactSection
+    lead="If your problem looks like this one, tell us about it. A rough sketch and a deadline is enough to start — we come back with scope, a written estimate, and a straight answer on whether building it is the right call."
+  />
+</Layout>

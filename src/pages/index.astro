@@ -3,31 +3,19 @@ import Layout from '@/layouts/Layout.astro';
 import Intro from '@/components/layout/Intro.astro';
 import Square from '@/components/grids/Square.astro';
 import About from '@/components/layout/About.astro';
+import ContactSection from '@/components/layout/ContactSection.astro';
 ---
 
 <Layout
-  title="Homepage"
-  description="Insdash  loves creating functional yet fun interactions to humanize technology!"
+  title="Design and development studio"
+  description="insdash is a design and development studio in Zürich. We take a project from the first conversation to the thing running in production."
   image="./images/logo/insdash_dark.png"
-  keywords="Insdash , software engineer, product designer, developer, interaction">
-  <div class="my-[12rem]">
-    <Intro />
-  </div>
+  keywords="design studio Zürich, web development, UI/UX design, product design, interaction design">
+  <Intro />
 
-  <Square />
-
-  <div class="text-center my-[12rem] text-[var(--color-text-hover)]">
-    <h3>
-      The website is currently being updated, and more projects are on the way.
-    </h3>
-    <h3>
-      In the meantime, you can check out <a
-        href="https://yingshiuan.github.io/yingsc/"
-        class="underline text-[var(--color-text-hover)">
-        Ying's website
-      </a>!
-    </h3>
-  </div>
+  <Square limit={3} />
 
   <About />
+
+  <ContactSection />
 </Layout>

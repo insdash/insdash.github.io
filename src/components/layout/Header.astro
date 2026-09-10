@@ -49,13 +49,11 @@ const baseUrl = import.meta.env.BASE_URL;
   }
 
   function setAppliedMode(mode: Mode): void {
-    if (mode === 'tonality') {
-      // Apply your special tonality class
-      document.body.className = 'tonality';
-    } else {
-      // Apply normal light/dark
-      document.body.className = mode;
-    }
+    // Writes to <html data-theme>, matching the synchronous script in Head.astro.
+    // This previously assigned document.body.className, which both replaced every
+    // other class on <body> and could not run before first paint.
+    document.documentElement.dataset.theme =
+      mode === 'tonality' ? 'system' : mode.replace('_mode', '');
 
     // Update <meta name="color-scheme">
     const colorScheme = document.querySelector<HTMLMetaElement>(
@@ -114,13 +112,16 @@ const baseUrl = import.meta.env.BASE_URL;
           themeTooltip.innerText = appliedMode.replace('_', ' ');
         }
 
-        setAppliedMode(appliedMode);
+        // Pass the *preference*, not the resolved mode: "tonality" has to reach
+        // the DOM as data-theme="system" so CSS keeps following the OS. Passing
+        // appliedMode pinned it to light/dark and broke follow-the-system.
+        setAppliedMode(userPreference);
       };
     }
 
     // Initial apply
     const appliedMode = getAppliedMode(userPreference);
-    setAppliedMode(appliedMode);
+    setAppliedMode(userPreference);
 
     if (themeDisplay) themeDisplay.innerText = modeIcons[userPreference];
     if (themeTooltip) themeTooltip.innerText = appliedMode.replace('_', ' ');
@@ -140,7 +141,7 @@ const baseUrl = import.meta.env.BASE_URL;
     <div class="flex flex-col">
       <div class="items-center sticky">
         <div class="logo">
-          <!-- Replace with your logo or <img> if needed -->
+          {/* Replace with your logo or <img> if needed */}
         </div>
 
         <div class="theme-bar">
@@ -150,7 +151,7 @@ const baseUrl = import.meta.env.BASE_URL;
               </a>
               <span class="tooltip">"Nice to meet you!"</span>
           </div>
-          <!-- <NavBar baseUrl={baseUrl}/> -->
+          <NavBar baseUrl={baseUrl}/>
           <div class="relative items-center group">
             <button
               id="mode-button"
@@ -166,19 +167,14 @@ const baseUrl = import.meta.env.BASE_URL;
   </div>
 </header>
 
-<!-- <div id="scroll" class="scroll-bar">
-  <p>
-    Recently completed a Research Internship at DisneyResearch|Studios, seeking
-    my next challenge in <b>creative technology</b> and
-    <b>software development!</b>
-  </p>
-</div> -->
-
 <style>
   @reference "@/styles/global.css";
 
+  /* `opacity-90` on the element faded the text too. An alpha background tints
+     only the bar, so the white links stay at full contrast. `bg-main` comes
+     from the @theme token, replacing the hardcoded hex. */
   .header-container {
-    @apply top-0 left-0 right-0 fixed z-[100] bg-[#0A1A33] opacity-90;
+    @apply top-0 left-0 right-0 fixed z-[100] bg-main/90 backdrop-blur-sm;
   }
 
   .theme-bar {
@@ -218,19 +214,11 @@ const baseUrl = import.meta.env.BASE_URL;
   }
 
   @media all and (max-width: 900px) {
-    .header-container {
-      /* background: none; */
-      width: 100%;
-    }
-
+    /* The bar keeps its own background here. It previously set
+       `background: none` while the links stayed white, so legibility depended
+       on NavBar's `z-[-99]` element painting behind a transparent parent. */
     .theme-bar {
       @apply px-[2rem] py-[0.5rem];
-    }
-
-    .infoBar {
-      position: fixed;
-      margin: 1rem auto 0rem auto;
-      padding-top: 0.2rem;
     }
   }
 </style>

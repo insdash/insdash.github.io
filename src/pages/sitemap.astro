@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+const projects = (await getCollection('projects')).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title)
+);
+
+// Example for static links
+const staticLinks = [
+  { label: 'Home', href: `${baseUrl}` },
+  { label: 'Projects', href: `${baseUrl}projects` },
+  { label: 'Services', href: `${baseUrl}services` },
+  { label: 'About', href: `${baseUrl}about` },
+  { label: 'Privacy', href: `${baseUrl}privacy` },
+];
+---
+
+<Layout
+    title="Sitemap"
+    noindex={true}
+    description="Insdash loves creating functional yet fun interactions to humanize technology!"
+    image="./images/logo/insdash_dark.png"
+    keywords="Insdash, design and development studio, Zürich, software, interaction">
+    <div class="sitemap my-[var(--space-section)]">
+      <h1>Site Sitemap</h1>
+
+      {/* Static pages */}
+      <ul>
+        {
+          staticLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+
+      {/* Project posts */}
+      {
+        projects.length > 0 && (
+          <>
+            <h2>Projects</h2>
+            <ul>
+              {projects.map((project) => (
+                <li>
+                  <a href={`${baseUrl}projects/${project.id}`}>
+                    {project.data.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </div>
+  </Layout>
+
+  <style>
+    @reference "@/styles/global.css";
+
+    .sitemap {
+      @apply px-[2.5rem] mx-auto;
+    }
+
+    .sitemap a {
+      @apply hover:underline;
+    }
+
+    @media (min-width: 900px) {
+      .sitemap {
+        @apply max-w-[80rem];
+      }
+    }
+  </style>

@@ -13,7 +13,10 @@ export default defineConfig({
   base: '/',
   integrations: [
       sitemap({
-        filter: (page) => true,
+        // Was `() => true`, which is the same as no filter and left ESLint
+        // flagging an unused `page`. The human-readable index duplicates this
+        // file, so keep it out.
+        filter: (page) => !page.endsWith('/sitemap/'),
       }),
       partytown({
           config: {

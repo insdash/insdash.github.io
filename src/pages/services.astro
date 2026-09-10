@@ -1,0 +1,268 @@
+---
+import { getEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import BreakLine from '@/components/UI/BreakLine.astro';
+import ContactSection from '@/components/layout/ContactSection.astro';
+
+// All page copy lives in src/content/services/services.md — edit the words
+// there, not here. This file only decides how they are laid out.
+const entry = await getEntry('services', 'services');
+
+if (!entry)
+  throw new Error('Missing content collection entry: services/services.md');
+
+const {
+  title,
+  description,
+  keywords,
+  eyebrow,
+  heading,
+  lead,
+  engagementsHeading,
+  engagements,
+  promise,
+  promiseEmphasis,
+  problemsHeading,
+  problems,
+  servicesHeading,
+  servicesLead,
+  servicesSummary,
+  services,
+  processHeading,
+  process: processSteps,
+} = entry.data;
+
+const slug = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+---
+
+<Layout
+  title={title}
+  description={description}
+  image="./images/logo/insdash_dark.png"
+  keywords={keywords}>
+  <section class="page_intro">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{heading}</h1>
+    <p class="lead">{lead}</p>
+  </section>
+
+  <section class="band">
+    <h2>{engagementsHeading}</h2>
+    <ul class="engagements">
+      {
+        engagements.map((e) => (
+          <li class="engagement">
+            <h3>{e.name}</h3>
+            <p>{e.body}</p>
+            <p class="engagement_evidence">{e.evidence}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="promise">
+      {promise}
+      <strong>{promiseEmphasis}</strong>
+    </p>
+  </section>
+
+  <BreakLine />
+
+  <section class="band">
+    <h2>{problemsHeading}</h2>
+    <ul class="problems">
+      {
+        problems.map((p) => (
+          <li class="problem">
+            <h3 class="problem_quote">“{p.quote}”</h3>
+            <p class="problem_body">{p.body}</p>
+            <p class="engagement_evidence">
+              <a href={p.href}>{p.evidence}</a>
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <BreakLine />
+
+  <section class="band">
+    <h2>{processHeading}</h2>
+    <ol class="process">
+      {
+        processSteps.map((p) => (
+          <li>
+            <b>{p.step}</b>
+            <p>{p.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <BreakLine />
+
+  {
+    /* Disclosed rather than displayed: the list stays in the DOM for search and
+      for anyone checking one specific line item, but thirty bullets no longer
+      outweigh the sections above. Nothing links to the group ids, so
+      collapsing them breaks no anchor. */
+  }
+  <section class="band">
+    <h2>{servicesHeading}</h2>
+    <p class="services_lead">{servicesLead}</p>
+    <details class="serviceDisclosure">
+      <summary>{servicesSummary}</summary>
+      <div class="serviceGroups">
+        {
+          services.map((group) => (
+            <div class="serviceGroup" id={slug(group.name)}>
+              <h3>{group.name}</h3>
+              <ul class="serviceItems">
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </details>
+  </section>
+
+  <BreakLine />
+
+  <ContactSection />
+</Layout>
+
+<style>
+  @reference "@/styles/global.css";
+
+  .page_intro,
+  .band {
+    @apply px-[2.5rem] mx-auto max-w-[80rem] my-[var(--space-section)];
+  }
+
+  .engagements {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-8 list-none p-0 m-0;
+  }
+
+  .engagement_evidence {
+    @apply text-sm m-0;
+    color: var(--color-text-caption);
+  }
+
+  .engagement_evidence a {
+    @apply underline;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--color-text-caption);
+  }
+
+  .engagement_evidence a:hover {
+    color: var(--color-text-hover);
+  }
+
+  .problems {
+    @apply list-none p-0 m-0 mt-8 flex flex-col gap-12 max-w-[70ch];
+  }
+
+  .problem_quote {
+    @apply m-0 mb-3;
+  }
+
+  .problem_body {
+    @apply m-0 mb-2;
+  }
+
+  .services_lead {
+    @apply mb-8 max-w-[60ch];
+    color: var(--color-text-caption);
+  }
+
+  .promise {
+    @apply mt-8 p-6 rounded-[1rem];
+    background-color: var(--color-work-background);
+  }
+
+  .serviceDisclosure summary {
+    @apply inline-flex items-center gap-3 cursor-pointer font-mono text-meta uppercase select-none;
+    list-style: none;
+  }
+
+  .serviceDisclosure summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .serviceDisclosure summary::after {
+    @apply text-base leading-none;
+    content: '+';
+    color: var(--color-text-caption);
+  }
+
+  .serviceDisclosure[open] summary::after {
+    content: '–';
+  }
+
+  .serviceDisclosure summary:hover {
+    color: var(--color-text-hover);
+  }
+
+  /* The default marker is gone, so the focus ring has to be explicit. */
+  .serviceDisclosure summary:focus-visible {
+    @apply outline-2 outline-offset-4;
+    outline-color: var(--color-text-hover);
+  }
+
+  /* Two across, not three. The items are sentences of 50-70 characters, and a
+     third column drops each one to ~379px — narrow enough that nearly every
+     line wraps. Two columns give ~576px, which most items clear outright.
+     Single column until lg for the same reason: at md, two columns are 328px. */
+  .serviceGroups {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-10 mt-8;
+  }
+
+  .serviceItems {
+    @apply list-none p-0 m-0 text-sm flex flex-col gap-1;
+  }
+
+  /* The dash is a grid cell rather than an inline ::before, so the few items
+     that still wrap hang under their own text instead of under the dash. */
+  .serviceItems li {
+    @apply grid grid-cols-[auto_1fr] gap-x-2;
+    color: var(--color-text-caption);
+  }
+
+  .serviceItems li::before {
+    content: '—';
+  }
+
+  /* Vertical: one step per row, with the label in a fixed left column so the
+     four bodies share a common measure and read as a sequence. Four across
+     put each body in a column too narrow to read at full size. Stacks to
+     label-above-body below md. */
+  .process {
+    @apply list-none p-0 m-0 flex flex-col;
+  }
+
+  .process li {
+    @apply grid grid-cols-1 md:grid-cols-[9rem_1fr] gap-x-8 gap-y-1 py-6;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .process li:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  /* The label is a <p>, so it carries the global paragraph margin. */
+  .process .meta-label {
+    @apply m-0;
+  }
+
+  .process p:last-child {
+    @apply m-0 max-w-[60ch];
+  }
+</style>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The human-readable index duplicates the XML sitemap below.
+Disallow: /sitemap/
+
+Sitemap: https://insdash.ch/sitemap-index.xml

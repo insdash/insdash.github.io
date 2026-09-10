@@ -1,58 +1,71 @@
 ---
+import { site, socials } from '@/ts/site';
+
 const year = new Date().getFullYear();
+const baseUrl = import.meta.env.BASE_URL;
+
+const footerLinks = [
+  { label: 'Work', href: `${baseUrl}projects` },
+  { label: 'Services', href: `${baseUrl}services` },
+  { label: 'About', href: `${baseUrl}about` },
+];
 ---
 
 <footer>
   <div class="footer_container">
-    <!-- Main -->
-    <div class="footer_main">
-      <div class="group relative inline-block">
-        <h4><a href="mailto:insdash.io@gmail.com">insdash</a></h4>
-        <span class="item_link_hover">Email us</span>
+    <div class="footer_top">
+      <div>
+        <p class="wordmark">
+          <a href={`mailto:${site.email}`}>{site.name}</a>
+        </p>
+        <p class="footer_meta">{site.location}</p>
       </div>
+
+      {/* Nav, socials and the sitemap link were all commented out, leaving the
+          footer with no navigation and no outbound proof at all. */}
+      <nav aria-label="Footer">
+        <ul class="footer_nav">
+          {footerLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <ul class="footer_nav">
+        {
+          socials.map((s) => (
+            <li>
+              <a href={s.href} rel="noopener noreferrer" target="_blank">
+                {s.label}
+              </a>
+            </li>
+          ))
+        }
+        {/* No link to the personal portfolio. It is written for employers and
+            says so up front, which is not where a client weighing a maintenance
+            contract should be sent. The portfolio links to this site instead. */}
+      </ul>
     </div>
-
-    <!-- Navbar -->
-    <!-- <NavBar baseUrl={baseUrl}/> -->
-    <br>
-
-    <!-- Social media -->
-    <!-- <div class="media">
-      <div class="media_icon">
-        <a href="https://www.linkedin.com/in/chenyingshiuan/" target="_blank">
-          <i class="fab fa-linkedin"></i>
-        </a>
-        <a href="https://github.com/yingshiuan" target="_blank">
-          <i class="fab fa-github"></i>
-        </a>
-        <a href="https://yingsc.medium.com" target="_blank">
-          <i class="fab fa-medium-m"></i>
-        </a>
-        <a href="https://vimeo.com/yshiuanc" target="_blank">
-          <i class="fab fa-vimeo-v"></i>
-        </a>
-
-        <a
-          href="https://www.youtube.com/channel/UCFpat39kIqYmYTbbfdoBNfA"
-          target="_blank">
-          <i class="fab fa-youtube"></i>
-        </a>
-      </div>
-    </div> -->
 
     <hr />
-    <!-- Resources -->
-    <div class="resource">
-      <!-- <ul class="sitemap">
-        <li><a href=`${baseUrl}sitemap`>Site Map</a></li>
-      </ul> -->
-    </div>
+    <nav aria-label="Legal">
+      <ul class="footer_legal">
+        <li>
+          <a href={`${baseUrl}sitemap`}>Sitemap</a>
+        </li>
+        <li>
+          <a href={`${baseUrl}privacy`}>Privacy</a>
+        </li>
 
-    <!-- Copyright -->
+        <li hidden>
+          <button type="button" class="footer_button" data-cookie-settings>
+            Cookie settings
+          </button>
+        </li>
+      </ul>
+    </nav>
+
     <div class="footer_copyright">
       <p>
-        Copyright &copy; {year}
-        <a href="/">insdash</a>. All rights reserved.
+        Copyright &copy; {year} <a href={baseUrl}>{site.name}</a>. All rights reserved.
       </p>
     </div>
   </div>
@@ -61,43 +74,56 @@ const year = new Date().getFullYear();
 <style>
   @reference "@/styles/global.css";
   footer {
-    @apply bg-[#0A1A33] text-white opacity-90;
+    @apply bg-main/90 text-white;
   }
 
-  a {
+  a,
+  .footer_button {
     @apply  text-white hover:text-[var(--color-text-hover)] hover:text-shadow-[0.05rem_0.05rem_var(--color-text-primary)];
   }
 
-  .item_link_hover{
-    @apply absolute top-full left-1/2 transform mt-1 hidden px-2 py-1 text-xs text-white bg-[var(--color-text-hover)] rounded group-hover:block whitespace-nowrap;
+  /* Reads as one of the links above it, but has to be a button: it opens the
+     consent bar rather than going anywhere. */
+  .footer_button {
+    font: inherit;
+    @apply bg-transparent border-0 p-0 cursor-pointer;
+  }
+
+  .footer_button:focus-visible {
+    @apply outline-2 outline-offset-2 outline-white;
   }
 
   .footer_container {
-    @apply px-[2.5rem] py-[1rem];
+    @apply px-[2.5rem] py-[2rem];
   }
 
-  .footer_main {
-    @apply mt-[0.5rem];
+  .footer_top {
+    @apply flex flex-col gap-6 mb-6 md:flex-row md:justify-between;
+  }
+
+  .footer_meta {
+    @apply font-mono text-meta uppercase m-0 opacity-70;
+  }
+
+  .footer_nav {
+    @apply flex flex-col gap-2 list-none m-0 p-0 text-sm;
+  }
+
+  .footer_legal {
+    @apply flex flex-wrap justify-center gap-4 list-none m-0 mt-1 mb-4 p-0 text-sm;
+  }
+
+  /* The rule separates the entries visually only — the empty alt text after
+     the slash keeps the bar out of the accessibility tree, where a list
+     already conveys the boundary. `+` skips a hidden Cookie settings item, so
+     a build without a consent bar has no dangling rule. */
+  .footer_legal li + li::before {
+    content: '|' / '';
+    margin-right: 1rem;
   }
 
   .footer_copyright {
-    @apply flex justify-center text-white;
-  }
-
-  .media_icon {
-    @apply text-[1.5rem];
-  }
-
-  .media_icon a {
-    @apply px-[0.5rem] text-white hover:text-[var(--color-text-hover)] hover:text-shadow-[0.05rem_0.05rem_var(--color-text-primary)];
-  }
-
-  .media {
-    @apply flex my-[1rem];
-  }
-
-  .resource {
-    @apply mt-[1rem];
+    @apply flex justify-center text-white text-sm;
   }
 
   @media (min-width: 900px) {

@@ -1,67 +1,84 @@
 ---
-import type { ProjectMeta } from '@/ts/project';
+import type { CollectionEntry } from 'astro:content';
 import Tag from '@/components/UI/Tag.astro';
 
 interface Props {
-  projectMeta: ProjectMeta;
+  project: CollectionEntry<'projects'>;
 }
 
-const { projectMeta } = Astro.props as Props;
+const { project } = Astro.props as Props;
+const meta = project.data;
+
+// menuGen's `client` is insdash itself, so a "Client" label would read as a
+// studio hiring itself. Self-initiated work says what it is instead.
+const selfInitiated = /self[-\s]?initiated/i.test(meta.type ?? '');
 
 ---
 <section class="meta space-y-16">
   <div class="space-y-16">
-    <h2 class="projectTitle">{projectMeta.title}</h2>
-    <p class="projectDescription">{projectMeta.description}</p>
+    {/* h1, not h2: this is the page title. As an h2 it left both case studies
+        with no h1 and made every markdown `##` a sibling rather than a child. */}
+    <h1 class="projectTitle">{meta.title}</h1>
+    <p class="projectDescription lead">{meta.description}</p>
     <div class="my-[2rem]">
-      {projectMeta.tags && <Tag tags={projectMeta.tags} />}
+      {meta.tags && <Tag tags={meta.tags} />}
     </div>
   </div>
     
-  <ul class="projectDetail grid grid-cols-1 md:grid-cols-4 gap-6 list-none">
-    {projectMeta.role && (
-      <li>
-        <ol>Role:</ol>
-        <ol>{projectMeta.role}</ol>
-      </li>
+  {/* A description list is what this is. It was an <ul> whose <li>s each held
+      two <ol>s — one for the label, one for the value — which is neither a list
+      nor an ordered one. Labels are mono, values sans. */}
+  <dl class="projectDetail grid grid-cols-1 md:grid-cols-3 gap-6">
+    {meta.scope && (
+      <div class="col-span-1 md:col-span-3">
+        <dt class="meta-label">What we did</dt>
+        <dd>{meta.scope}</dd>
+      </div>
     )}
-    {projectMeta.timeline && (
-      <li>
-        <ol>Timeline:</ol>
-        <ol>{projectMeta.timeline}</ol>
-      </li>
+    {meta.timeline && (
+      <div>
+        <dt class="meta-label">Timeline</dt>
+        <dd>{meta.timeline}</dd>
+      </div>
     )}
-    {projectMeta.completed && (
-      <li>
-        <ol>Completed:</ol>
-        <ol>{projectMeta.completed}</ol>
-      </li>
+    {meta.completed && (
+      <div>
+        <dt class="meta-label">Delivered</dt>
+        <dd>{meta.completed}</dd>
+      </div>
     )}
-    {projectMeta.credit && (
-      <li>
-        <ol>Credit:</ol>
-        <ol>{projectMeta.credit}</ol>
-      </li>
-    )}
-
-    <!-- Tools full width -->
-    {projectMeta.tools && (
-      <li class="col-span-1 md:col-span-4">
-        <ol>Tools:</ol>
-        <ol>{projectMeta.tools.join(', ')}</ol>
-      </li>
+    {meta.client && (
+      <div>
+        <dt class="meta-label">{selfInitiated ? 'Origin' : 'Client'}</dt>
+        <dd>{selfInitiated ? 'Self-initiated' : meta.client}</dd>
+      </div>
     )}
 
-    <!-- Activities full width -->
-    {projectMeta.activities && (
-      <li class="col-span-1 md:col-span-4">
-        <ol>Activities:</ol>
-        <ol>
-          {projectMeta.activities}
-        </ol>
-      </li>
+    {/* The judgment the engagement turned on. Every project file already
+        carried this; nothing rendered it until now. */}
+    {!!meta.focus?.length && (
+      <div class="col-span-1 md:col-span-3">
+        <dt class="meta-label">Focus</dt>
+        <dd>{meta.focus.join(' · ')}</dd>
+      </div>
     )}
-  </ul>
+
+    {/* Tools full width */}
+    {meta.tools && (
+      <div class="col-span-1 md:col-span-3">
+        <dt class="meta-label">Tools</dt>
+        <dd>{meta.tools.join(', ')}</dd>
+      </div>
+    )}
+
+    {/* Approach full width */}
+    {meta.approach && (
+      <div class="col-span-1 md:col-span-3">
+        <dt class="meta-label">Approach</dt>
+        <dd>{meta.approach}</dd>
+      </div>
+    )}
+  </dl>
 
 </section>
 
@@ -78,8 +95,12 @@ const { projectMeta } = Astro.props as Props;
     @apply border rounded-sm p-[0.5rem];
   }
 
-  .projectDetail ol{
+  .projectDetail dt {
     @apply pb-[0.25rem];
+  }
+
+  .projectDetail dd {
+    @apply m-0;
   }
 
 </style>

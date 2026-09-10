@@ -1,0 +1,124 @@
+---
+import { getEntry, render } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import ContactSection from '@/components/layout/ContactSection.astro';
+
+interface Props {
+  profileImage?: string;
+  gifImage?: string;
+}
+
+const base = import.meta.env.BASE_URL;
+
+const {
+  profileImage = 'images/logo/insdash_dark.png',
+  gifImage = 'images/logo/insdash_w.png',
+} = Astro.props;
+
+const profileImagePath = `${base}${profileImage}`;
+const gifImagePath = `${base}${gifImage}`;
+
+// All page copy lives in src/content/about/about.md — edit the prose there, not
+// here. Links in that file are root-relative, which is correct while `base` is
+// '/' in astro.config.mjs.
+const about = await getEntry('about', 'about');
+
+if (!about) throw new Error('Missing content collection entry: about/about.md');
+
+const { title, description, keywords, eyebrow, heading, lead, contactLead } =
+  about.data;
+
+const { Content } = await render(about);
+---
+
+<Layout
+  title={title}
+  description={description}
+  image={profileImagePath}
+  keywords={keywords}>
+  <section class="about">
+    <div class="about_head">
+      <div class="about_text">
+        <p class="eyebrow">{eyebrow}</p>
+        <h1>{heading}</h1>
+        <p class="lead">{lead}</p>
+      </div>
+
+      <div class="about_portrait">
+        <div class="static_image group">
+          <img
+            src={profileImagePath}
+            alt="insdash"
+            class="profile_image group-hover:opacity-0"
+          />
+          <img
+            src={gifImagePath}
+            alt=""
+            aria-hidden="true"
+            class="profile_image absolute top-0 left-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="about_body">
+      <Content />
+    </div>
+  </section>
+
+  <ContactSection lead={contactLead} />
+</Layout>
+
+<style>
+  @reference "@/styles/global.css";
+
+  .about {
+    @apply px-[2.5rem] my-[var(--space-section)] mx-auto max-w-[80rem];
+  }
+
+  .about_head {
+    @apply grid grid-cols-1 lg:grid-cols-12 gap-8 items-start;
+  }
+
+  .about_text {
+    @apply lg:col-span-8;
+  }
+
+  .about_portrait {
+    @apply lg:col-span-4 flex justify-center lg:justify-end;
+  }
+
+  .about_body {
+    @apply mt-[var(--space-section)] max-w-[80rem];
+  }
+
+  /* The body is rendered from markdown, so its elements are outside this
+     component's scope — these rules have to be :global(). */
+  .about_body :global(a) {
+    @apply underline underline-offset-4;
+  }
+
+  .about_body :global(a:hover) {
+    color: var(--color-text-hover);
+  }
+
+  .about_body :global(ul) {
+    @apply list-none p-0 m-0 flex flex-col gap-2;
+  }
+
+  .about_body :global(ul li) {
+    @apply before:content-['—'] before:mr-2;
+  }
+
+  .about_body :global(.practicalities) {
+    color: var(--color-text-caption);
+  }
+
+  .static_image {
+    @apply relative w-72 h-72;
+  }
+
+  .profile_image {
+    @apply w-full h-full rounded-full transition-opacity duration-500;
+  }
+</style>
