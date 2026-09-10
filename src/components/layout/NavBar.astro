@@ -22,14 +22,13 @@ const links: NavLink[] = [
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const toggleBtn = document.querySelector<HTMLElement>('.navbarToggle');
-    const items = document.querySelectorAll<HTMLElement>('.item');
+    const nav = document.getElementById('mynav');
+    const toggle = nav?.querySelector<HTMLButtonElement>('.navbarToggle');
+    if (!nav || !toggle) return;
 
-    toggleBtn?.addEventListener('click', () => {
-      items.forEach((item) => {
-        item.classList.toggle('show');
-      });
-      toggleBtn.classList.toggle('hide');
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
     });
   });
 
@@ -48,20 +47,21 @@ const links: NavLink[] = [
 </script>
 
 <nav id="mynav">
-  <ul id="navbar">
-    <li class="navbarToggle">
-      <button aria-label="Toggle menu">
-        <i class="material-symbols-outlined menu-icon">menu</i>
-        <i class="material-symbols-outlined close-icon hidden">close</i>
-      </button>
-    </li>
+  <button
+    class="navbarToggle"
+    aria-label="Toggle menu"
+    aria-expanded="false"
+    aria-controls="navbar">
+    <i class="material-symbols-outlined menu-icon">menu</i>
+    <i class="material-symbols-outlined close-icon">close</i>
+  </button>
 
+  <ul id="navbar">
     {links.map((link) => (
       <li class="item">
         <a href={link.href}>{link.label}</a>
       </li>
     ))}
-   
   </ul>
 </nav>
 
@@ -72,12 +72,25 @@ const links: NavLink[] = [
    Base (mobile first)
    =========================== */
 
+  /* A flex item in Header's row. The auto margin pushes it to the right, and the
+     theme button follows it at the far right, as it does on desktop. */
   nav {
-    @apply w-full px-6 bg-main fixed top-0 left-0 z-[-99];
+    @apply ml-auto flex items-center;
   }
 
+  .navbarToggle {
+    @apply border-none text-white text-2xl cursor-pointer;
+  }
+
+  /* The list opens as a full-width panel under the bar. Its containing block is
+     Header's sticky row, which spans the whole header. */
   ul {
-    @apply list-none flex flex-col items-start m-0 py-[0.5rem];
+    @apply list-none hidden flex-col items-start m-0 py-[0.5rem] px-6
+      absolute top-full left-0 w-full bg-main;
+  }
+
+  nav.open ul {
+    @apply flex;
   }
 
   .logo {
@@ -85,7 +98,7 @@ const links: NavLink[] = [
   }
 
   .item {
-    @apply hidden w-full text-center py-[0.5rem];
+    @apply w-full text-center py-[0.5rem];
   }
 
   .item:hover {
@@ -97,28 +110,16 @@ const links: NavLink[] = [
     @apply text-white ;
   }
 
-  .item.show {
-    @apply block;
-  }
-
-  .navbarToggle {
-    @apply self-end;
-  }
-
-  .navbarToggle button {
-    @apply border-none text-white text-2xl cursor-pointer;
-  }
-
   /* --- Icon toggle logic --- */
   .navbarToggle .close-icon {
     @apply hidden;
   }
 
-  .navbarToggle.hide .menu-icon {
+  nav.open .navbarToggle .menu-icon {
     @apply hidden;
   }
 
-  .navbarToggle.hide .close-icon {
+  nav.open .navbarToggle .close-icon {
     @apply block;
   }
 
@@ -134,11 +135,11 @@ const links: NavLink[] = [
 
   @media (min-width: 900px) {
     nav {
-      @apply max-w-[80rem] mx-auto z-[99] bg-transparent static flex justify-center items-center;
+      @apply w-full px-6 max-w-[80rem] mx-auto z-[99] justify-center;
     }
 
     ul {
-      @apply flex-row p-[0.5rem];
+      @apply flex flex-row p-[0.5rem] static w-auto bg-transparent;
       /* rounded-[1rem] bg-[#2C2C2C] border border-white/25  */
     }
 

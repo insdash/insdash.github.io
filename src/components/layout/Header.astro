@@ -218,7 +218,13 @@ const baseUrl = import.meta.env.BASE_URL;
        `background: none` while the links stayed white, so legibility depended
        on NavBar's `z-[-99]` element painting behind a transparent parent. */
     .theme-bar {
-      @apply px-[2rem] py-[0.5rem];
+      @apply px-[2rem] py-[0.5rem] gap-2;
+    }
+
+    /* Solid on a phone, as it looked while NavBar's fixed panel painted behind
+       the bar, and matching the open menu panel beneath it. */
+    .header-container {
+      @apply bg-main;
     }
   }
 </style>
