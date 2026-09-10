@@ -1,0 +1,185 @@
+---
+/**
+ * Answer Engine Optimization — one JSON-LD `@graph` per page.
+ *
+ * Rendered once, from Head.astro, so no page has to remember to include it.
+ * The component works out what kind of page it is on from the pathname and
+ * builds the graph from the same content collections the page itself renders,
+ * which is why /services never drifts out of step with its own markup.
+ *
+ * Node shapes live in src/ts/aeo.ts. This file only decides which of them
+ * belong on the current page.
+ */
+import { getCollection, getEntry } from 'astro:content';
+import {
+  absolute,
+  buildBreadcrumb,
+  buildOrganization,
+  buildProject,
+  buildProjectList,
+  buildWebPage,
+  buildWebSite,
+  organizationId,
+  workId,
+} from '@/ts/aeo';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Raw value as passed to <Layout>: './foo.png', '/foo.png' or absolute. */
+  image?: string;
+  /** Absolute canonical URL, already resolved by Head.astro. */
+  canonicalUrl: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, canonicalUrl, noindex } =
+  Astro.props as Props;
+
+const siteUrl = (import.meta.env.SITE || 'https://insdash.ch').replace(
+  /\/$/,
+  ''
+);
+const base = import.meta.env.BASE_URL;
+
+// Pathname with the base prefix and any trailing slash removed, so '/projects/'
+// and '/projects' are the same route. The homepage normalises to ''.
+const route = Astro.url.pathname
+  .replace(new RegExp(`^${base.replace(/\/$/, '')}`), '')
+  .replace(/\/$/, '');
+
+const projectMatch = route.match(/^\/projects\/(.+)$/);
+const isHome = route === '';
+const isServices = route === '/services';
+const isAbout = route === '/about';
+const isWorkIndex = route === '/projects';
+
+const pageImage = absolute(image, siteUrl);
+
+// Astro builds directory-style URLs, so every canonical ends in a slash.
+// Breadcrumb crumbs and list entries have to match the canonical exactly, or
+// each one resolves to a second URL for a page that already has one.
+const href = (path = '') => `${siteUrl}/${path}${path ? '/' : ''}`;
+
+/* -------------------------------------------------------------------------
+ * The two nodes every page carries. Both keep the same @id everywhere, so a
+ * crawler merges them into one studio and one site rather than one per page.
+ * ------------------------------------------------------------------------- */
+
+// The homepage advertises the engagement shapes; only /services lists every
+// capability under them, so only /services carries the full catalogue.
+const services =
+  isHome || isServices ? await getEntry('services', 'services') : undefined;
+
+const graph: Record<string, unknown>[] = [
+  buildOrganization({
+    siteUrl,
+    services: services?.data,
+    catalogue: isServices,
+  }),
+  buildWebSite(siteUrl),
+];
+
+/* -------------------------------------------------------------------------
+ * The page itself. Skipped on noindex pages — 404 and the human sitemap are
+ * not entities anyone should be resolving.
+ * ------------------------------------------------------------------------- */
+
+if (!noindex) {
+  const trail = [{ name: 'Home', url: href() }];
+  let pageType = 'WebPage';
+  let mainEntity: string | undefined;
+
+  if (isAbout) {
+    pageType = 'AboutPage';
+    trail.push({ name: 'About', url: href('about') });
+  } else if (isServices) {
+    trail.push({ name: 'Services', url: href('services') });
+  } else if (isWorkIndex) {
+    pageType = 'CollectionPage';
+    trail.push({ name: 'Work', url: href('projects') });
+  } else if (projectMatch) {
+    pageType = 'ItemPage';
+    trail.push({ name: 'Work', url: href('projects') });
+  } else if (isHome) {
+    mainEntity = organizationId(siteUrl);
+  }
+
+  // A single "Home" crumb is not a trail; the homepage gets no breadcrumb.
+  const hasBreadcrumb = trail.length > 1;
+
+  /* ---------------------------------------------------------------------
+   * Work index: an ordered list, so an answer engine can enumerate the
+   * studio's projects instead of inferring them from anchor tags. Sorted the
+   * way Square.astro sorts the cards — featured first, then newest.
+   * ------------------------------------------------------------------- */
+  if (isWorkIndex) {
+    const projects = await getCollection('projects');
+    projects.sort((a, b) => {
+      if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+      const aDate = a.data.created;
+      const bDate = b.data.created;
+      if (!aDate && !bDate) return 0;
+      if (!aDate) return 1;
+      if (!bDate) return -1;
+      return new Date(bDate).getTime() - new Date(aDate).getTime();
+    });
+
+    graph.push(
+      buildProjectList(
+        canonicalUrl,
+        projects.map((project) => ({
+          title: project.data.title,
+          url: href(`projects/${project.id}`),
+        }))
+      )
+    );
+    mainEntity = `${canonicalUrl}#worklist`;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Case study: the page is an ItemPage whose subject is the work itself, so
+   * the studio's authorship, the client and the delivery date attach to the
+   * project rather than to the HTML document describing it.
+   * ------------------------------------------------------------------- */
+  if (projectMatch) {
+    const project = await getEntry('projects', projectMatch[1]);
+
+    if (project) {
+      trail.push({ name: project.data.title, url: canonicalUrl });
+      mainEntity = workId(canonicalUrl);
+
+      graph.push(
+        buildProject({
+          siteUrl,
+          pageUrl: canonicalUrl,
+          data: project.data,
+          image: absolute(
+            (project.data.thumbnail ?? project.data.image)?.src,
+            siteUrl
+          ),
+        })
+      );
+    }
+  }
+
+  graph.push(
+    buildWebPage({
+      siteUrl,
+      pageUrl: canonicalUrl,
+      title,
+      description,
+      image: pageImage,
+      type: pageType,
+      mainEntity,
+      hasBreadcrumb,
+    })
+  );
+
+  if (hasBreadcrumb) graph.push(buildBreadcrumb(canonicalUrl, trail));
+}
+
+const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

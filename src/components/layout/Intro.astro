@@ -1,56 +1,78 @@
 ---
 import Tag from '@/components/UI/Tag.astro';
-const {
-  description = 'We build scalable systems grounded in comprehensive research, applying interactive design principles to optimize workflows and deliver efficient, user-centric solutions.',
-} = Astro.props;
 
-const skills = [
-  'Web & App Development',
-  'UI/UX Design & Services',
-  'AR/VR Development and prototyping',
-  'Branding & Visual Design',
-  '3D & Motion Services',
-];
+// The intro at the top of a page: an eyebrow, the page's one h1, and a lead.
+// Each page passes its own copy. The homepage also asks for the display-size
+// headline, and passes the service tags and the location line.
+interface Props {
+  eyebrow: string;
+  heading: string;
+  lead: string;
+  /** The homepage hero: a display-size headline, set tight to its lead. */
+  display?: boolean;
+  /** Tags listed under the lead, with an optional h2 above them. */
+  tags?: string[];
+  tagsHeading?: string;
+  /** A location line, on its own row under the intro. */
+  location?: string;
+}
+
+const {
+  eyebrow,
+  heading,
+  lead,
+  display = false,
+  tags = [],
+  tagsHeading,
+  location,
+} = Astro.props;
 ---
 
-<script></script>
-
 <div class="intro">
-  <p class="intro_item">Hi there!</p><br /><p class="intro_item">This is </p>
-  <h3 class="intro_item">insdash</h3>
-  <br />
-  <h4 class="intro_item">Here is what we do</h4>
-  <p class="intro_item">
-    {description}
-  </p>
-  <div class="mt-[2rem]">
-    <Tag tags={skills} />
-  </div>
-
+  {/* The eyebrow is a label, not a heading, so the page keeps exactly one h1
+      and the tags heading sits under it as an h2. */}
+  <p class="eyebrow">{eyebrow}</p>
+  <h1 class:list={{ intro_headline: display }}>{heading}</h1>
+  <p class:list={['lead', { intro_item: display }]}>{lead}</p>
+  {
+    tags.length > 0 && (
+      <>
+        {tagsHeading && <h2 class="intro_item">{tagsHeading}</h2>}
+        <div class="mt-[2rem]">
+          <Tag tags={tags} />
+        </div>
+      </>
+    )
+  }
 </div>
 
-<div class="intro">
-  <!-- <p>
-    {description}
-  </p> -->
-  <div class="flex justify-end items-end"><p class="intro_item"><span class="material-symbols-outlined">location_on</span>Based in Zürich</p></div>
-</div>
-
-
+{
+  location && (
+    <div class="intro">
+      <div class="flex justify-end items-end">
+        <p class="intro_item"><span class="material-symbols-outlined">location_on</span>{location}</p>
+      </div>
+    </div>
+  )
+}
 
 <style>
   @reference "@/styles/global.css";
   .intro {
-    @apply px-[2.5rem] my-[12rem] mx-auto;
+    @apply px-[2.5rem] my-[var(--space-section)] mx-auto;
   }
 
   .intro_item {
-    @apply pt-[0.1rem] m-0;
+    @apply m-0;
+  }
+
+  .intro_headline {
+    @apply text-display font-medium mt-2 mb-6;
   }
 
   @media (min-width: 900px) {
     .intro {
-      @apply my-[4rem] max-w-[80rem];
+      @apply max-w-[80rem];
     }
   }
 </style>

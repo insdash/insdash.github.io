@@ -1,0 +1,73 @@
+---
+import { site, socials } from '@/ts/site';
+
+interface Props {
+  /** Overrides the default line above the address. */
+  lead?: string;
+}
+
+const {
+  lead = 'Tell us what you are trying to make work. A rough sketch and a deadline is enough to start — we will come back with scope, a written estimate, and a straight answer on whether building it is the right call.',
+} = Astro.props as Props;
+---
+
+{/* id="contact" is the target for links that already existed on the site but
+    pointed at nothing. */}
+<section id="contact" class="contact">
+  <p class="eyebrow">Contact</p>
+  <h2>Start a project</h2>
+  <p class="lead">{lead}</p>
+
+  <p class="contact_email">
+    <a href={`mailto:${site.email}`}>{site.email}</a>
+  </p>
+
+  <p class="contact_meta">
+    {site.location}
+    {
+      socials.map((s) => (
+        <>
+          <span aria-hidden="true"> · </span>
+          <a href={s.href} rel="noopener noreferrer" target="_blank">
+            {s.label}
+          </a>
+        </>
+      ))
+    }
+  </p>
+</section>
+
+<style>
+  @reference "@/styles/global.css";
+
+  .contact {
+    @apply px-[2.5rem] mx-auto max-w-[80rem] my-[var(--space-section)];
+  }
+
+  .contact_email {
+    @apply text-h3 font-medium mt-8 mb-2;
+  }
+
+  .contact_email a {
+    @apply underline underline-offset-4;
+  }
+
+  .contact_email a:hover {
+    color: var(--color-text-hover);
+  }
+
+  .contact_meta {
+    @apply font-mono text-meta uppercase;
+    color: var(--color-text-caption);
+  }
+
+  /* These sit inside the address line rather than in a nav, so colour alone is
+     not enough to mark them as links — same underline as the email above. */
+  .contact_meta a {
+    @apply underline underline-offset-4;
+  }
+
+  .contact_meta a:hover {
+    color: var(--color-text-hover);
+  }
+</style>

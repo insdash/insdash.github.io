@@ -3,6 +3,7 @@ import Head from '@/components/layout/Head.astro';
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 import Analytics from '@/components/layout/Analytics.astro';
+import { analytics } from '@/ts/site';
 import '@/styles/global.css';
 
 interface Props {
@@ -11,36 +12,34 @@ interface Props {
   image?: string;
   url?: string;
   keywords?: string;
+  noindex?: boolean;
 }
 
-const { title, description, image, url, keywords } = Astro.props;
+const { title, description, image, url, keywords, noindex } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+{/* Defaults to "system" so the palette and the dark: variants resolve correctly
+     from the served HTML, before the inline script runs and with JS disabled.
+     The script in Head.astro overwrites it with a stored preference. */}
+<html lang="en" data-theme="system">
   <Head
     title={title}
     description={description}
     image={image}
     url={url}
     keywords={keywords}
+    noindex={noindex}
   />
-  <Header />
   <body>
-    <Analytics measurementId="G-795EK5W2DW" requireConsent={false}/>
-
-    <slot />
-    <main class="min-h-[30vh]"></main>
+    <a href="#main" class="skip-link">Skip to content</a>
+    {/* The ID lives in site.ts because the privacy policy names the same
+        property and cookie. Changing it there updates both. */}
+    <Analytics measurementId={analytics.measurementId} requireConsent={true} />
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
     <Footer />
-    
   </body>
 </html>
-
-<style>
-  html,
-  body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>

@@ -19,12 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout your repository using git
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install, build, and upload your site
         uses: withastro/action@v6
         # with:
           # path: . # The root location of your Astro project inside the repository. (optional)
-          # node-version: 24 # The specific version of Node that should be used to build your site. Defaults to 24. (optional)
+          # node-version: 24 # The specific version of Node that should be used to build your site. Defaults to 24, which satisfies Astro 7's >=22.12 requirement. (optional)
           # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
           # build-cmd: pnpm run build # The command to run to build your site. Runs the package build script/task by default. (optional)
         # env:
@@ -40,3 +40,49 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  # Reporting only — deliberately outside the deploy path. `deploy` needs
+  # `build`, never this job, so a contrast regression can never hold up a
+  # release; it shows up as a failed check, a job summary and an artifact.
+  # Runs in parallel with `build`, so it adds no wall-clock time to a deploy.
+  a11y:
+    name: Accessibility audit
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      # Puppeteer's own postinstall pulls full Chrome (~180MB). The audit only
+      # needs a renderer, so skip that and fetch chrome-headless-shell instead.
+      - name: Install dependencies
+        run: npm ci
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+
+      - name: Cache headless Chrome
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/puppeteer
+          key: puppeteer-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install headless Chrome
+        run: npx puppeteer browsers install chrome-headless-shell
+
+      # Audits every built route in both themes and appends the report to the
+      # job summary. Exits non-zero on any WCAG 2.1 A/AA violation.
+      - name: Audit
+        run: npm run a11y
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: a11y-report
+          path: a11y-report/

@@ -1,0 +1,48 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ContactSection from '@/components/layout/ContactSection.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout
+  title="Page not found"
+  noindex={true}
+  description="That page doesn't exist. Here's the way back to the work.">
+  <section class="notfound">
+    <p class="eyebrow">404</p>
+    <h1>That page doesn't exist.</h1>
+    <p class="lead">
+      It may have moved, or the link may be out of date. The work is all still
+      here.
+    </p>
+    <ul class="notfound_links">
+      <li><a href={base}>Home</a></li>
+      <li><a href={`${base}projects/`}>Work</a></li>
+      <li><a href={`${base}services/`}>Services</a></li>
+      <li><a href={`${base}about/`}>About</a></li>
+    </ul>
+  </section>
+
+  <ContactSection lead="Or if you were looking for something specific, just ask." />
+</Layout>
+
+<style>
+  @reference "@/styles/global.css";
+
+  .notfound {
+    @apply px-[2.5rem] my-[var(--space-section)] mx-auto max-w-[80rem];
+  }
+
+  .notfound_links {
+    @apply list-none p-0 mt-8 flex flex-wrap gap-6;
+  }
+
+  .notfound_links a {
+    @apply underline underline-offset-4;
+  }
+
+  .notfound_links a:hover {
+    color: var(--color-text-hover);
+  }
+</style>

@@ -1,40 +1,59 @@
 ---
 import type { SeoData } from '@/ts/type.ts';
+import { site } from '@/ts/site';
 
-const { title, description, image, url, keywords } = Astro.props as SeoData;
+const { title, description, image, url, keywords, noindex } = Astro.props as SeoData;
 const fullTitle = `${title} | insdash | Zürich`;
-const ogImage = image ?? './images/logo/insdash_dark.png';
 
 const keywordString = Array.isArray(keywords)
   ? keywords.join(', ')
   : (keywords ?? '');
 
-const baseUrl = import.meta.env.SITE || 'https://insdash.github.io';
+const siteUrl = (import.meta.env.SITE || 'https://insdash.ch').replace(
+  /\/$/,
+  ''
+);
+const base = import.meta.env.BASE_URL;
 const pageUrl = url ?? Astro.url.pathname;
 
 // Check if pageUrl already starts with http
 const canonicalUrl = pageUrl.startsWith('http')
   ? pageUrl
-  : `${baseUrl}${pageUrl.startsWith('/') ? pageUrl : `/${pageUrl}`}`;
-  
+  : `${siteUrl}${pageUrl.startsWith('/') ? pageUrl : `/${pageUrl}`}`;
+
+// Social crawlers don't resolve relative URLs, so og:/twitter: images have to
+// be absolute. Accepts './foo.png', '/foo.png' or an already-absolute URL.
+//
+// A page with no image of its own gets the 1200×630 share card — the shape
+// summary_large_image and LinkedIn draw. The 300×300 logo used to stand in
+// here, and was cropped or shrunk wherever a link was shared. Regenerate the
+// card with `node scripts/og-image.mjs`.
+const rawImage = image ?? `${base}images/og/default.png`;
+const ogImage = rawImage.startsWith('http')
+  ? rawImage
+  : `${siteUrl}/${rawImage.replace(/^\.?\//, '')}`;
 ---
 
 <title>{fullTitle}</title>
-<meta property="og:image" content={ogImage} />
-<meta property="og:url" content={canonicalUrl} />
+{/* The human sitemap duplicates the XML one; it should not be indexed. */}
+{noindex && <meta name="robots" content="noindex, follow" />}
 {description && <meta name="description" content={description} />}
 {keywordString && <meta name="keywords" content={keywordString} />}
-{url && <link rel="canonical" href={canonicalUrl} />}
+{/* A noindex page has no preferred URL to declare. The 404 is served at
+    whatever path was missed, so its canonical named /404/, which does not exist. */}
+{!noindex && <link rel="canonical" href={canonicalUrl} />}
 
-<!-- Open Graph / Social Preview -->
+{/* Open Graph / Social Preview */}
+<meta property="og:site_name" content={site.name} />
+{/* en_GB rather than en_US: the copy is written in British spelling. */}
+<meta property="og:locale" content="en_GB" />
 <meta property="og:title" content={fullTitle} />
-{url && <meta property="og:url" content={url} />}
-<meta property="og:type" content="website" />
+{!noindex && <meta property="og:url" content={canonicalUrl} />}
+<meta property="og:image" content={ogImage} />
 {description && <meta property="og:description" content={description} />}
-{image && <meta property="og:image" content={image} />}
 
-<!-- Twitter Card -->
+{/* Twitter Card */}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 {description && <meta name="twitter:description" content={description} />}
-{image && <meta name="twitter:image" content={image} />}
+<meta name="twitter:image" content={ogImage} />

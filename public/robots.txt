@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# /sitemap/ is kept out of search by its noindex tag. Do not also Disallow it:
+# a crawler blocked from the page never sees the noindex, and the URL can still
+# be indexed from the footer link on every page.
+
+Sitemap: https://insdash.ch/sitemap-index.xml

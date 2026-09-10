@@ -1,0 +1,166 @@
+---
+
+const { baseUrl } = Astro.props;
+
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+// "Home" comes out — the wordmark in Header already links there — which frees a
+// slot for Contact without growing the mobile toggle nav. The label is "Work"
+// while the URL stays /projects: the XML sitemap, ContentFooter's button and any
+// external link all point there, and GitHub Pages offers no redirects.
+// Rule: the page title matches the nav label; the URL may differ from both.
+const links: NavLink[] = [
+  { label: 'Work', href: `${baseUrl}projects/` },
+  { label: 'Services', href: `${baseUrl}services/` },
+  { label: 'About', href: `${baseUrl}about/` },
+  { label: 'Contact', href: `${baseUrl}#contact` },
+];
+---
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.getElementById('mynav');
+    const toggle = nav?.querySelector<HTMLButtonElement>('.navbarToggle');
+    if (!nav || !toggle) return;
+
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+  const currentPath = window.location.pathname.replace(/\/$/, '');
+  const items = document.querySelectorAll<HTMLLIElement>('#navbar .item');
+
+  items.forEach(item => {
+    const link = item.querySelector('a')!;
+    const linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/$/, '');
+    if (linkPath === currentPath) {
+      item.classList.add('active-link'); // add to li instead of a
+    }
+  });
+});
+</script>
+
+<nav id="mynav">
+  <button
+    class="navbarToggle"
+    aria-label="Toggle menu"
+    aria-expanded="false"
+    aria-controls="navbar">
+    <i class="material-symbols-outlined menu-icon">menu</i>
+    <i class="material-symbols-outlined close-icon">close</i>
+  </button>
+
+  <ul id="navbar">
+    {links.map((link) => (
+      <li class="item">
+        <a href={link.href}>{link.label}</a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  @reference "@/styles/global.css";
+
+  /* ===========================
+   Base (mobile first)
+   =========================== */
+
+  /* A flex item in Header's row. The auto margin pushes it to the right, and the
+     theme button follows it at the far right, as it does on desktop. */
+  nav {
+    @apply ml-auto flex items-center;
+  }
+
+  .navbarToggle {
+    @apply border-none text-white text-2xl cursor-pointer;
+  }
+
+  /* The list opens as a full-width panel under the bar. Its containing block is
+     Header's sticky row, which spans the whole header. */
+  ul {
+    @apply list-none hidden flex-col items-start m-0 py-[0.5rem] px-6
+      absolute top-full left-0 w-full bg-main;
+  }
+
+  nav.open ul {
+    @apply flex;
+  }
+
+  .logo {
+    @apply flex-1;
+  }
+
+  .item {
+    @apply w-full text-center py-[0.5rem];
+  }
+
+  .item:hover {
+    @apply rounded-full bg-gradient-to-t from-white/20 via-white/10 to-white/5
+      backdrop-blur-md border border-white/25;
+  }
+
+  .item a {
+    @apply text-white ;
+  }
+
+  /* --- Icon toggle logic --- */
+  .navbarToggle .close-icon {
+    @apply hidden;
+  }
+
+  nav.open .navbarToggle .menu-icon {
+    @apply hidden;
+  }
+
+  nav.open .navbarToggle .close-icon {
+    @apply block;
+  }
+
+  /* Active border */
+  .active-link {
+    @apply rounded-full bg-gradient-to-t from-white/20 via-white/10 to-white/5
+    backdrop-blur-md border border-white/25;
+  }
+
+  /* ===========================
+   Larger screens (>=900px)
+   =========================== */
+
+  @media (min-width: 900px) {
+    nav {
+      @apply w-full px-6 max-w-[80rem] mx-auto z-[99] justify-center;
+    }
+
+    ul {
+      @apply flex flex-row p-[0.5rem] static w-auto bg-transparent;
+      /* rounded-[1rem] bg-[#2C2C2C] border border-white/25  */
+    }
+
+    li {
+      @apply px-4 py-0;
+    }
+
+    .item {
+      @apply block w-auto;
+    }
+
+    /* .item a {
+      @apply text-white hover:text-[var(--color-text-hover)] hover:text-shadow-[0.05rem_0.05rem_var(--color-text-primary)];
+    } */
+
+    .navbarToggle {
+      @apply hidden;
+    }
+    .footer_container,
+    .item {
+      @apply text-white;
+    }
+  }
+</style>
