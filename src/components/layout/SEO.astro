@@ -1,5 +1,6 @@
 ---
 import type { SeoData } from '@/ts/type.ts';
+import { site } from '@/ts/site';
 
 const { title, description, image, url, keywords, noindex } = Astro.props as SeoData;
 const fullTitle = `${title} | insdash | Zürich`;
@@ -8,7 +9,7 @@ const keywordString = Array.isArray(keywords)
   ? keywords.join(', ')
   : (keywords ?? '');
 
-const site = (import.meta.env.SITE || 'https://insdash.ch').replace(
+const siteUrl = (import.meta.env.SITE || 'https://insdash.ch').replace(
   /\/$/,
   ''
 );
@@ -18,14 +19,19 @@ const pageUrl = url ?? Astro.url.pathname;
 // Check if pageUrl already starts with http
 const canonicalUrl = pageUrl.startsWith('http')
   ? pageUrl
-  : `${site}${pageUrl.startsWith('/') ? pageUrl : `/${pageUrl}`}`;
+  : `${siteUrl}${pageUrl.startsWith('/') ? pageUrl : `/${pageUrl}`}`;
 
 // Social crawlers don't resolve relative URLs, so og:/twitter: images have to
 // be absolute. Accepts './foo.png', '/foo.png' or an already-absolute URL.
-const rawImage = image ?? `${base}images/logo/insdash_dark.png`;
+//
+// A page with no image of its own gets the 1200×630 share card — the shape
+// summary_large_image and LinkedIn draw. The 300×300 logo used to stand in
+// here, and was cropped or shrunk wherever a link was shared. Regenerate the
+// card with `node scripts/og-image.mjs`.
+const rawImage = image ?? `${base}images/og/default.png`;
 const ogImage = rawImage.startsWith('http')
   ? rawImage
-  : `${site}/${rawImage.replace(/^\.?\//, '')}`;
+  : `${siteUrl}/${rawImage.replace(/^\.?\//, '')}`;
 ---
 
 <title>{fullTitle}</title>
@@ -36,6 +42,9 @@ const ogImage = rawImage.startsWith('http')
 <link rel="canonical" href={canonicalUrl} />
 
 {/* Open Graph / Social Preview */}
+<meta property="og:site_name" content={site.name} />
+{/* en_GB rather than en_US: the copy is written in British spelling. */}
+<meta property="og:locale" content="en_GB" />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:image" content={ogImage} />
