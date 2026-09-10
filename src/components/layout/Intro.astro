@@ -1,46 +1,60 @@
 ---
-import { getEntry } from 'astro:content';
 import Tag from '@/components/UI/Tag.astro';
 
+// The intro at the top of a page: an eyebrow, the page's one h1, and a lead.
+// Each page passes its own copy. The homepage also asks for the display-size
+// headline, and passes the service tags and the location line.
 interface Props {
-  description?: string;
+  eyebrow: string;
+  heading: string;
+  lead: string;
+  /** The homepage hero: a display-size headline, set tight to its lead. */
+  display?: boolean;
+  /** Tags listed under the lead, with an optional h2 above them. */
+  tags?: string[];
+  tagsHeading?: string;
+  /** A location line, on its own row under the intro. */
+  location?: string;
 }
 
-// Both the blurb and the tags come from src/content/services/services.md, so
-// editing that file is enough to change what the intro advertises.
-const entry = await getEntry('services', 'services');
-
-if (!entry)
-  throw new Error('Missing content collection entry: services/services.md');
-
-const { description = entry.data.homeBlurb } = Astro.props as Props;
-
-const services = entry.data.services.map((s) => s.name);
+const {
+  eyebrow,
+  heading,
+  lead,
+  display = false,
+  tags = [],
+  tagsHeading,
+  location,
+} = Astro.props;
 ---
 
-<script></script>
-
 <div class="intro">
-  {/* The page had no h1 at all, and the brand name was an h3 with the section
-      head an h4 — levels chosen for size rather than structure. The wordmark is
-      a wordmark, so it stops being a heading; the positioning line becomes the h1. */}
-  <p class="eyebrow">insdash — Zürich</p>
-  <h1 class="intro_headline">We design it and we build it.</h1>
-  <p class="intro_item lead">
-    {description}
-  </p>
-  <h2 class="intro_item">Here is what we do</h2>
-  <div class="mt-[2rem]">
-    <Tag tags={services} />
-  </div>
-
+  {/* The eyebrow is a label, not a heading, so the page keeps exactly one h1
+      and the tags heading sits under it as an h2. */}
+  <p class="eyebrow">{eyebrow}</p>
+  <h1 class:list={{ intro_headline: display }}>{heading}</h1>
+  <p class:list={['lead', { intro_item: display }]}>{lead}</p>
+  {
+    tags.length > 0 && (
+      <>
+        {tagsHeading && <h2 class="intro_item">{tagsHeading}</h2>}
+        <div class="mt-[2rem]">
+          <Tag tags={tags} />
+        </div>
+      </>
+    )
+  }
 </div>
 
-<div class="intro">
-  <div class="flex justify-end items-end"><p class="intro_item"><span class="material-symbols-outlined">location_on</span>Based in Zürich</p></div>
-</div>
-
-
+{
+  location && (
+    <div class="intro">
+      <div class="flex justify-end items-end">
+        <p class="intro_item"><span class="material-symbols-outlined">location_on</span>{location}</p>
+      </div>
+    </div>
+  )
+}
 
 <style>
   @reference "@/styles/global.css";

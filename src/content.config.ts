@@ -58,7 +58,7 @@ const services = defineCollection({
     title: z.string(),
     description: z.string(),
     keywords: z.string(),
-    // Read by Intro.astro on the homepage, not by /services itself.
+    // Read by the homepage, which passes it to Intro — not by /services itself.
     homeBlurb: z.string(),
     // Page intro
     eyebrow: z.string(),

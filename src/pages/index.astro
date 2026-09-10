@@ -1,9 +1,17 @@
 ---
+import { getEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import Intro from '@/components/layout/Intro.astro';
 import Square from '@/components/grids/Square.astro';
 import About from '@/components/layout/About.astro';
 import ContactSection from '@/components/layout/ContactSection.astro';
+
+// The intro's blurb and tags come from src/content/services/services.md, so
+// editing that file is enough to change what the homepage advertises.
+const services = await getEntry('services', 'services');
+
+if (!services)
+  throw new Error('Missing content collection entry: services/services.md');
 ---
 
 <Layout
@@ -11,7 +19,15 @@ import ContactSection from '@/components/layout/ContactSection.astro';
   description="insdash is a design and development studio in Zürich. We take a project from the first conversation to the thing running in production."
   image="./images/logo/insdash_dark.png"
   keywords="design studio Zürich, web development, UI/UX design, product design, interaction design">
-  <Intro />
+  <Intro
+    eyebrow="insdash — Zürich"
+    heading="We design it and we build it."
+    lead={services.data.homeBlurb}
+    display
+    tagsHeading="Here is what we do"
+    tags={services.data.services.map((s) => s.name)}
+    location="Based in Zürich"
+  />
 
   <Square limit={3} />
 

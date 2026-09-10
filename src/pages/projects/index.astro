@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import Intro from '@/components/layout/Intro.astro';
 import Square from '@/components/grids/Square.astro';
 import ContactSection from '@/components/layout/ContactSection.astro';
 ---
@@ -9,26 +10,13 @@ import ContactSection from '@/components/layout/ContactSection.astro';
   description="Selected client work from insdash — a design and development studio in Zürich. Menu systems, scheduling software and 3D product animation."
   image="./images/logo/insdash_dark.png"
   keywords="design studio Zürich portfolio, web development case studies, UI/UX work">
-  {/* Was a stub rendering the homepage <Intro/> — nav-linked and listed in the
-      XML sitemap, but with no project list on it. */}
-  <div class="workIntro">
-    <p class="eyebrow">Work</p>
-    <h1>Things we designed, and things we built.</h1>
-    <p class="lead">
-      Every project here started as a client problem. Some were solved with
-      design, some needed software, and a few began as one and became the other.
-    </p>
-  </div>
+  <Intro
+    eyebrow="Work"
+    heading="Things we designed, and things we built."
+    lead="Every project here started as a client problem. Some were solved with design, some needed software, and a few began as one and became the other."
+  />
 
   <Square heading="All projects" />
 
   <ContactSection />
 </Layout>
-
-<style>
-  @reference "@/styles/global.css";
-
-  .workIntro {
-    @apply px-[2.5rem] my-[var(--space-section)] mx-auto max-w-[80rem] mb-[var(--space-section)];
-  }
-</style>
