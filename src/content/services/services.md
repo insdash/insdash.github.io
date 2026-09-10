@@ -5,8 +5,8 @@
 # ---------------------------------------------------------------------------
 
 # Head and SEO
-title: 'Services'
-description: 'What insdash does: design, build, or both. Every engagement starts with a scoping conversation and a written estimate — and if buying beats building, we say so.'
+title: 'Design and software development services'
+description: 'Design and software for small companies in Zürich. Every engagement starts with a written estimate, and if buying beats building, we say so.'
 keywords: 'design services Zürich, web application development, product design, build vs buy, Postgres, software maintenance Zürich'
 
 # The homepage intro shows this blurb, plus the service names further down.
@@ -26,7 +26,7 @@ engagements:
 
   - name: 'Build'
     body: 'We build and ship it. You get the repository and a working deployment, not a prototype.'
-    evidence: 'menuGen — a web app that turns menu data into a print-ready PDF.'
+    evidence: 'Sprachschule Yang — one month from signed scope to production, and the school owns it outright.'
 
   - name: 'Design → build'
     body: 'Starts as a design engagement. If it turns out the problem needs software, we scope that and build it too, rather than handing you a spec to take elsewhere.'
@@ -58,8 +58,13 @@ problems:
     evidence: 'menuGen — built because no product did the job.'
     href: '/projects/menugen/'
 
-# Archived — not shown on /services. The case study is still live under
-# /projects. To bring it back, delete the leading # on its lines.
+  - quote: 'We need it looked after once it is built.'
+    body: 'Software a business runs its week on needs someone still answering in year two. We keep what we deliver running, ship the features you ask for, and say so when a request is not worth building.'
+    evidence: 'Sprachschule Yang — two releases since launch, and an app we talked them out of.'
+    href: '/projects/sprachschule-yang/'
+
+# Archived — entries here are not shown on /services, and their case studies
+# stay live under /projects. To bring one back, delete the leading # on its lines.
 
 servicesHeading: 'Everything we do'
 servicesLead: 'The same people scope it, design it and build it, which is why nothing has to be re-explained when a problem moves from the interface to the database. If what you need is not on the list, ask.'
