@@ -18,6 +18,14 @@ const links: NavLink[] = [
   { label: 'About', href: `${baseUrl}about/` },
   { label: 'Contact', href: `${baseUrl}#contact` },
 ];
+
+// The current page is marked at build time, so the pill is there on first paint
+// rather than appearing after load. Contact is a section of the homepage, not a
+// page: the old script compared pathnames alone, and /#contact has the same
+// pathname as /, so Contact lit up as the current item on the homepage.
+const trim = (path: string) => path.replace(/\/$/, '');
+const isCurrent = (href: string) =>
+  !href.includes('#') && trim(href) === trim(Astro.url.pathname);
 ---
 
 <script>
@@ -31,19 +39,6 @@ const links: NavLink[] = [
       toggle.setAttribute('aria-expanded', String(open));
     });
   });
-
-  document.addEventListener('DOMContentLoaded', () => {
-  const currentPath = window.location.pathname.replace(/\/$/, '');
-  const items = document.querySelectorAll<HTMLLIElement>('#navbar .item');
-
-  items.forEach(item => {
-    const link = item.querySelector('a')!;
-    const linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/$/, '');
-    if (linkPath === currentPath) {
-      item.classList.add('active-link'); // add to li instead of a
-    }
-  });
-});
 </script>
 
 <nav id="mynav">
@@ -57,11 +52,14 @@ const links: NavLink[] = [
   </button>
 
   <ul id="navbar">
-    {links.map((link) => (
-      <li class="item">
-        <a href={link.href}>{link.label}</a>
-      </li>
-    ))}
+    {links.map((link) => {
+      const current = isCurrent(link.href);
+      return (
+        <li class:list={['item', { 'active-link': current }]}>
+          <a href={link.href} aria-current={current ? 'page' : undefined}>{link.label}</a>
+        </li>
+      );
+    })}
   </ul>
 </nav>
 
