@@ -49,6 +49,9 @@ jobs:
     name: Accessibility audit
     runs-on: ubuntu-latest
     continue-on-error: true
+    # Build and audit take a few minutes. Without a limit, a hang runs until
+    # GitHub's six-hour cap or until someone cancels it.
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v7

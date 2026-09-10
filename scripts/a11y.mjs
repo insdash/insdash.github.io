@@ -210,6 +210,29 @@ function markdown(findings, contrast) {
   return lines.join('\n');
 }
 
+/**
+ * chrome-headless-shell keeps CI light; full Chrome is the local fallback.
+ *
+ * On CI both launch with --no-sandbox. Chrome's sandbox depends on kernel
+ * settings the runner controls, and the audit only ever loads this build from
+ * localhost, so the sandbox protects nothing here. Local runs are unchanged.
+ *
+ * If both launches fail, the first error is the one thrown. The fallback's
+ * "Could not find Chrome" was all CI reported, and it hid why the shell failed.
+ */
+async function launchBrowser() {
+  const args = process.env.CI ? ['--no-sandbox'] : [];
+  try {
+    return await puppeteer.launch({ headless: 'shell', args });
+  } catch (shellError) {
+    try {
+      return await puppeteer.launch({ headless: true, args });
+    } catch {
+      throw shellError;
+    }
+  }
+}
+
 async function main() {
   const all = routes().sort();
   const targets = opts.url ? all.filter((r) => r.includes(opts.url)) : all;
@@ -220,20 +243,18 @@ async function main() {
     `Auditing ${targets.length} route(s) × ${themes.length} theme(s)\n`
   );
 
-  const server = await serveDist(opts.port);
-  // chrome-headless-shell keeps CI light; fall back to full Chrome locally.
-  let browser;
-  try {
-    browser = await puppeteer.launch({ headless: 'shell' });
-  } catch {
-    browser = await puppeteer.launch({ headless: true });
-  }
-
   const findings = [];
   const contrast = [];
   const raw = [];
 
+  const server = await serveDist(opts.port);
+  let browser;
+
+  // The launch is inside the try so a browser that fails to start still closes
+  // the server. It used to sit above it: on CI the launch threw, the error was
+  // printed, and the open server kept Node running until the job was cancelled.
   try {
+    browser = await launchBrowser();
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 900 });
 
@@ -265,7 +286,9 @@ async function main() {
       }
     }
   } finally {
-    await browser.close();
+    // Undefined when the launch failed — and a throw here would skip closing
+    // the server, which is the hang all over again.
+    await browser?.close();
     server.closeAllConnections?.();
     server.close();
   }
