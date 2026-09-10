@@ -40,7 +40,7 @@ approach: 'Self-initiated after the A Fatt engagement. Product decisions, interf
 
 There wasn't one. This is the project we set ourselves.
 
-[A Fatt](/projects/afatt) hired us to design a menu, and we delivered a modular
+[A Fatt](/projects/afatt/) hired us to design a menu, and we delivered a modular
 system in Figma and Canva that they still use. They work in Canva and are happy
 there, so we did not push a tool change on them — the switching cost would have
 landed on the restaurant, not on us.
@@ -139,6 +139,6 @@ does both halves. You are not paying a designer to produce a specification for
 somebody else to interpret.
 
 That is the whole argument, and menuGen is the clearest instance of it:
-[a menu design job](/projects/afatt) that turned into a product.
+[a menu design job](/projects/afatt/) that turned into a product.
 
 </div>

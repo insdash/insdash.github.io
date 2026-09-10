@@ -143,7 +143,7 @@ built for the general problem rather than for A Fatt, who work in Canva and are
 happily still on the system above.
 
 <div>
-  <a href="/projects/menugen">Read the menuGen case study →</a>
+  <a href="/projects/menugen/">Read the menuGen case study →</a>
 </div>
 
 ![MenuGen](./menuGen.webp)
@@ -160,7 +160,7 @@ A design engagement, run by one of us end to end — the content structure, the
 modular system and the production files the restaurant still edits today. No
 specialist was brought in, because at this size none was needed. We say that
 here for the same reason we [say which of us did what on Sprachschule
-Yang](/projects/sprachschule-yang): you should always know who did what before
+Yang](/projects/sprachschule-yang/): you should always know who did what before
 you hire anybody.
 
 #### What it means for your project

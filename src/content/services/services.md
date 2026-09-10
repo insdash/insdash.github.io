@@ -46,17 +46,17 @@ problems:
   - quote: 'We are paying for software that does not fit us.'
     body: 'Usually a subscription priced for a company ten times your size. We work out what you actually use, what it costs to replace, and tell you which way to go — including when the answer is to keep paying.'
     evidence: 'Sprachschule Yang — we ran that comparison and built the replacement.'
-    href: '/projects/sprachschule-yang'
+    href: '/projects/sprachschule-yang/'
 
   - quote: 'Our customers cannot find what they need.'
     body: 'The information is usually already there. It is in the wrong place, at the wrong size, or in the wrong order for the moment someone actually reads it.'
     evidence: 'A Fatt — a menu that explains unfamiliar dishes and flags what is in them.'
-    href: '/projects/afatt'
+    href: '/projects/afatt/'
 
   - quote: 'The thing we need does not seem to exist.'
     body: 'Then it probably does not, and building it is a real option worth pricing. If it turns out something on the market does the job, we will tell you that instead.'
     evidence: 'menuGen — built because no product did the job.'
-    href: '/projects/menugen'
+    href: '/projects/menugen/'
 
 # Archived — not shown on /services. The case study is still live under
 # /projects. To bring it back, delete the leading # on its lines.

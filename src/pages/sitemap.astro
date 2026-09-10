@@ -11,10 +11,10 @@ const projects = (await getCollection('projects')).sort((a, b) =>
 // Example for static links
 const staticLinks = [
   { label: 'Home', href: `${baseUrl}` },
-  { label: 'Projects', href: `${baseUrl}projects` },
-  { label: 'Services', href: `${baseUrl}services` },
-  { label: 'About', href: `${baseUrl}about` },
-  { label: 'Privacy', href: `${baseUrl}privacy` },
+  { label: 'Projects', href: `${baseUrl}projects/` },
+  { label: 'Services', href: `${baseUrl}services/` },
+  { label: 'About', href: `${baseUrl}about/` },
+  { label: 'Privacy', href: `${baseUrl}privacy/` },
 ];
 ---
 
@@ -46,7 +46,7 @@ const staticLinks = [
             <ul>
               {projects.map((project) => (
                 <li>
-                  <a href={`${baseUrl}projects/${project.id}`}>
+                  <a href={`${baseUrl}projects/${project.id}/`}>
                     {project.data.title}
                   </a>
                 </li>

@@ -10,6 +10,10 @@ export default defineConfig({
    site: 'https://insdash.ch',
   // repo name
   base: '/',
+  // Canonicals and the sitemap already end in a slash, and GitHub Pages answers
+  // `/about` with a 301 to `/about/`. Internal links have to carry the slash;
+  // this makes the dev server flag the ones that do not.
+  trailingSlash: 'always',
   integrations: [
       sitemap({
         // Was `() => true`, which is the same as no filter and left ESLint
