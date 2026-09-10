@@ -71,7 +71,8 @@ const KNOWS_ABOUT = [
   'Web Application Development',
   'Product Design',
   'Interaction Design',
-  'UI/UX Design',
+  'Interface Design',
+  'UX Research',
   'Design Systems',
   'Build vs Buy Analysis',
   'Requirements Gathering',
@@ -146,8 +147,6 @@ type ServicesData = CollectionEntry<'services'>['data'];
 
 export interface OrganizationInput {
   siteUrl: string;
-  /** Overrides the studio description. Defaults to the /about opening. */
-  description?: string;
   /** services.md. Adds the four engagement shapes and the service types. */
   services?: ServicesData;
   /**
@@ -170,7 +169,6 @@ export interface OrganizationInput {
  */
 export function buildOrganization({
   siteUrl,
-  description = STUDIO_DESCRIPTION,
   services,
   catalogue = false,
 }: OrganizationInput) {
@@ -181,7 +179,9 @@ export function buildOrganization({
     '@id': id,
     name: site.name,
     url: `${siteUrl}/`,
-    description,
+    // The same on every page. `/` and /about used to pass their own meta
+    // description in, which gave one @id two descriptions to reconcile.
+    description: STUDIO_DESCRIPTION,
     disambiguatingDescription: STUDIO_DIFFERENTIATOR,
     slogan: STUDIO_SLOGAN,
     logo: {

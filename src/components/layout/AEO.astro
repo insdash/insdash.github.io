@@ -71,12 +71,9 @@ const href = (path = '') => `${siteUrl}/${path}${path ? '/' : ''}`;
 const services =
   isHome || isServices ? await getEntry('services', 'services') : undefined;
 
-const about = isHome || isAbout ? await getEntry('about', 'about') : undefined;
-
 const graph: Record<string, unknown>[] = [
   buildOrganization({
     siteUrl,
-    description: about?.data.description,
     services: services?.data,
     catalogue: isServices,
   }),
