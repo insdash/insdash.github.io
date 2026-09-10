@@ -114,9 +114,9 @@ their own lessons open, a colleague's does not.
 
 #### Who did what
 
-Both of us — which here is the whole studio.
+Two people worked on this one.
 
-We are two people with deliberately different halves. One is a **senior software
+One is a **senior software
 engineer** — the database, the access rules, the deploy, the parts that decide
 whether a system is still standing in year three. The other is a **product
 engineer** — the conversation with the owner, what gets built and what does not,
@@ -130,8 +130,8 @@ model. The software engineer implemented it and took it to production in July.
 
 **Since August it has run the other way.** The new feature work — the hours
 report, the mobile pass, the term breaks, the Postgres migrations underneath
-them — is written by the product engineer and reviewed by the software engineer
-before anything merges. **Nothing
+them — is written by the product engineer, and none of it goes live without the
+software engineer. **Nothing
 reaches the school's live schedule on one person's say-so**, which matters more
 on a system a business runs its week on than anything we could say about our own
 process.

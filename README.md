@@ -10,7 +10,7 @@ This repository is the source of our website, **[insdash.ch](https://insdash.ch)
 
 ## Who we are
 
-insdash is two people. We build for the companies that fall through the gap in
+insdash is a small studio. We build for the companies that fall through the gap in
 this market — too specific for off-the-shelf software, too small to be
 interesting to an agency, and too important to hand to somebody who will not be
 reachable next year.

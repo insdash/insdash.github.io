@@ -26,7 +26,7 @@ import { site, socials } from './site';
 
 /** about.md, first paragraph. Kept short enough for an answer engine to quote. */
 const STUDIO_DESCRIPTION =
-  'insdash is a two-person design and development studio in Zürich. We design and build software for small companies — too specific for off-the-shelf products, too small to interest an agency — and we take a project from the first conversation to the thing running in production.';
+  'insdash is a design and development studio in Zürich. We design and build software for small companies — too specific for off-the-shelf products, too small to interest an agency — and we take a project from the first conversation to the thing running in production.';
 
 /**
  * The one line that separates insdash from every other studio in the city.
@@ -34,16 +34,13 @@ const STUDIO_DESCRIPTION =
  * answer engine reaches for when it has to say what makes a company different.
  */
 const STUDIO_DIFFERENTIATOR =
-  'The same two people run the requirements, the interface design and the production code, so a design engagement can turn into working software without changing supplier — and the studio will say when buying beats building.';
+  'The requirements, the interface design and the production code are done in one place, so a design engagement can turn into working software without changing supplier — and the studio will say when buying beats building.';
 
 /** about.md: "We design and build." */
 const STUDIO_SLOGAN = 'We design and build.';
 
 /** The studio’s first client engagement, completed 08/2021. */
 const FOUNDING_YEAR = '2021';
-
-/** about.md: "a two-person design and development studio in Zürich". */
-const HEADCOUNT = 2;
 
 /**
  * Working languages, as BCP-47 tags. English only, matching the site.
@@ -202,10 +199,6 @@ export function buildOrganization({
         addressLocality: 'Zürich',
         addressCountry: 'CH',
       },
-    },
-    numberOfEmployees: {
-      '@type': 'QuantitativeValue',
-      value: HEADCOUNT,
     },
     address: {
       '@type': 'PostalAddress',

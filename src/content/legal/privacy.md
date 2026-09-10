@@ -19,8 +19,8 @@ long version, written to be checked rather than skimmed.
 
 insdash, Zürich, Switzerland — <insdash.io@gmail.com>.
 
-We are a two-person studio, and the same two people who built this site answer
-anything you write to us about it. We have not appointed a data protection
+We are a small studio, and the person who built this site answers anything you
+write to us about it. We have not appointed a data protection
 officer; at this size, holding this little, neither Swiss nor EU law requires
 one.
 
