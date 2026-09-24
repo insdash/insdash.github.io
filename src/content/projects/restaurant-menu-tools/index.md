@@ -84,9 +84,13 @@ Every piece is a web page at its real print size, with the brand's colours and f
 
 The flyer hangs outside the restaurant with a QR code carrying their logo. A logo uses up a QR code's error correction, and a code that has gone too far still looks fine on screen and fails on the wall. So we built a small tool, [inscode](https://github.com/yingshiuan/inscode), that measures how much the logo can cover, checks the code at its printed size, and reads back every file it writes before calling it done. The printed flyer scans.
 
+![inscode with A Fatt's seal on a code for afatt.ch: data intact, module size at print size, verified safe](./inscode.webp)
+
 #### A logo that holds at poster size
 
-We rebuilt their logo as clean vectors, the seal from true circles and arcs and the wordmark refitted, so it stays sharp at A2.
+We rebuilt their logo as clean vectors, the seal from true circles and arcs and the wordmark refitted, so it stays sharp at A2. We have since turned that approach into an in-house vectoriser for other clients' logos.
+
+![Our vectoriser tracing the studio's own 144 px logo: bitmap on the left, vector on the right](./vectorize.webp)
 
 </div>
 
