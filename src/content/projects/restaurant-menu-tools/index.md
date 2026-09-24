@@ -92,6 +92,8 @@ We rebuilt their logo as clean vectors, the seal from true circles and arcs and 
 
 ![A test run of our vectoriser on A Fatt's wordmark, after the job, with tuned settings: one ink found, background removed, repeated letters written as exact copies. The delivered logo set was made by the original script.](./vectorize.webp)
 
+![The same trace, half and half: the source bitmap on the left, the vector on the right.](./vectorize-compare.webp)
+
 ![The bowl up close, same settings: the chopsticks keep their white outline against the bowl.](./vectorize-bowl.webp)
 
 </div>
