@@ -42,7 +42,7 @@ approach: 'We start from what the restaurant actually does every week, not from 
 
 A Fatt is a Malaysian Chinese restaurant in Zürich. In 2024 they asked us to redo their menu. Two years later they came back for new work. This page covers both, and the tools the work turned out to need.
 
-![The three A2 posters: the full menu, the recommended dishes, and every vegan and vegetarian dish](./posters.webp)
+![The two A2 posters: the recommended dishes, and every vegan and vegetarian dish](./posters.webp)
 
 A menu is never finished. Prices change, dishes come and go, and every version lives in several places at once: the printed menu, the posters, the website, and each language. None of that is hard work, which is exactly why it drifts back to a designer every few months, or quietly goes out of date. So we keep the menu as data, and make everything else a view of it.
 
@@ -66,13 +66,11 @@ The full 2024 process is in the [original case study](/projects/afatt/).
 
 ## 2026: they came back
 
-A Fatt returned as a paying client for a dessert section, an exterior flyer with a QR code, three A2 posters, gift cards and name cards. We built the new pieces as code.
+A Fatt returned as a paying client for a dessert section, an exterior flyer with a QR code, two A2 posters, gift cards and name cards. We built the new pieces as code.
 
 #### One dish list, every poster
 
-Every piece is a web page at its real print size, with the brand's colours and fonts defined once. The menu is a single dish list. Mark a dish as recommended and it appears on the full menu and on the recommendations poster. Tag it vegan or vegetarian and it joins the veggie poster. A page that overflows is flagged before it reaches the printer. When a price changes, it changes once, and every poster follows.
-
-![The A2 menu](./a2-menu.webp)
+Every piece is a web page at its real print size, with the brand's colours and fonts defined once. The menu is a single dish list. Mark a dish as recommended and it joins the recommendations poster. Tag it vegan or vegetarian and it joins the veggie poster. A page that overflows is flagged before it reaches the printer. When a price changes, it changes once, and every poster follows.
 
 ![The recommended dishes](./a2-picks.webp)
 
