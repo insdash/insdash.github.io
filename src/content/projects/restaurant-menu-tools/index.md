@@ -90,7 +90,7 @@ The flyer hangs outside the restaurant with a QR code carrying their logo. A log
 
 We rebuilt their logo as clean vectors, the seal from true circles and arcs and the wordmark refitted, so it stays sharp at A2. We have since turned that approach into an in-house vectoriser for other clients' logos.
 
-![Our vectoriser tracing the studio's own 144 px logo: bitmap on the left, vector on the right](./vectorize.webp)
+![A test run of our vectoriser on A Fatt's wordmark, after the job: one ink found, background removed, repeated letters written as exact copies. The delivered logo set was made by the original script.](./vectorize.webp)
 
 </div>
 
