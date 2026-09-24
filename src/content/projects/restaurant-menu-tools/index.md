@@ -86,6 +86,8 @@ The flyer hangs outside the restaurant with a QR code carrying their logo. A log
 
 ![The flyer's code in inscode: A Fatt's seal across the whole code, and still verified. Data intact, the module size above the floor at print size, and the logo verified safe.](./inscode.webp)
 
+![The same link in inscode's centre-logo mode: a standard code with the seal on a clear plate, also verified safe.](./inscode-centre.webp)
+
 #### A logo that holds at poster size
 
 We rebuilt their logo as clean vectors, the seal from true circles and arcs and the wordmark refitted, so it stays sharp at A2. We have since turned that approach into an in-house vectoriser for other clients' logos.
