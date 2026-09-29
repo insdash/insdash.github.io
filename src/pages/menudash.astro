@@ -7,6 +7,11 @@ import ContactSection from '@/components/layout/ContactSection.astro';
 import afattPhone from '@/assets/menudash/afatt-menu-phone.webp';
 import dashboard from '@/assets/menudash/dashboard-upload.webp';
 import themeHome from '@/assets/menudash/theme-home.webp';
+import themePhone from '@/assets/menudash/theme-phone.webp';
+import themeMenu from '@/assets/menudash/theme-menu.webp';
+import allLanguages from '@/assets/menudash/menu-all-languages.webp';
+import check from '@/assets/menudash/dashboard-check.webp';
+import qr from '@/assets/menudash/dashboard-qr.webp';
 
 // All page copy lives in src/content/menudash/menudash.md — edit the words
 // there, not here. This file only decides how they are laid out.
@@ -32,6 +37,8 @@ const {
   addonsHeading,
   addonsLead,
   addons,
+  themeHeading,
+  themeBody,
   packagesHeading,
   packagesLead,
   packages,
@@ -82,17 +89,27 @@ const {
 
   <BreakLine />
 
-  <section class="band">
-    <div class="two_col">
-      <div>
-        <h2>{guestsHeading}</h2>
-        <ul class="dash_list">{guests.map((g) => <li>{g}</li>)}</ul>
-      </div>
-      <div>
-        <h2>{ownerHeading}</h2>
-        <ul class="dash_list">{owner.map((o) => <li>{o}</li>)}</ul>
-      </div>
+  <section class="band intro_grid">
+    <div>
+      <h2>{guestsHeading}</h2>
+      <ul class="dash_list">{guests.map((g) => <li>{g}</li>)}</ul>
     </div>
+    <figure class="phone">
+      <Image
+        src={allLanguages}
+        alt="The sample menu on a phone with All selected: each dish in German, Chinese and English, with its description in each language, diet marks and a photo"
+        widths={[370, 740]}
+        sizes="(min-width: 768px) 370px, 80vw"
+      />
+      <figcaption>All three languages at once, with the sample menu.</figcaption>
+    </figure>
+  </section>
+
+  <BreakLine />
+
+  <section class="band">
+    <h2>{ownerHeading}</h2>
+    <ul class="dash_list owner_list">{owner.map((o) => <li>{o}</li>)}</ul>
     <figure class="shot">
       <Image
         src={dashboard}
@@ -100,8 +117,29 @@ const {
         widths={[800, 1600]}
         sizes="(min-width: 1280px) 75rem, 100vw"
       />
-      <figcaption>The dashboard after an upload, with the sample menu.</figcaption>
+      <figcaption>The dashboard after an upload.</figcaption>
     </figure>
+    <div class="two_col shots">
+      <figure class="shot">
+        <Image
+          src={check}
+          alt="The check list: every dish with its number, photo or “no photo”, German and Chinese name, diet marks and price, grouped by category"
+          widths={[600, 1200]}
+          sizes="(min-width: 768px) 37rem, 100vw"
+        />
+        <figcaption>The check: which dishes still need a photo.</figcaption>
+      </figure>
+      <figure class="shot">
+        <Image
+          src={qr}
+          alt="The QR code tab: fields for the link, heading and Wi-Fi, and a live preview of the table card with the menu QR code and a smaller Wi-Fi code"
+          widths={[600, 1200]}
+          sizes="(min-width: 768px) 37rem, 100vw"
+        />
+        <figcaption>QR table cards, with the Wi-Fi on them.</figcaption>
+      </figure>
+    </div>
+    <p class="caption_note">Screenshots show the sample menu that ships with MenuDash.</p>
   </section>
 
   <BreakLine />
@@ -109,25 +147,61 @@ const {
   <section class="band">
     <h2>{addonsHeading}</h2>
     <p class="band_lead">{addonsLead}</p>
-    <ul class="cards">
+    <ul class="addons">
       {
         addons.map((a) => (
           <li>
-            <h3>{a.name}</h3>
-            <p>{a.body}</p>
+            <div class="addon_text">
+              <h3>{a.name}</h3>
+              <p>{a.body}</p>
+            </div>
+            <Image
+              src={a.image}
+              alt={a.alt}
+              widths={[600, 1200]}
+              sizes="(min-width: 768px) 45rem, 100vw"
+            />
           </li>
         ))
       }
     </ul>
+  </section>
+
+  <BreakLine />
+
+  <section class="band">
+    <h2>{themeHeading}</h2>
+    <p class="band_lead">{themeBody}</p>
+    <div class="theme_shots">
+      <figure class="shot">
+        <Image
+          src={themeHome}
+          alt="The MenuDash Theme home page with sample content: an “opens today at 17:00” badge, the address, a headline, and Menu, Reserve and Order online buttons"
+          widths={[640, 1280]}
+          sizes="(min-width: 1280px) 56rem, 100vw"
+        />
+        <figcaption>The home page.</figcaption>
+      </figure>
+      <figure class="shot phone_small">
+        <Image
+          src={themePhone}
+          alt="The same home page on a phone, with a Call, Directions and Menu bar along the bottom"
+          widths={[260, 520]}
+          sizes="(min-width: 768px) 16rem, 60vw"
+        />
+        <figcaption>On a phone.</figcaption>
+      </figure>
+    </div>
     <figure class="shot">
       <Image
-        src={themeHome}
-        alt="The MenuDash Theme home page with sample content: an “opens today at 17:00” badge, the address, a headline, and Menu, Reserve and Order online buttons"
+        src={themeMenu}
+        alt="The theme's menu page: jump buttons to the lunch menu, today's specials and the menu, a language switch, and the lunch menu of the day"
         widths={[640, 1280]}
         sizes="(min-width: 1280px) 75rem, 100vw"
       />
-      <figcaption>The MenuDash Theme, with sample content.</figcaption>
+      <figcaption>The menu page, with the lunch menu and specials above the menu.</figcaption>
     </figure>
+    <p class="caption_note">Screenshots show the theme’s sample restaurant.</p>
   </section>
 
   <BreakLine />
@@ -281,6 +355,50 @@ const {
   .dash_list li::before {
     content: '—';
     color: var(--color-text-caption);
+  }
+
+  .owner_list {
+    @apply max-w-[70ch];
+  }
+
+  .shots .shot {
+    @apply mt-8;
+  }
+
+  .caption_note {
+    @apply text-sm mt-6 mb-0;
+    color: var(--color-text-caption);
+  }
+
+  /* One add-on per row: text beside its screenshot on wide screens, so each
+     claim sits next to the thing it describes. */
+  .addons {
+    @apply list-none p-0 m-0 flex flex-col gap-12;
+  }
+
+  .addons li {
+    @apply grid grid-cols-1 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-8 items-start;
+  }
+
+  .addons h3 {
+    @apply mt-0;
+  }
+
+  .addons :global(img) {
+    @apply w-full h-auto rounded-[1rem];
+    border: 1px solid var(--color-rule);
+  }
+
+  .theme_shots {
+    @apply grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_16rem] gap-8 items-start;
+  }
+
+  .theme_shots .shot {
+    @apply mt-0;
+  }
+
+  .phone_small {
+    @apply mx-auto w-full max-w-[16rem];
   }
 
   .cards {

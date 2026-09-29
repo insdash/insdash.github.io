@@ -46,12 +46,19 @@ addonsLead: 'MenuDash covers the menu. The add-ons keep the rest of what guests 
 addons:
   - name: 'Restaurant'
     body: 'Address, phone, delivery and reservation links, entered once. Opening hours with an “open now” badge, and a holiday notice that appears and disappears by itself.'
+    image: '../../assets/menudash/addon-restaurant.webp'
+    alt: 'The opening hours form: a row of time pickers per day, and a preview of how the hours read on the site'
   - name: 'Specials'
     body: 'Today’s specials and the lunch menu of the week, each from its own short spreadsheet, in the same style and languages as the menu.'
+    image: '../../assets/menudash/addon-specials.webp'
+    alt: 'Today’s specials on the site: starters, main courses and sides in German, English and Chinese, with diet marks and prices'
   - name: 'Gift Cards'
     body: 'A gift card order form. The order arrives by e-mail; a switch pauses it, and spam is kept out.'
-  - name: 'MenuDash Theme'
-    body: 'A full restaurant website around MenuDash: a home page with your recommended dishes, opening hours, a map, and a Call · Directions · Menu bar on phones. The address and hours are typed once, in MenuDash, and every page shows them.'
+    image: '../../assets/menudash/addon-giftcards.webp'
+    alt: 'The gift card page: the card picture beside a form with amounts, pickup or post, name, e-mail and an order button'
+
+themeHeading: 'MenuDash Theme'
+themeBody: 'A full restaurant website around MenuDash: a home page with your recommended dishes, opening hours and a map, the lunch menu and specials above the menu, and a Call · Directions · Menu bar on phones. The address and hours are typed once, in MenuDash, and every page shows them.'
 
 # Packages. No prices here on purpose; see the note at the top.
 packagesHeading: 'Packages'

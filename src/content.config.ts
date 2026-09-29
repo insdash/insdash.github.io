@@ -163,13 +163,14 @@ const legal = defineCollection({
 
 // Page copy for /menudash, the one product we sell as a package rather than
 // as a project. Same split as `services`: every word is frontmatter, the page
-// only lays it out. Images are imported by the page, not named here.
+// only lays it out. Each add-on names its own screenshot, so adding one is a
+// frontmatter edit; the page's fixed screenshots are imported by the page.
 const menudash = defineCollection({
   loader: glob({
     pattern: '**/*.md',
     base: './src/content/menudash',
   }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     description: z.string(),
     keywords: z.string(),
@@ -186,7 +187,16 @@ const menudash = defineCollection({
     owner: z.array(z.string()),
     addonsHeading: z.string(),
     addonsLead: z.string(),
-    addons: z.array(z.object({ name: z.string(), body: z.string() })),
+    addons: z.array(
+      z.object({
+        name: z.string(),
+        body: z.string(),
+        image: image(),
+        alt: z.string(),
+      })
+    ),
+    themeHeading: z.string(),
+    themeBody: z.string(),
     packagesHeading: z.string(),
     packagesLead: z.string(),
     packages: z.array(
