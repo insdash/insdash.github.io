@@ -51,7 +51,7 @@ MenuDash makes the spreadsheet the website menu. You upload the file you already
 
 A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 110 dishes in three languages, with photos and diet marks, from the same spreadsheet the staff already edit. [See the menu on afatt.ch](https://afatt.ch/menu/).
 
-![A Fatt’s menu on a phone: language switch, diet filters, category tabs, and dishes with German and Chinese names, prices and photos](./afatt-menu-phone.webp)
+![A Fatt’s menu on a phone: language switch, diet filters, category tabs, and dishes with German and Chinese names, prices and photos](./afatt-menu-iphone.webp)
 
 </div>
 
