@@ -142,15 +142,17 @@ We set MenuDash up for restaurants. Each package is a one-time setup; the add-on
 
 Add-ons can be added to any package later. Every package is a fixed price, agreed in writing before we start.
 
+For prices, write to us with your current menu and your website address. We send the price list and a written estimate for your restaurant.
+
 **How setup works.** We agree the package and the price. The restaurant sends the menu spreadsheet, dish photos, logo, address and opening hours, and a login to its WordPress site; no site yet, and we set one up. We install it, fill everything in and check every dish against its photo before anything goes live. The owner gets a short guide with a screenshot for each thing they will do: a new menu, new hours, a holiday.
 
 </div>
 
 <div class="contentSection">
 
-## Free if you do it yourself
+## Open source, so you are not locked in
 
-MenuDash and the MenuDash Theme are free and open source. Anyone running WordPress can install them today: [MenuDash on GitHub](https://github.com/yingshiuan/menudash) and [MenuDash Theme on GitHub](https://github.com/yingshiuan/menudash-theme). What a restaurant pays us for is the setup, the add-ons, and someone who answers when something needs to change.
+MenuDash and the MenuDash Theme are open source, on GitHub for anyone to see ([MenuDash](https://github.com/yingshiuan/menudash), [MenuDash Theme](https://github.com/yingshiuan/menudash-theme)). Your menu never depends on us: if you stop working with us, it keeps running. What you pay us for is the setup, the add-ons, and someone who answers when something needs to change.
 
 **Good to know:**
 
