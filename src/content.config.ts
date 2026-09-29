@@ -161,68 +161,9 @@ const legal = defineCollection({
   }),
 });
 
-// Page copy for /menudash, the one product we sell as a package rather than
-// as a project. Same split as `services`: every word is frontmatter, the page
-// only lays it out. Each add-on names its own screenshot, so adding one is a
-// frontmatter edit; the page's fixed screenshots are imported by the page.
-const menudash = defineCollection({
-  loader: glob({
-    pattern: '**/*.md',
-    base: './src/content/menudash',
-  }),
-  schema: ({ image }) => z.object({
-    title: z.string(),
-    description: z.string(),
-    keywords: z.string(),
-    eyebrow: z.string(),
-    heading: z.string(),
-    lead: z.string(),
-    // The reference site. Only a restaurant actually running it goes here.
-    liveHeading: z.string(),
-    liveBody: z.string(),
-    liveLink: z.object({ label: z.string(), href: z.string() }),
-    guestsHeading: z.string(),
-    guests: z.array(z.string()),
-    ownerHeading: z.string(),
-    owner: z.array(z.string()),
-    addonsHeading: z.string(),
-    addonsLead: z.string(),
-    addons: z.array(
-      z.object({
-        name: z.string(),
-        body: z.string(),
-        image: image(),
-        alt: z.string(),
-      })
-    ),
-    themeHeading: z.string(),
-    themeBody: z.string(),
-    packagesHeading: z.string(),
-    packagesLead: z.string(),
-    packages: z.array(
-      z.object({
-        name: z.string(),
-        includes: z.string(),
-        fee: z.string(),
-      })
-    ),
-    packagesNote: z.string(),
-    openHeading: z.string(),
-    openBody: z.string(),
-    openLinks: z.array(z.object({ label: z.string(), href: z.string() })),
-    setupHeading: z.string(),
-    setup: z.array(z.object({ step: z.string(), body: z.string() })),
-    // What it does not do, so nobody buys a package that cannot fit.
-    limitsHeading: z.string(),
-    limits: z.array(z.string()),
-    contactLead: z.string(),
-  }),
-});
-
 export const collections = {
   projects,
   services,
   about,
   legal,
-  menudash,
 };
