@@ -18,7 +18,7 @@ hoverImage: './cover-hover.webp'
 thumbnail: './thumbnail.webp'
 seoTitle: 'MenuDash, a restaurant menu plugin for WordPress'
 info: 'A WordPress plugin that turns a restaurant’s menu spreadsheet into its website menu, in three languages with diet filters. Live on afatt.ch; we set it up for restaurants.'
-description: 'Restaurants already keep their menu in a spreadsheet. MenuDash puts that spreadsheet on their WordPress site: the owner uploads it, and guests read the menu in German, English and Chinese, with photos and diet filters. The core plugin and theme are open source; we set them up, with paid add-ons for opening hours, specials and gift cards.'
+description: 'A restaurant website’s menu is usually a copy that falls behind. MenuDash makes one spreadsheet the website menu: we set it up with the restaurant, the owner uploads it, and guests read the menu in German, English and Chinese, with photos and diet filters. The core plugin and theme are open source; we set them up, with paid add-ons for opening hours, specials and gift cards.'
 scope: 'Product, design and development, setup for restaurants'
 timeline: '2026'
 completed: 'Live on afatt.ch 09/2026'
@@ -32,16 +32,16 @@ focus:
     'Three languages',
     'Setup and care',
   ]
-approach: 'The owner should never need us for a price change. So the menu stays in the spreadsheet the staff already edit, a wrong file is refused rather than published, and the plugin lives inside the WordPress dashboard they already log into. We sell the setup and the care, not the code: the core is open source.'
+approach: 'The owner should never need us for a price change. So the menu lives in one spreadsheet the owner uploads, a wrong file is refused rather than published, and the plugin lives inside the WordPress dashboard they already log into. We sell the setup and the care, not the code: the core is open source.'
 ---
 
 <div class="contentSection">
 
 ## The problem
 
-A restaurant’s menu lives in a spreadsheet. The website menu is usually a copy of it: a PDF, a picture, or a page someone typed in by hand. Every price change means updating it twice, and the website is the copy that falls behind.
+Most restaurants keep their menu in a file they edit. The website menu is usually a copy of it: a PDF, a picture, or a page someone typed in by hand. Every price change means updating it twice, and the website is the copy that falls behind.
 
-MenuDash makes the spreadsheet the website menu. You upload the file you already keep, and the menu page updates by itself.
+MenuDash makes one spreadsheet the website menu. When we set it up, we put the menu into that spreadsheet with the restaurant. From then on, the owner uploads it, and the menu page updates by itself.
 
 </div>
 
@@ -49,7 +49,7 @@ MenuDash makes the spreadsheet the website menu. You upload the file you already
 
 ## Running on afatt.ch
 
-A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 110 dishes in three languages, with photos and diet marks, from the same spreadsheet the staff already edit. [See the menu on afatt.ch](https://afatt.ch/menu/).
+A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 110 dishes in three languages, with photos and diet marks, from one spreadsheet the owner uploads. [See the menu on afatt.ch](https://afatt.ch/menu/).
 
 ![A Fatt’s menu on a phone: language switch, diet filters, category tabs, and dishes with German and Chinese names, prices and photos](./afatt-menu-iphone-wide.webp)
 
@@ -72,7 +72,7 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 
 ## What the owner does
 
-- Upload the menu spreadsheet, as Excel or CSV. A short report says what was read, and warns about anything odd, like the same dish twice with different prices.
+- Upload the menu spreadsheet, as Excel or CSV. A short report says what was read, and warns about anything odd, like the same dish listed twice with different diet marks, or one dish number used twice.
 - A file that is not a menu is refused, so the live menu never breaks. The last five uploads can be put back with one click.
 - Upload all dish photos at once. A check list shows every dish with its photo, and which ones are still missing.
 - Print QR table cards or a poster straight from the dashboard, with the Wi-Fi on them if they like.
@@ -144,7 +144,7 @@ Add-ons can be added to any package later. Every package is a fixed price, agree
 
 For prices, write to us with your current menu and your website address. We send the price list and a written estimate for your restaurant.
 
-**How setup works.** We agree the package and the price. The restaurant sends the menu spreadsheet, dish photos, logo, address and opening hours, and a login to its WordPress site; no site yet, and we set one up. We install it, fill everything in and check every dish against its photo before anything goes live. The owner gets a short guide with a screenshot for each thing they will do: a new menu, new hours, a holiday.
+**How setup works.** We agree the package and the price. The restaurant sends its current menu, dish photos, logo, address and opening hours, and a login to its WordPress site; no site yet, and we set one up. We install it, put the menu into the spreadsheet, fill everything in and check every dish against its photo before anything goes live. The owner gets a short guide with a screenshot for each thing they will do: a new menu, new hours, a holiday.
 
 </div>
 
