@@ -1,0 +1,332 @@
+---
+import { getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '@/layouts/Layout.astro';
+import BreakLine from '@/components/UI/BreakLine.astro';
+import ContactSection from '@/components/layout/ContactSection.astro';
+import afattPhone from '@/assets/menudash/afatt-menu-phone.webp';
+import dashboard from '@/assets/menudash/dashboard-upload.webp';
+import themeHome from '@/assets/menudash/theme-home.webp';
+
+// All page copy lives in src/content/menudash/menudash.md — edit the words
+// there, not here. This file only decides how they are laid out.
+const entry = await getEntry('menudash', 'menudash');
+
+if (!entry)
+  throw new Error('Missing content collection entry: menudash/menudash.md');
+
+const {
+  title,
+  description,
+  keywords,
+  eyebrow,
+  heading,
+  lead,
+  liveHeading,
+  liveBody,
+  liveLink,
+  guestsHeading,
+  guests,
+  ownerHeading,
+  owner,
+  addonsHeading,
+  addonsLead,
+  addons,
+  packagesHeading,
+  packagesLead,
+  packages,
+  packagesNote,
+  openHeading,
+  openBody,
+  openLinks,
+  setupHeading,
+  setup,
+  limitsHeading,
+  limits,
+  contactLead,
+} = entry.data;
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords={keywords}>
+  {/* The live menu sits beside the intro: the first thing a restaurant owner
+      sees is a real restaurant running it, not a mock-up. */}
+  <section class="page_intro intro_grid">
+    <div>
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{heading}</h1>
+      <p class="lead">{lead}</p>
+      <div class="live">
+        <h2 class="live_heading">{liveHeading}</h2>
+        <p>{liveBody}</p>
+        <p class="link_line">
+          <a href={liveLink.href} rel="noopener noreferrer" target="_blank"
+            >{liveLink.label} ↗</a
+          >
+        </p>
+      </div>
+    </div>
+    <figure class="phone">
+      <Image
+        src={afattPhone}
+        alt="A Fatt's menu on a phone: language switch, diet filters, category tabs, and dishes with German and Chinese names, prices and photos"
+        widths={[370, 740]}
+        sizes="(min-width: 768px) 370px, 80vw"
+        loading="eager"
+      />
+      <figcaption>afatt.ch/menu on a phone</figcaption>
+    </figure>
+  </section>
+
+  <BreakLine />
+
+  <section class="band">
+    <div class="two_col">
+      <div>
+        <h2>{guestsHeading}</h2>
+        <ul class="dash_list">{guests.map((g) => <li>{g}</li>)}</ul>
+      </div>
+      <div>
+        <h2>{ownerHeading}</h2>
+        <ul class="dash_list">{owner.map((o) => <li>{o}</li>)}</ul>
+      </div>
+    </div>
+    <figure class="shot">
+      <Image
+        src={dashboard}
+        alt="The MenuDash page in the WordPress dashboard after an upload: a confirmation, the menu and photo upload boxes, and the check list of dishes"
+        widths={[800, 1600]}
+        sizes="(min-width: 1280px) 75rem, 100vw"
+      />
+      <figcaption>The dashboard after an upload, with the sample menu.</figcaption>
+    </figure>
+  </section>
+
+  <BreakLine />
+
+  <section class="band">
+    <h2>{addonsHeading}</h2>
+    <p class="band_lead">{addonsLead}</p>
+    <ul class="cards">
+      {
+        addons.map((a) => (
+          <li>
+            <h3>{a.name}</h3>
+            <p>{a.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <figure class="shot">
+      <Image
+        src={themeHome}
+        alt="The MenuDash Theme home page with sample content: an “opens today at 17:00” badge, the address, a headline, and Menu, Reserve and Order online buttons"
+        widths={[640, 1280]}
+        sizes="(min-width: 1280px) 75rem, 100vw"
+      />
+      <figcaption>The MenuDash Theme, with sample content.</figcaption>
+    </figure>
+  </section>
+
+  <BreakLine />
+
+  <section class="band">
+    <h2>{packagesHeading}</h2>
+    <p class="band_lead">{packagesLead}</p>
+    <ol class="cards packages">
+      {
+        packages.map((p) => (
+          <li>
+            <h3>{p.name}</h3>
+            <p>{p.includes}</p>
+            <p class="fee">{p.fee}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="promise">{packagesNote}</p>
+  </section>
+
+  <BreakLine />
+
+  <section class="band">
+    <h2>{setupHeading}</h2>
+    <ol class="process">
+      {
+        setup.map((s) => (
+          <li>
+            <b>{s.step}</b>
+            <p>{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <BreakLine />
+
+  <section class="band two_col">
+    <div>
+      <h2>{openHeading}</h2>
+      <p>{openBody}</p>
+      <ul class="link_list">
+        {
+          openLinks.map((l) => (
+            <li>
+              <a href={l.href} rel="noopener noreferrer" target="_blank">
+                {l.label} ↗
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div>
+      <h2>{limitsHeading}</h2>
+      <ul class="dash_list">{limits.map((l) => <li>{l}</li>)}</ul>
+    </div>
+  </section>
+
+  <BreakLine />
+
+  <ContactSection lead={contactLead} />
+</Layout>
+
+<style>
+  @reference "@/styles/global.css";
+
+  .page_intro,
+  .band {
+    @apply px-[2.5rem] mx-auto max-w-[80rem] my-[var(--space-section)];
+  }
+
+  .intro_grid {
+    @apply grid grid-cols-1 md:grid-cols-[1fr_auto] gap-12 items-start;
+  }
+
+  .intro_grid .lead {
+    @apply max-w-[60ch];
+  }
+
+  .live {
+    @apply mt-10 p-6 rounded-[1rem] max-w-[60ch];
+    background-color: var(--color-work-background);
+  }
+
+  .live_heading {
+    @apply text-lg m-0 mb-2;
+  }
+
+  .live p:last-child {
+    @apply m-0;
+  }
+
+  .link_line a,
+  .link_list a {
+    @apply underline;
+    text-underline-offset: 4px;
+  }
+
+  .link_line a:hover,
+  .link_list a:hover {
+    color: var(--color-text-hover);
+  }
+
+  /* Capped at the phone's own width, so it reads as a phone rather than a
+     stretched strip on wide screens. */
+  .phone {
+    @apply m-0 mx-auto w-full max-w-[370px];
+  }
+
+  .phone :global(img) {
+    @apply w-full h-auto rounded-[1.5rem];
+    border: 1px solid var(--color-rule);
+  }
+
+  .shot {
+    @apply m-0 mt-12;
+  }
+
+  .shot :global(img) {
+    @apply w-full h-auto rounded-[1rem];
+    border: 1px solid var(--color-rule);
+  }
+
+  figcaption {
+    @apply text-sm mt-3;
+    color: var(--color-text-caption);
+  }
+
+  .two_col {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10;
+  }
+
+  .band_lead {
+    @apply mb-8 max-w-[60ch];
+    color: var(--color-text-caption);
+  }
+
+  .dash_list,
+  .link_list {
+    @apply list-none p-0 m-0 flex flex-col gap-3;
+  }
+
+  /* Same hanging dash as the capability list on /services. */
+  .dash_list li {
+    @apply grid grid-cols-[auto_1fr] gap-x-2;
+  }
+
+  .dash_list li::before {
+    content: '—';
+    color: var(--color-text-caption);
+  }
+
+  .cards {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6 list-none p-0 m-0;
+  }
+
+  .cards li {
+    @apply p-6 rounded-[1rem];
+    background-color: var(--color-work-background);
+  }
+
+  .cards h3 {
+    @apply mt-0;
+  }
+
+  .cards p:last-child {
+    @apply m-0;
+  }
+
+  .packages {
+    @apply lg:grid-cols-4;
+  }
+
+  .fee {
+    @apply text-sm;
+    color: var(--color-text-caption);
+  }
+
+  .promise {
+    @apply mt-8;
+  }
+
+  .process {
+    @apply list-none p-0 m-0 flex flex-col;
+  }
+
+  .process li {
+    @apply grid grid-cols-1 md:grid-cols-[9rem_1fr] gap-x-8 gap-y-1 py-6;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .process li:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .process p {
+    @apply m-0 max-w-[60ch];
+  }
+</style>

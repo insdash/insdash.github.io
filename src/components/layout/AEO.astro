@@ -52,6 +52,7 @@ const projectMatch = route.match(/^\/projects\/(.+)$/);
 const isHome = route === '';
 const isServices = route === '/services';
 const isAbout = route === '/about';
+const isMenuDash = route === '/menudash';
 const isWorkIndex = route === '/projects';
 
 const pageImage = absolute(image, siteUrl);
@@ -95,6 +96,8 @@ if (!noindex) {
     trail.push({ name: 'About', url: href('about') });
   } else if (isServices) {
     trail.push({ name: 'Services', url: href('services') });
+  } else if (isMenuDash) {
+    trail.push({ name: 'MenuDash', url: href('menudash') });
   } else if (isWorkIndex) {
     pageType = 'CollectionPage';
     trail.push({ name: 'Work', url: href('projects') });
