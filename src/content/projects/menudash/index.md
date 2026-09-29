@@ -1,7 +1,7 @@
 ---
 title: 'MenuDash'
 subtitle: 'A restaurant menu for WordPress, kept in a spreadsheet'
-featured: false
+featured: true
 type: 'Product'
 created: 2026-09-29
 domains:
@@ -51,7 +51,7 @@ MenuDash makes the spreadsheet the website menu. You upload the file you already
 
 A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 110 dishes in three languages, with photos and diet marks, from the same spreadsheet the staff already edit. [See the menu on afatt.ch](https://afatt.ch/menu/).
 
-![A Fatt’s menu on a phone: language switch, diet filters, category tabs, and dishes with German and Chinese names, prices and photos](./afatt-menu-iphone.webp)
+![A Fatt’s menu on a phone: language switch, diet filters, category tabs, and dishes with German and Chinese names, prices and photos](./afatt-menu-iphone-wide.webp)
 
 </div>
 
