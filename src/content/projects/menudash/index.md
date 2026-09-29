@@ -64,7 +64,7 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 - A photo next to each dish, large with one tap.
 - A page that reads well on a phone, and that search engines can read too: the menu is real text, not a PDF or a picture.
 
-![The sample menu on a phone with All selected: each dish in German, Chinese and English, with diet marks and a photo](./menu-all-languages.webp)
+![The sample menu on a phone with All selected: each dish in German, Chinese and English, with diet marks and a photo](./menu-all-languages-iphone-wide.webp)
 
 </div>
 
