@@ -77,9 +77,14 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 - Upload all dish photos at once. A check list shows every dish with its photo, and which ones are still missing.
 - Print QR table cards or a poster straight from the dashboard, with the Wi-Fi on them if they like.
 - Fill in where the meat and fish come from, as Swiss rules require in writing. It is translated into the menu languages and shown under the menu.
-- Pick colours and, if they want, their own diet icons, so the menu looks like their restaurant.
+- Show the recommended dishes, with their photos, on any page, such as the home page. Each one links to the menu. They can be split into groups, like meat and fish or vegan and vegetarian.
+- Leave the menu in the website’s own colours and fonts, or pick their own, and their own diet icons if they want, so the menu looks like their restaurant.
+- Use the dashboard in German, English or Chinese. It follows each user’s WordPress language.
+- Update MenuDash with one click, like any other plugin, when a new version comes out.
 
 ![The MenuDash page in the WordPress dashboard after an upload: a confirmation, the menu and photo upload boxes, and the check list of dishes](./dashboard-upload.webp)
+
+![The Recommended dishes block in the page editor: tabs for meat and fish or vegan and vegetarian, a row of dishes with photos and names in German and Chinese, and a button to the whole menu](./recommended-dishes.webp)
 
 ![The QR code tab: fields for the link, heading and Wi-Fi, and a live preview of the table card](./dashboard-qr.webp)
 
@@ -91,23 +96,23 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 
 ## Add-ons
 
-MenuDash covers the menu. Three add-ons keep the rest of what guests look up on a restaurant website current, from the same dashboard page.
+MenuDash covers the menu. Three add-ons keep the rest of what guests look up on a restaurant website current, from the same dashboard page, which is in German, English or Chinese too.
 
 ### Restaurant
 
-Address, phone, delivery and reservation links, entered once. Opening hours with an “open now” badge, and a holiday notice that appears and disappears by itself.
+Address, phone, logo, delivery and reservation links, entered once. Opening hours with an “open now” badge, and a holiday notice that appears and disappears by itself. Links to Instagram, Facebook, TikTok, YouTube and WhatsApp, and to the restaurant’s Google and Tripadvisor reviews. A ready-made “Visit us” page with the address, the way there and the opening hours.
 
 ![The opening hours form: time pickers per day, and a preview of how the hours read on the site](./addon-restaurant.webp)
 
 ### Specials
 
-Today’s specials and the lunch menu of the week, each from its own short spreadsheet, in the same style and languages as the menu.
+Today’s specials and the lunch menu of the week, in the same style and languages as the menu. Each comes from its own short spreadsheet, or from its own sheet in the menu’s Excel file. The lunch menu shows today, with the whole week one tap away.
 
 ![Today’s specials on the site: starters, main courses and sides in German, English and Chinese, with diet marks and prices](./addon-specials.webp)
 
 ### Gift Cards
 
-A gift card order form. The order arrives by e-mail; a switch pauses it, and spam is kept out.
+A gift card order form in the website’s language. The order arrives by e-mail with the restaurant’s logo; a switch pauses it, and spam is kept out.
 
 ![The gift card page: the card picture beside a form with amounts, pickup or post, name, e-mail and an order button](./addon-giftcards.webp)
 
@@ -117,9 +122,13 @@ A gift card order form. The order arrives by e-mail; a switch pauses it, and spa
 
 ## MenuDash Theme
 
-A full restaurant website around MenuDash: a home page with the recommended dishes, opening hours and a map, the lunch menu and specials above the menu, and a Call · Directions · Menu bar on phones. The address and hours are typed once, in MenuDash, and every page shows them.
+A full restaurant website around MenuDash: a home page with the recommended dishes, opening hours and a map, the lunch menu and specials above the menu, links to the restaurant’s social media and reviews, and a Call · Directions · Menu bar on phones. The address and hours are typed once, in MenuDash, and every page shows them.
+
+The theme works with MenuDash alone, and fills in more as add-ons are added. It is in German, English and Chinese; with the free Polylang plugin, each page can have its own version in every language, with a language switch in the header.
 
 ![The MenuDash Theme home page with sample content: an “opens today” badge, the address, a headline, and Menu, Reserve and Order online buttons](./theme-home.webp)
+
+![The MenuDash Theme home page in German, English and Chinese, each with its own navigation and a DE · EN · 中文 switch in the header](./theme-languages.webp)
 
 ![The theme’s menu page: jump buttons to the lunch menu, today’s specials and the menu, a language switch, and the lunch menu of the day](./theme-menu.webp)
 
@@ -131,16 +140,21 @@ A full restaurant website around MenuDash: a home page with the recommended dish
 
 ## Packages
 
-We set MenuDash up for restaurants. Each package is a one-time setup; the add-ons come with a yearly fee, which pays for their updates and for help when something changes.
+We set MenuDash up for restaurants. Each package is a one-time setup; the add-ons come with a yearly fee, which pays for their updates, installed by us, and for help when something changes. MenuDash itself updates from the WordPress dashboard.
 
 | Package | What’s in it | Fees |
 |---|---|---|
 | **Menu** | MenuDash: the menu, photos, filters, QR cards and colours | One-time setup. Care plan optional. |
 | **Menu + Restaurant** | MenuDash with the Restaurant add-on | One-time setup, plus a yearly fee |
+| **Menu + Gift Cards** | MenuDash with the Gift Cards add-on | One-time setup, plus a yearly fee |
 | **Complete** | MenuDash with Restaurant, Specials and Gift Cards | One-time setup, plus a yearly fee |
 | **Complete + website** | Everything above, on the MenuDash Theme or on a design made for the restaurant | One-time setup, plus a yearly fee |
 
 Add-ons can be added to any package later. Every package is a fixed price, agreed in writing before we start.
+
+**Opening a restaurant or café?** Two packages start from nothing: a website on the MenuDash Theme with the menu and the Restaurant add-on, the Google Business Profile, a domain and e-mail, drafts of the Impressum and privacy policy, and QR table cards. The larger one adds Specials, Gift Cards, the meat origin and allergy note, a gift card design and an hour of training.
+
+**Also on request:** a theme designed for the restaurant, like afatt.ch’s own; a monthly care plan with WordPress updates, backups and monitoring, and hours for changes; and print design for gift cards, flyers or a printed menu.
 
 For prices, write to us with your current menu and your website address. We send the price list and a written estimate for your restaurant.
 
