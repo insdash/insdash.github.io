@@ -87,7 +87,7 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 - Use the dashboard in German, English or Chinese. It follows each user’s WordPress language.
 - Update MenuDash with one click, like any other plugin, when a new version comes out.
 
-![The MenuDash page in the WordPress dashboard after an upload: a confirmation, the menu and photo upload boxes, and the check list of dishes](./dashboard-upload.webp)
+![The MenuDash page in the WordPress dashboard after an upload: a confirmation, the menu and photo upload boxes, the Download menu (CSV) button, and the check list of dishes](./dashboard-upload.webp)
 
 ![The Recommended dishes block in the page editor: tabs for meat and fish or vegan and vegetarian, a row of dishes with photos and names in German and Chinese, and a button to the whole menu](./recommended-dishes.webp)
 
