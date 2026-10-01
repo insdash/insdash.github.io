@@ -142,6 +142,29 @@ system we designed for A Fatt in 2024, straight from their spreadsheet.
 
 <div class="contentSection">
 
+## What the no taught us
+
+We showed menuGen to A Fatt, and they kept the Canva system. That answer taught
+us more than the build did.
+
+What we took from it: a restaurant owner judges a menu by what the guest sees.
+menuGen made the work behind the menu easier, but the guest still got the same
+printed page as before, so there was nothing to switch for.
+
+So when we went back in 2026 and found one price being kept by hand across an
+English, a German and a vegan and vegetarian menu, we changed what the guest
+gets instead: one online menu that every guest filters by language and diet on
+their own phone. That became [MenuDash](/projects/menudash/), and this time the
+answer was yes.
+
+**One file, both tools.** A dish is one row, with a field per language and a
+flag per diet. The same spreadsheet uploads to both: menuGen prints it,
+MenuDash publishes it.
+
+</div>
+
+<div class="contentSection">
+
 ## The result
 
 menuGen is **deployed and live** at
@@ -169,6 +192,7 @@ does both halves. You are not paying a designer to produce a specification for
 somebody else to interpret.
 
 That is the whole argument, and menuGen is the clearest instance of it:
-[a menu design job](/projects/afatt/) that turned into a product.
+[a menu design job](/projects/afatt/) that turned into a product, and then,
+because the client said no, into [the one they took](/projects/menudash/).
 
 </div>

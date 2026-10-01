@@ -41,7 +41,9 @@ approach: 'The owner should never need us for a price change. So the menu lives 
 
 Most restaurants keep their menu in a file they edit. The website menu is usually a copy of it: a PDF, a picture, or a page someone typed in by hand. Every price change means updating it twice, and the website is the copy that falls behind.
 
-MenuDash makes one spreadsheet the website menu. When we set it up, we put the menu into that spreadsheet with the restaurant. From then on, the owner uploads it, and the menu page updates by itself.
+At A Fatt it went further. They kept an English, a German and a vegan and vegetarian menu, so one price change meant three edits. The obvious job was more printed menus. We changed what the guest gets instead: one online menu that every guest filters by language and diet on their own phone. An owner judges a menu by what the guest sees, so that is where the change had to be.
+
+MenuDash makes one spreadsheet the website menu. When we set it up, we put the menu into that spreadsheet with the restaurant: one row per dish, a field per language, a flag per diet. From then on, the owner uploads it, and the menu page updates by itself. The same file also goes into [menuGen](/projects/menugen/), our tool for printed menus.
 
 </div>
 
@@ -173,5 +175,6 @@ MenuDash and the MenuDash Theme are open source, on GitHub for anyone to see ([M
 - It runs on WordPress. A site on Wix or Squarespace does not fit, and we will say so.
 - German, English and Chinese are built in. Other languages are possible, but they are extra work.
 - One menu per site.
+- It is the menu guests read. Recipes, food cost and stock belong to kitchen software, and MenuDash does not do them.
 
 </div>
