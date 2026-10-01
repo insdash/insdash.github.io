@@ -20,8 +20,8 @@ seoTitle: 'menuGen, a print-ready menu generator'
 info: 'A web app that turns structured menu data into a print-ready PDF. Deployed at menugen.insdash.ch, and the source is public.'
 description: 'A Fatt hired us to design a menu. Doing that job showed us the problem underneath it — even in Canva, every change is still layout work — so we built the tool that removes the layout step entirely. menuGen takes structured menu data and produces a print-ready PDF, with the on-screen preview matching the printed page exactly.'
 scope: 'Product, design and development'
-timeline: '4 months · 130 commits'
-completed: '02/2026'
+timeline: '10 months · 176 commits'
+completed: '09/2026'
 client: 'insdash'
 clientLink: 'https://menugen.insdash.ch'
 tools: ['Vue.js', 'TypeScript', 'Node.js', 'Figma']
@@ -31,6 +31,7 @@ focus:
     'Async job queue',
     'Category-aware pagination',
     'Asset pipeline',
+    'Multilingual and dietary menus',
   ]
 approach: 'Self-initiated after the A Fatt engagement. Product decisions, interface design, build and deployment were all ours. The hard part was print fidelity — guaranteeing that what a restaurant sees on screen is what comes out of the printer — which is what forced the asynchronous job queue behind the renderer.'
 ---
@@ -42,9 +43,9 @@ approach: 'Self-initiated after the A Fatt engagement. Product decisions, interf
 There wasn't one. This is the project we set ourselves.
 
 [A Fatt](/projects/afatt/) hired us to design a menu, and we delivered a modular
-system in Figma and Canva that they still use. They work in Canva and are happy
-there, so we did not push a tool change on them — the switching cost would have
-landed on the restaurant, not on us.
+system in Figma and Canva. They worked in Canva and were happy there, so we did
+not push a tool change on them — the switching cost would have landed on the
+restaurant, not on us.
 
 What was left over was the *general* problem. A restaurant owner with no design
 training still has to lay out a menu by hand every time a price moves or a dish
@@ -112,16 +113,44 @@ force a manual renumber down the page.
 
 <div class="contentSection">
 
+## Back to a real menu
+
+In September 2026 we loaded A Fatt's current menu into menuGen: more than 100
+dishes in three languages, most of them with dietary icons. The sample data had
+never tested the tool like that, and a real menu found the gaps quickly.
+
+![A Fatt's 2026 menu in the menuGen editor, English with Chinese alongside](./08-afatt-menu-2026.webp)
+
+- **Three languages per dish.** Every name, description and category now holds
+  English, German and Chinese. You pick the main language and choose which
+  others appear after it, so one spreadsheet gives an English menu, a German
+  one, or either with the Chinese names alongside.
+- **A menu for one diet.** "Show only" filters by dietary icon, with a count
+  next to each. Tick Vegan and the preview, the page count and the PDF all
+  become the vegan menu; vegan dishes count as vegetarian too. Editing still
+  sees the whole menu, so nothing gets lost while it is filtered.
+- **Characters the font doesn't have.** 叄 in 叄峇 (sambal) is missing from
+  the Chinese typeface we use and printed as an empty box. It now falls back to
+  a font that has it.
+- **Photos matched by name.** Dish photos pair with their dishes by filename,
+  whatever the language, capitalisation or spacing.
+
+The result is that menuGen can now produce the same printed menu as the Canva
+system we designed for A Fatt in 2024, straight from their spreadsheet.
+
+</div>
+
+<div class="contentSection">
+
 ## The result
 
 menuGen is **deployed and live** at
 [menugen.insdash.ch](https://menugen.insdash.ch), and
 [the source is public](https://github.com/yingshiuan/menuGen).
 
-**It has no users.** A Fatt, the restaurant the idea came from, chose to stay on
-the Canva system we handed over — which was the right call for them, and we
-didn't push it. We publish menuGen because the interesting part is the
-engineering, not a usage number we'd have to invent.
+**It has no users yet.** A Fatt's menu is what we test it against, but the
+restaurant doesn't use menuGen. We publish it because the interesting part is
+the engineering, not a usage number we'd have to invent.
 
 <div>
   <a href="https://github.com/yingshiuan/menuGen" target="_blank" rel="noopener noreferrer">
