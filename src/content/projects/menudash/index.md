@@ -78,6 +78,7 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 
 - Upload the menu spreadsheet, as Excel or CSV. A short report says what was read, and warns about anything odd, like the same dish listed twice with different diet marks, or one dish number used twice.
 - A file that is not a menu is refused, so the live menu never breaks. The last five uploads can be put back with one click.
+- Download the live menu back as a CSV, with the same columns they uploaded: change it in Excel or Numbers and upload it again, or open it in [menuGen](/projects/menugen/) to print it.
 - Upload all dish photos at once. A check list shows every dish with its photo, and which ones are still missing.
 - Print QR table cards or a poster straight from the dashboard, with the Wi-Fi on them if they like.
 - Fill in where the meat and fish come from, as Swiss rules require in writing. It is translated into the menu languages and shown under the menu.
@@ -86,7 +87,7 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 - Use the dashboard in German, English or Chinese. It follows each user’s WordPress language.
 - Update MenuDash with one click, like any other plugin, when a new version comes out.
 
-![The MenuDash page in the WordPress dashboard after an upload: a confirmation, the menu and photo upload boxes, and the check list of dishes](./dashboard-upload.webp)
+![The MenuDash page in the WordPress dashboard after an upload: a confirmation, the menu and photo upload boxes, the Download menu (CSV) button, and the check list of dishes](./dashboard-upload.webp)
 
 ![The Recommended dishes block in the page editor: tabs for meat and fish or vegan and vegetarian, a row of dishes with photos and names in German and Chinese, and a button to the whole menu](./recommended-dishes.webp)
 
