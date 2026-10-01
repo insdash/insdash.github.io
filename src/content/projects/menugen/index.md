@@ -157,9 +157,11 @@ gets instead: one online menu that every guest filters by language and diet on
 their own phone. That became [MenuDash](/projects/menudash/), and this time the
 answer was yes.
 
-**One file, both tools.** A dish is one row, with a field per language and a
-flag per diet. The same spreadsheet uploads to both: menuGen prints it,
-MenuDash publishes it.
+**One Excel file, one menu system.** A dish is one row, with a field per
+language and a flag per diet. The same file uploads to both tools: menuGen
+prints it, MenuDash publishes it. Together they are one way to manage a menu:
+change a price in the file once, upload it and the website menu is current,
+open it in menuGen and the new print PDF is ready.
 
 </div>
 

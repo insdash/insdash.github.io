@@ -43,7 +43,9 @@ Most restaurants keep their menu in a file they edit. The website menu is usuall
 
 At A Fatt it went further. They kept an English, a German and a vegan and vegetarian menu, so one price change meant three edits. The obvious job was more printed menus. We changed what the guest gets instead: one online menu that every guest filters by language and diet on their own phone. An owner judges a menu by what the guest sees, so that is where the change had to be.
 
-MenuDash makes one spreadsheet the website menu. When we set it up, we put the menu into that spreadsheet with the restaurant: one row per dish, a field per language, a flag per diet. From then on, the owner uploads it, and the menu page updates by itself. The same file also goes into [menuGen](/projects/menugen/), our tool for printed menus.
+MenuDash makes one spreadsheet the website menu. When we set it up, we put the menu into that spreadsheet with the restaurant: one row per dish, a field per language, a flag per diet. From then on, the owner uploads it, and the menu page updates by itself.
+
+**One Excel file, one menu system.** The same file also goes into [menuGen](/projects/menugen/), our tool for printed menus. Together they manage the whole menu from that one file: change a price once, upload it and the website menu is current, open it in menuGen and the new print PDF is ready.
 
 </div>
 
