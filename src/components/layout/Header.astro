@@ -147,7 +147,15 @@ const baseUrl = import.meta.env.BASE_URL;
         <div class="theme-bar">
           <div class="flex relative group items-center py-[0.5rem]">
               <a href=`${baseUrl}` class="theme-link">
-                {siteTitle}
+                {/* The bar is navy in both themes, so it always takes the
+                    light-ink logo. */}
+                <img
+                  src={`${baseUrl}images/logo/insdash-logo-dark.svg`}
+                  alt={siteTitle}
+                  width="525"
+                  height="149"
+                  class="header-logo"
+                />
               </a>
               <span class="tooltip">"Nice to meet you!"</span>
           </div>
@@ -185,7 +193,11 @@ const baseUrl = import.meta.env.BASE_URL;
   }
 
   .theme-link {
-    @apply text-white hover:text-[var(--color-text-hover)] hover:text-shadow-[0.05rem_0.05rem_var(--color-text-primary)];
+    @apply block transition-opacity hover:opacity-80;
+  }
+
+  .header-logo {
+    @apply block h-[2.25rem] w-auto;
   }
 
 

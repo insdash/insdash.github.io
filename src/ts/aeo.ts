@@ -81,7 +81,7 @@ const KNOWS_ABOUT = [
 ];
 
 /** Raster, square, and served from this origin — what Google asks a logo to be. */
-const LOGO = { path: 'images/logo/insdash_dark.png', width: 300, height: 300 };
+const LOGO = { path: 'images/logo/insdash-icon.png', width: 512, height: 512 };
 
 /* -------------------------------------------------------------------------
  * Helpers

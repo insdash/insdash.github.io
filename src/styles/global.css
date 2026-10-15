@@ -66,7 +66,9 @@
 
       /* Identical in both themes — previously re-declared three times anyway. */
       --color-text-hover: #315D8E;
-      --color-text-link: #70ACDA;
+      /* Sky is 2.4:1 on white, too faint for text; light mode takes the blue
+         (6.8:1) and dark mode keeps sky (8.4:1 on #020407). */
+      --color-text-link:         light-dark(#315D8E, #70ACDA);
 
       --color-caption-primary:   light-dark(#e6e6e6, #3C3C3C);
       --color-caption-secondary: light-dark(#3c3c3c, #E6E6E6);
