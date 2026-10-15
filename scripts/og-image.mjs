@@ -7,8 +7,9 @@
  * so change them there and here together.
  *
  * Rendered in headless Chrome rather than drawn with sharp so the type is the
- * site's real DM Sans and DM Mono, loaded from Google Fonts. The colours and the
- * four squares are sampled from images/logo/insdash_dark.png.
+ * site's real DM Sans and DM Mono, loaded from Google Fonts. The logo is
+ * images/logo/insdash-logo-dark.svg inlined as-is (its letters are outlined, so
+ * it needs no font of its own).
  *
  * Usage:
  *   node scripts/og-image.mjs
@@ -18,6 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const OUT = path.resolve('public/images/og/default.png');
+const LOGO = fs.readFileSync(path.resolve('public/images/logo/insdash-logo-dark.svg'), 'utf8');
 const WIDTH = 1200;
 const HEIGHT = 630;
 
@@ -25,7 +27,7 @@ const html = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,500&display=block" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=DM+Sans:opsz,wght@9..40,500&display=block" />
 <style>
   * { box-sizing: border-box; margin: 0; }
   html, body { width: ${WIDTH}px; height: ${HEIGHT}px; }
@@ -37,21 +39,10 @@ const html = `<!doctype html>
     color: #e3e7ea;
     font-family: 'DM Sans', sans-serif;
   }
-  .mark {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: flex-end;
-    align-self: flex-start;
-    gap: 10px;
-  }
-  .wordmark {
-    font-family: 'DM Mono', monospace;
-    font-size: 44px;
-    font-weight: 500;
-    line-height: 1;
-  }
-  .squares { display: flex; gap: 10px; }
-  .squares span { width: 15px; height: 11px; }
+  .mark { align-self: flex-start; }
+  /* The SVG carries 24/149 of its height as clear space; pull it back so the
+     tiles line up with the headline. */
+  .mark svg { display: block; height: 80px; width: auto; margin: -13px 0 0 -13px; }
   h1 {
     margin-top: auto;
     font-size: 96px;
@@ -73,12 +64,7 @@ const html = `<!doctype html>
 </style>
 </head>
 <body>
-  <div class="mark">
-    <span class="wordmark">insdash</span>
-    <span class="squares" aria-hidden="true">
-      <span style="background:#1f3a5c"></span><span style="background:#315d8e"></span><span style="background:#70acda"></span><span style="background:#e3e7ea"></span>
-    </span>
-  </div>
+  <div class="mark">${LOGO}</div>
   <h1>We design it and<br />we build it.</h1>
   <div class="foot">
     <span class="label">Design and development studio · Zürich</span>
@@ -106,7 +92,7 @@ try {
   const loaded = await page.evaluate(async () => {
     await Promise.all([
       document.fonts.load('500 96px "DM Sans"'),
-      document.fonts.load('500 44px "DM Mono"'),
+      document.fonts.load('400 24px "DM Mono"'),
     ]);
     await document.fonts.ready;
     const has = (family) =>
