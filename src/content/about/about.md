@@ -23,7 +23,7 @@ then stops answering.
 
 A Zürich language school was in exactly that position — renting scheduling
 software priced for an organisation many times its size in order to book six
-rooms. We made the build-vs-buy call and
+rooms for eight people. We made the build-vs-buy call and
 [delivered a replacement they own outright](/projects/sprachschule-yang/) — and
 we still maintain it.
 
@@ -53,7 +53,9 @@ directions, and that is how the gap gets filled.
 **Across domains.** A problem that arrives as one thing usually turns out to be
 several. [A Fatt](/projects/afatt/) arrived as a menu design and was really a
 content system — and the problem behind it later became
-[a piece of software](/projects/menugen/) of its own. Research,
+[a piece of software](/projects/menugen/) of its own, and then
+[MenuDash](/projects/menudash/), the plugin that now runs A Fatt's menu on its
+own website. Research,
 interface, product strategy and engineering are not four suppliers here, so
 nothing has to be re-explained when the problem moves.
 
