@@ -30,12 +30,14 @@ const canonicalUrl = `${baseUrl}${pageUrl.startsWith('/') ? pageUrl : `/${pageUr
   <meta name="author" content="insdash" />
   <meta name="copyright" content="insdash" />
   <meta name="color-scheme" content="light dark" />
-  <link rel="icon" type="image/svg+xml" href={`${base}insdash.svg`} />
+  {/* The SVG swaps its big tile to light on dark browser chrome; the PNG is
+       the fallback for browsers without SVG favicons. */}
+  <link rel="icon" type="image/svg+xml" href={`${base}images/logo/insdash-favicon.svg`} />
   <link
     rel="icon"
     type="image/png"
     sizes="32x32"
-    href={`${base}images/logo/insdash_dark.png`}
+    href={`${base}images/logo/insdash-favicon.png`}
   />
   {/* The icon iOS and iPadOS use when the site is saved to the home screen. */}
   <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
