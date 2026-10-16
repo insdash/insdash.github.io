@@ -66,7 +66,7 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 - The menu in German, English and Chinese, all at once or one language at a time. The choice is remembered.
 - Filters for vegetarian, vegan, gluten-free, spicy and not spicy, plus the dishes the restaurant recommends.
 - A photo next to each dish, large with one tap.
-- A page that reads well on a phone, and that search engines can read too: the menu is real text, not a PDF or a picture.
+- A page that reads well on a phone, and that search engines can read too: the menu is real text, not a PDF or a picture, and each dish is also marked up for search engines, with its names in three languages, its price and its diet marks.
 
 ![The sample menu on a phone with All selected: each dish in German, Chinese and English, with diet marks and a photo](./menu-all-languages-iphone-wide.webp)
 
@@ -106,6 +106,8 @@ MenuDash covers the menu. Three add-ons keep the rest of what guests look up on 
 ### Restaurant
 
 Address, phone, logo, delivery and reservation links, entered once. Opening hours with an “open now” badge, and a holiday notice that appears and disappears by itself. Links to Instagram, Facebook, TikTok, YouTube and WhatsApp, and to the restaurant’s Google and Tripadvisor reviews. A ready-made “Visit us” page with the address, the way there and the opening hours.
+
+It also looks after what Google and chat apps show of the website. Search engines get the restaurant’s address, phone and opening hours as data, linked to its menu. Each page gets a short description, and a link shared on WhatsApp or Facebook shows a picture, on the menu page made from the recommended dishes. No SEO plugin needed; if the site already has one, MenuDash leaves it in charge.
 
 ![The opening hours form: time pickers per day, and a preview of how the hours read on the site](./addon-restaurant.webp)
 
