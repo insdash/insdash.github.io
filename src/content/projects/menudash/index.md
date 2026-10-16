@@ -127,7 +127,7 @@ A gift card order form in the website’s language. The order arrives by e-mail 
 
 What guests do on the menu page, counted without watching anyone. The owner sees which dishes guests stop at (a dish counts when it stays on the screen for two seconds, not when it is scrolled past), whose photo they open, which diet filters they turn on and which language they switch to, over the last week, month or year. A dish that is often looked at but whose photo is rarely opened gets flagged: a better photo or a clearer name may help. The counts stay with each dish when a new menu is uploaded.
 
-**Built for privacy first.** No cookies, so no cookie banner. Nothing is stored in the guest’s browser and no IP address is saved; MenuDash keeps only the totals per dish, button and day, for at most 25 months. To keep out fake counts, a scrambled form of the visitor’s address is held for ten minutes, made with a key that changes every day, so it can’t be traced back to anyone. Guests whose browser asks not to be tracked are not counted at all, and neither are the owner and staff while logged in. A paragraph for the privacy policy comes with it, ready to copy.
+**Built for privacy first.** No cookies. Nothing is stored in the guest’s browser and no IP address is saved; MenuDash keeps only the totals per dish, button and day, for at most 25 months. To keep out fake counts, a scrambled form of the visitor’s address is held for ten minutes and deleted within a day at the latest, made with a key that changes every day, so it can’t be traced back to anyone. Guests whose browser asks not to be tracked are not counted at all, and neither are the owner and staff while logged in. A paragraph for the privacy policy comes with it, ready to copy.
 
 </div>
 
