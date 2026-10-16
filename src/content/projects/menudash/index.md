@@ -55,7 +55,7 @@ MenuDash makes one spreadsheet the website menu. When we set it up, we put the m
 
 A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 110 dishes in three languages, with photos and diet marks, from one spreadsheet the owner uploads. [See the menu on afatt.ch](https://afatt.ch/menu/).
 
-![A Fatt’s menu on a phone: language switch, diet filters, category tabs, and dishes with German and Chinese names, prices and photos](./afatt-menu-iphone-wide.webp)
+![A Fatt’s menu on a phone: language switch, diet filters with Vegetarisch turned on (“48 von 110 Gerichten · Vegetarisch” and an Alle zeigen button), category tabs, and dishes with German and Chinese names, prices and photos](./afatt-menu-iphone-wide.webp)
 
 </div>
 
@@ -101,7 +101,7 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 
 ## Add-ons
 
-MenuDash covers the menu. Three add-ons keep the rest of what guests look up on a restaurant website current, from the same dashboard page, which is in German, English or Chinese too.
+MenuDash covers the menu. Four add-ons keep the rest of what guests look up on a restaurant website current, from the same dashboard page, which is in German, English or Chinese too.
 
 ### Restaurant
 
@@ -122,6 +122,12 @@ Today’s specials and the lunch menu of the week, in the same style and languag
 A gift card order form in the website’s language. The order arrives by e-mail with the restaurant’s logo; a switch pauses it, and spam is kept out.
 
 ![The gift card page: the card picture beside a form with amounts, pickup or post, name, e-mail and an order button](./addon-giftcards.webp)
+
+### Statistics
+
+What guests do on the menu page, counted without watching anyone. The owner sees which dishes guests stop at (a dish counts when it stays on the screen for two seconds, not when it is scrolled past), whose photo they open, which diet filters they turn on and which language they switch to, over the last week, month or year. A dish that is often looked at but whose photo is rarely opened gets flagged: a better photo or a clearer name may help. The counts stay with each dish when a new menu is uploaded.
+
+**Built for privacy first.** No cookies, so no cookie banner. Nothing is stored in the guest’s browser and no IP address is saved; MenuDash keeps only the totals per dish, button and day, for at most 25 months. To keep out fake counts, a scrambled form of the visitor’s address is held for ten minutes, made with a key that changes every day, so it can’t be traced back to anyone. Guests whose browser asks not to be tracked are not counted at all, and neither are the owner and staff while logged in. A paragraph for the privacy policy comes with it, ready to copy.
 
 </div>
 
