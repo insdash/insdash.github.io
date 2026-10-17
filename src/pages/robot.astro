@@ -1,0 +1,367 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import RobotMark from '@/components/UI/RobotMark.astro';
+
+// A toy for the robot mark. Not linked from the nav (the 404 page points here),
+// kept out of the sitemap and out of search.
+const tries = [
+  { what: 'Drag a block away', then: 'It springs back. Pull all four apart and it rebuilds itself.' },
+  { what: 'Tap each block', then: 'Head, tall bar, small square and wide bar all react differently.' },
+  { what: 'Tap it fast', then: 'Five taps in a row and it gets dizzy.' },
+  { what: 'Type anything', then: 'It types along on the wide bar.' },
+  { what: 'Leave it alone', then: 'After 20 seconds it falls asleep. Move to wake it.' },
+  { what: 'Switch the theme', then: 'The light change makes it squint.' },
+];
+
+const modes = [
+  { mode: 'hello', label: 'Hello' },
+  { mode: 'done', label: 'Happy' },
+  { mode: 'work', label: 'Working' },
+  { mode: 'think', label: 'Thinking' },
+  { mode: 'assemble', label: 'Assemble' },
+  { mode: 'peek', label: 'Peek' },
+  { mode: 'lost', label: 'Lost' },
+  { mode: 'idle', label: 'Idle' },
+];
+---
+
+<Layout
+  title="Robot playground"
+  noindex={true}
+  description="Play with the insdash robot: drag it apart, poke it, type with it.">
+  <section class="playground">
+    <p class="eyebrow">Playground</p>
+    <h1>Meet the robot.</h1>
+    <p class="lead">
+      The four blocks of the insdash mark, with eyes. Pull it apart, poke it,
+      or just type.
+    </p>
+
+    <div class="playground_grid">
+      <div class="playground_stage" id="robot-stage">
+        <RobotMark entrance="hello" tap={false} class="playground_robot" />
+        <p class="playground_now" aria-live="polite">
+          <span class="meta-label">Now</span> <span id="robot-now">Idle</span>
+        </p>
+      </div>
+
+      <div class="playground_side">
+        <ul class="tries">
+          {tries.map((t) => (
+            <li>
+              <span class="tries_what">{t.what}</span>
+              <span class="tries_then">{t.then}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="modes">
+          <p class="eyebrow">Modes</p>
+          <ul>
+            {modes.map((m) => (
+              <li><button type="button" class="mode" data-mode={m.mode}>{m.label}</button></li>
+            ))}
+          </ul>
+        </div>
+
+        <p class="playground_still" id="robot-still" hidden>
+          Your system asks for reduced motion, so the robot only moves when you
+          drag it.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  type Name = 'head' | 'arm' | 'hand' | 'body';
+
+  const robot = document.querySelector<HTMLElement>('.playground_robot');
+  const svg = robot?.querySelector('svg');
+  const now = document.getElementById('robot-now');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const still = document.getElementById('robot-still');
+  if (reduced && still) still.hidden = false;
+
+  const play = (mode: string) => robot?.dispatchEvent(new CustomEvent('robot:play', { detail: mode }));
+  const say = (text: string) => {
+    if (now) now.textContent = text;
+  };
+
+  // Moves that loop until something else happens; the rest say "Idle" after.
+  let sayIdle = 0;
+  const show = (text: string, ms?: number) => {
+    say(text);
+    clearTimeout(sayIdle);
+    if (ms) sayIdle = window.setTimeout(() => say('Idle'), ms);
+  };
+
+  if (robot && svg) {
+    const names: Name[] = ['head', 'arm', 'hand', 'body'];
+    const groups = Object.fromEntries(
+      names.map((n) => [n, svg.querySelector<SVGGElement>(`.${n}`)]),
+    ) as Record<Name, SVGGElement | null>;
+    const offset = Object.fromEntries(names.map((n) => [n, { x: 0, y: 0 }])) as Record<Name, { x: number; y: number }>;
+
+    // The page's own interactions are motion too, so they skip reduced motion.
+    const react = (mode: string, label: string, ms?: number) => {
+      if (reduced) return;
+      play(mode);
+      show(label, ms);
+    };
+
+    /* ---------- pulling it apart ---------- */
+
+    const SPRING = 'transform 0.55s cubic-bezier(0.3, 1.6, 0.5, 1)';
+    let drag: { name: Name; id: number; x0: number; y0: number; from: { x: number; y: number }; moved: boolean } | null = null;
+    let rebuild = 0;
+    const away = () => names.filter((n) => Math.hypot(offset[n].x, offset[n].y) > 0.5);
+
+    const place = (n: Name) => {
+      const g = groups[n];
+      if (g) g.style.transform = `translate(${offset[n].x}px, ${offset[n].y}px)`;
+    };
+
+    // Everything that is away flies home, one after another.
+    const goHome = () => {
+      const out = away();
+      if (!out.length) return;
+      const all = out.length === 4;
+      out.forEach((n, i) => {
+        const g = groups[n];
+        if (!g) return;
+        g.style.transition = `${SPRING} ${i * 120}ms`;
+        offset[n] = { x: 0, y: 0 };
+        g.style.transform = '';
+      });
+      window.setTimeout(() => {
+        names.forEach((n) => {
+          const g = groups[n];
+          if (g) g.style.transition = '';
+        });
+        robot.classList.remove('is-apart');
+        if (all && !reduced) {
+          play('done');
+          show('Rebuilt', 2000);
+        } else {
+          play('idle');
+          say('Idle');
+        }
+      }, out.length * 120 + 600);
+    };
+
+    svg.addEventListener('pointerdown', (e) => {
+      const block = (e.target as Element).closest<SVGGElement>('.head, .arm, .hand, .body');
+      if (!block || drag) return;
+      const name = names.find((n) => block.classList.contains(n));
+      if (!name) return;
+      e.preventDefault();
+      svg.setPointerCapture(e.pointerId);
+      drag = { name, id: e.pointerId, x0: e.clientX, y0: e.clientY, from: { ...offset[name] }, moved: false };
+    });
+
+    svg.addEventListener('pointermove', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const dx = e.clientX - drag.x0;
+      const dy = e.clientY - drag.y0;
+      if (!drag.moved) {
+        if (Math.hypot(dx, dy) < 5) return;
+        drag.moved = true;
+        clearTimeout(rebuild);
+        play('hold');
+        robot.classList.add('is-apart');
+        const g = groups[drag.name];
+        if (g) g.style.transition = '';
+        say('Taking it apart');
+      }
+      const scale = svg.getScreenCTM()?.a || 1;
+      offset[drag.name] = { x: drag.from.x + dx / scale, y: drag.from.y + dy / scale };
+      place(drag.name);
+      // Unless its own head is the one being carried off, it watches.
+      if (drag.name !== 'head') {
+        robot.dispatchEvent(new CustomEvent('robot:look', { detail: { x: e.clientX, y: e.clientY } }));
+      }
+    });
+
+    const drop = (e: PointerEvent) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const { name, moved } = drag;
+      drag = null;
+      if (!moved) {
+        tap(name);
+        return;
+      }
+      const g = groups[name];
+      // A short pull springs straight back; a long one stays put for a moment.
+      if (Math.hypot(offset[name].x, offset[name].y) < 30 && g) {
+        g.style.transition = SPRING;
+        offset[name] = { x: 0, y: 0 };
+        g.style.transform = '';
+      }
+      clearTimeout(rebuild);
+      rebuild = window.setTimeout(goHome, away().length === 4 ? 900 : 2500);
+      if (!away().length) window.setTimeout(goHome, 0);
+    };
+    svg.addEventListener('pointerup', drop);
+    svg.addEventListener('pointercancel', drop);
+
+    /* ---------- poking it ---------- */
+
+    let taps: number[] = [];
+    let dizzyUntil = 0;
+    const tap = (name: Name) => {
+      const t = performance.now();
+      // Taps while it is still dizzy would cut the spin short.
+      if (robot.classList.contains('is-apart') || t < dizzyUntil) return;
+      taps = [...taps.filter((x) => t - x < 2000), t];
+      if (taps.length >= 5) {
+        taps = [];
+        dizzyUntil = t + 2300;
+        react('dizzy', 'Dizzy', 2300);
+        return;
+      }
+      if (name === 'head') react('poke', 'Poked', 800);
+      if (name === 'arm') react('hello', 'Hello', 2000);
+      if (name === 'hand') react('handhop', 'Hop and type', 1700);
+      if (name === 'body') react('press', 'Squashed', 700);
+    };
+
+    /* ---------- sleeping and typing ---------- */
+
+    let last = performance.now();
+    let asleep = false;
+    const wake = () => {
+      last = performance.now();
+      if (!asleep) return false;
+      asleep = false;
+      react('wake', 'Awake', 900);
+      return true;
+    };
+    ['pointermove', 'pointerdown', 'scroll', 'touchstart'].forEach((type) =>
+      window.addEventListener(type, wake, { passive: true }),
+    );
+    window.setInterval(() => {
+      if (reduced || asleep || drag || away().length) return;
+      if (performance.now() - last > 20000) {
+        asleep = true;
+        play('sleep');
+        show('Asleep');
+      }
+    }, 1000);
+
+    window.addEventListener('keydown', (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if ((e.target as Element).closest('input, textarea, [contenteditable]')) return;
+      if (wake()) return;
+      if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Enter') {
+        if (e.key === ' ' && (e.target as Element).closest('button')) return;
+        react('key', 'Typing along', 900);
+      }
+    });
+
+    /* ---------- the modes row ---------- */
+
+    const length: Record<string, number> = { hello: 2000, done: 2000, assemble: 3400, peek: 4600, lost: 3800 };
+    document.querySelectorAll<HTMLButtonElement>('.mode').forEach((b) =>
+      b.addEventListener('click', () => {
+        const mode = b.dataset.mode ?? 'idle';
+        if (away().length) goHome();
+        asleep = false;
+        play(mode);
+        show(b.textContent ?? mode, length[mode]);
+      }),
+    );
+    show('Assembling', 3400);
+  }
+</script>
+
+<style>
+  @reference "@/styles/global.css";
+
+  .playground {
+    @apply px-[2.5rem] my-[var(--space-section)] mx-auto max-w-[80rem];
+  }
+
+  .playground_grid {
+    @apply grid grid-cols-1 lg:grid-cols-12 gap-10 mt-12 items-start;
+  }
+
+  /* Room to drag the blocks around; anything pulled past the edge is clipped. */
+  .playground_stage {
+    @apply lg:col-span-7 flex flex-col items-center justify-center gap-8 overflow-hidden;
+    min-height: 30rem;
+    padding: 5rem 1rem 2rem;
+    background: var(--color-work-background);
+    border-radius: 1rem;
+  }
+
+  .playground_robot {
+    --robot-size: min(15rem, 55vw);
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+  }
+
+  .playground_robot:active {
+    cursor: grabbing;
+  }
+
+  .playground_now {
+    @apply m-0 font-mono text-meta uppercase;
+    color: var(--color-text-caption);
+  }
+
+  .playground_side {
+    @apply lg:col-span-5 flex flex-col gap-10;
+  }
+
+  .tries {
+    @apply list-none p-0 m-0 flex flex-col;
+  }
+
+  .tries li {
+    @apply flex flex-col gap-1 py-3;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .tries li:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .tries_what {
+    @apply font-medium;
+  }
+
+  .tries_then {
+    @apply text-sm;
+    color: var(--color-text-secondary);
+  }
+
+  .modes ul {
+    @apply list-none p-0 m-0 mt-3 flex flex-wrap gap-2;
+  }
+
+  .mode {
+    @apply font-mono text-meta uppercase cursor-pointer;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid var(--color-rule);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-text-primary);
+  }
+
+  .mode:hover {
+    border-color: var(--color-text-link);
+    color: var(--color-text-link);
+  }
+
+  .mode:focus-visible {
+    outline: 2px solid var(--color-text-link);
+    outline-offset: 2px;
+  }
+
+  .playground_still {
+    @apply text-sm m-0;
+    color: var(--color-text-secondary);
+  }
+</style>

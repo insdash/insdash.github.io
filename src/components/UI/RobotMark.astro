@@ -1,0 +1,772 @@
+---
+/**
+ * The insdash mark as a small robot: the four logo blocks with two eyes in the
+ * navy square and rounder corners (14 instead of the logo's 5). Every
+ * animation starts and ends on the four blocks, so at rest it is still the mark.
+ *
+ * entrance="lost"  assembles block by block, looks around, shrugs (404 page).
+ * entrance="hello" assembles, then waves (about page).
+ * entrance="peek"  rises from behind its ground line, looks around, waves.
+ *                  Plays once per visit; on later pages it is already standing.
+ *
+ * entrance="none"  just stands there (the /robot/ playground).
+ *
+ * Any mode can be played from outside by dispatching a `robot:play` event on
+ * the element, with the mode as `detail`: idle, hello, done, work, think,
+ * assemble, lost, peek, and the playground's reactions (poke, handhop, press,
+ * dizzy, sleep, wake, key, hold). `robot:look` with { x, y } in client
+ * coordinates points the eyes. data-tap="off" stops a click from waving.
+ *
+ * lookAt: a selector the robot watches on hover and hops for on click (the
+ * contact email).
+ */
+interface Props {
+  entrance: 'lost' | 'hello' | 'peek' | 'none';
+  lookAt?: string;
+  /** false when the page handles taps itself (the playground). */
+  tap?: boolean;
+  class?: string;
+}
+
+// rest carries the parent's style scope, so its --robot-size rule reaches here.
+const { entrance, lookAt, tap = true, class: className, ...rest } = Astro.props as Props;
+const clipId = `robot-clip-${Math.random().toString(36).slice(2, 8)}`;
+
+// Corner radius, capped so the small square never turns into a circle.
+const R = 14;
+const blocks = {
+  body: { x: 40.41, y: 70.72, w: 60.62, h: 30.31 },
+  arm: { x: 70.72, y: 0, w: 30.31, h: 60.62 },
+  head: { x: 0, y: 0, w: 60.62, h: 60.62 },
+  hand: { x: 0, y: 70.72, w: 30.31, h: 30.31 },
+};
+const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
+---
+
+<div
+  class:list={['robot', className]}
+  data-robot={entrance}
+  data-look-at={lookAt}
+  data-tap={tap ? undefined : 'off'}
+  aria-hidden="true"
+  {...rest}>
+  <svg viewBox="-10 -30 142 131.5">
+    <defs>
+      <clipPath id={clipId}><rect x="-80" y="-300" width="320" height="401.5" /></clipPath>
+    </defs>
+    <g class="clipper" data-clip={`url(#${clipId})`}>
+      <g class="rise">
+        <g class="bot">
+          <g class="body">
+            <rect class="blk" x={blocks.body.x} y={blocks.body.y} width={blocks.body.w} height={blocks.body.h} rx={rx(blocks.body)} />
+            <g class="keys">
+              <rect x="49" y="83.4" width="5" height="5" rx="1.6" />
+              <rect x="58" y="83.4" width="5" height="5" rx="1.6" />
+              <rect x="67" y="83.4" width="5" height="5" rx="1.6" />
+              <rect x="76" y="83.4" width="5" height="5" rx="1.6" />
+            </g>
+          </g>
+          <g class="arm">
+            <rect class="blk" x={blocks.arm.x} y={blocks.arm.y} width={blocks.arm.w} height={blocks.arm.h} rx={rx(blocks.arm)} />
+          </g>
+          <g class="head">
+            <rect class="blk" x={blocks.head.x} y={blocks.head.y} width={blocks.head.w} height={blocks.head.h} rx={rx(blocks.head)} />
+            <g class="look">
+              <g class="eyes">
+                <rect class="eye" x="16.6" y="21" width="8.4" height="14" rx="4.2" />
+                <rect class="eye" x="35.6" y="21" width="8.4" height="14" rx="4.2" />
+              </g>
+              <g class="happy">
+                <path d="M16.4 31.5 L20.8 26.5 L25.2 31.5" />
+                <path d="M35.4 31.5 L39.8 26.5 L44.2 31.5" />
+              </g>
+            </g>
+          </g>
+          <g class="hand">
+            <rect class="blk" x={blocks.hand.x} y={blocks.hand.y} width={blocks.hand.w} height={blocks.hand.h} rx={rx(blocks.hand)} />
+          </g>
+        </g>
+      </g>
+    </g>
+    <g class="zz">
+      <text x="58" y="-2">z</text>
+      <text x="58" y="-2">z</text>
+      <text x="58" y="-2">z</text>
+    </g>
+  </svg>
+</div>
+
+<script>
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
+  const PEEK_SEEN = 'insdash-robot-peeked';
+
+  type Bot = {
+    el: HTMLElement;
+    svg: SVGSVGElement;
+    idle: boolean;
+    watching: boolean;
+    timers: number[];
+    frame: number;
+  };
+
+  const bots: Bot[] = [];
+
+  const lookTo = (bot: Bot, x: number, y: number) => {
+    const look = bot.svg.querySelector<SVGGElement>('.look');
+    if (!look) return;
+    const cx = Math.max(-4.5, Math.min(4.5, x));
+    const cy = Math.max(-4, Math.min(5, y));
+    look.style.transform = `translate(${cx}px, ${cy}px)`;
+  };
+
+  // Point the eyes at a spot on screen, measured from the head's centre.
+  const lookAtClient = (bot: Bot, clientX: number, clientY: number) => {
+    const ctm = bot.svg.getScreenCTM();
+    if (!ctm) return;
+    const p = new DOMPoint(clientX, clientY).matrixTransform(ctm.inverse());
+    const dx = p.x - 30.3;
+    const dy = p.y - 28;
+    const d = Math.hypot(dx, dy) || 1;
+    const k = Math.min(1, d / 90);
+    lookTo(bot, (dx / d) * 4.5 * k, (dy / d) * 4.5 * k);
+  };
+
+  const after = (bot: Bot, ms: number, fn: () => void) => {
+    bot.timers.push(window.setTimeout(fn, ms));
+  };
+
+  const clipper = (bot: Bot) => bot.svg.querySelector<SVGGElement>('.clipper');
+  const hand = (bot: Bot) => bot.svg.querySelector<SVGGElement>('.hand');
+
+  const clear = (bot: Bot) => {
+    bot.timers.forEach(clearTimeout);
+    bot.timers = [];
+    cancelAnimationFrame(bot.frame);
+    const h = hand(bot);
+    if (h) h.style.transform = '';
+    const c = clipper(bot);
+    if (c) c.style.clipPath = '';
+    bot.el.classList.remove('is-hello', 'is-done', 'is-happy', 'is-shrug', 'is-work', 'is-assemble', 'is-peek', 'is-sunk', 'is-closed',
+      'is-wobble', 'is-handhop', 'is-press', 'is-shake', 'is-sleep', 'is-startle', 'is-typing');
+    void bot.el.offsetWidth; // restart CSS animations
+  };
+
+  const toIdle = (bot: Bot) => {
+    clear(bot);
+    bot.idle = true;
+    lookTo(bot, 0, 0);
+  };
+
+  const blink = (bot: Bot) => {
+    bot.el.classList.add('is-blink');
+    window.setTimeout(() => bot.el.classList.remove('is-blink'), 130);
+  };
+
+  const hello = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-hello');
+    lookTo(bot, 3, -1);
+    after(bot, 1100, () => bot.el.classList.add('is-happy'));
+    after(bot, 2000, () => toIdle(bot));
+  };
+
+  const hop = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-done', 'is-happy');
+    lookTo(bot, 0, 0);
+    after(bot, 2000, () => toIdle(bot));
+  };
+
+  // The small square types on the wide bar until another mode starts.
+  const work = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-work');
+    lookTo(bot, 3.5, 4.5);
+  };
+
+  // The small square circles the robot and the eyes follow it.
+  const think = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    const h = hand(bot);
+    if (!h) return;
+    const c = { x: 50.5, y: 50.5 };
+    const home = { x: 15.15, y: 85.87 };
+    const a0 = Math.atan2(home.y - c.y, home.x - c.x);
+    const r0 = Math.hypot(home.x - c.x, home.y - c.y);
+    const loop = 2600;
+    const rest = 500;
+    const t0 = performance.now();
+    const step = (now: number) => {
+      const t = (now - t0) % (loop + rest);
+      let dx = 0;
+      let dy = 0;
+      let turn = 0;
+      if (t < loop) {
+        const u = t / loop;
+        const e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+        const a = a0 + e * Math.PI * 2;
+        const r = r0 + Math.sin(u * Math.PI) * 34;
+        const x = c.x + Math.cos(a) * r;
+        const y = c.y + Math.sin(a) * r;
+        dx = x - home.x;
+        dy = y - home.y;
+        turn = e * 180;
+        const lx = x - 30.3;
+        const ly = y - 28;
+        const d = Math.hypot(lx, ly) || 1;
+        lookTo(bot, (lx / d) * 4.5, (ly / d) * 4.5);
+      } else {
+        lookTo(bot, -3, 3);
+      }
+      h.style.transform = `translate(${dx}px, ${dy}px) rotate(${turn}deg)`;
+      bot.frame = requestAnimationFrame(step);
+    };
+    bot.frame = requestAnimationFrame(step);
+  };
+
+  // The blocks drop in one by one, then the eyes open.
+  const assemble = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.remove('is-waiting');
+    bot.el.classList.add('is-assemble', 'is-closed');
+    after(bot, 1150, () => bot.el.classList.remove('is-closed'));
+    after(bot, 1500, () => blink(bot));
+  };
+
+  const greet = (bot: Bot) => {
+    assemble(bot);
+    after(bot, 1900, () => {
+      bot.el.classList.remove('is-assemble');
+      hello(bot);
+    });
+  };
+
+  const lost = (bot: Bot) => {
+    assemble(bot);
+    after(bot, 1800, () => lookTo(bot, -4.5, 0));
+    after(bot, 2400, () => lookTo(bot, 4.5, 0));
+    after(bot, 3000, () => {
+      lookTo(bot, 0, 1);
+      bot.el.classList.remove('is-assemble');
+      bot.el.classList.add('is-shrug');
+    });
+    after(bot, 3800, () => toIdle(bot));
+  };
+
+  const peek = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    const c = clipper(bot);
+    if (c) c.style.clipPath = c.dataset.clip ?? '';
+    // Replayed from the playground it starts standing, so drop out of sight first.
+    bot.el.classList.add('is-sunk');
+    void bot.el.offsetWidth;
+    lookTo(bot, 0, -2);
+    after(bot, 60, () => {
+      bot.el.classList.remove('is-waiting', 'is-sunk');
+      bot.el.classList.add('is-peek');
+    });
+    after(bot, 750, () => lookTo(bot, -4.5, -1));
+    after(bot, 1250, () => lookTo(bot, 4.5, -1));
+    after(bot, 1700, () => blink(bot));
+    after(bot, 1950, () => {
+      lookTo(bot, 0, 0);
+      bot.el.classList.remove('is-peek');
+    });
+    after(bot, 2550, () => hello(bot));
+  };
+
+  // One-off reactions: play a class for a while, then settle back to idle.
+  const react = (bot: Bot, cls: string[], ms: number, look?: [number, number]) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add(...cls);
+    if (look) lookTo(bot, look[0], look[1]);
+    after(bot, ms, () => toIdle(bot));
+  };
+
+  const poke = (bot: Bot) => {
+    react(bot, ['is-wobble'], 700, [0, 0]);
+    blink(bot);
+  };
+
+  const handhop = (bot: Bot) => {
+    react(bot, ['is-handhop'], 1700, [-3, 4]);
+    after(bot, 700, () => bot.el.classList.add('is-work'));
+  };
+
+  const press = (bot: Bot) => react(bot, ['is-press'], 650, [0, 2]);
+
+  // Eyes go round in circles, then it shakes it off.
+  const dizzy = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-wobble');
+    const t0 = performance.now();
+    const spin = (now: number) => {
+      const t = now - t0;
+      if (t > 1600) {
+        lookTo(bot, 0, 0);
+        bot.el.classList.remove('is-wobble');
+        void bot.el.offsetWidth;
+        bot.el.classList.add('is-shake');
+        after(bot, 600, () => toIdle(bot));
+        return;
+      }
+      const a = t / 140;
+      lookTo(bot, Math.cos(a) * 4, Math.sin(a) * 4);
+      bot.frame = requestAnimationFrame(spin);
+    };
+    bot.frame = requestAnimationFrame(spin);
+  };
+
+  const sleep = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-sleep', 'is-closed');
+    lookTo(bot, 0, 3);
+  };
+
+  const wake = (bot: Bot) => {
+    if (!bot.el.classList.contains('is-sleep')) return;
+    react(bot, ['is-startle'], 900, [0, -2]);
+  };
+
+  // Types along with the keyboard: one tap and one key per keystroke.
+  const key = (bot: Bot) => {
+    if (!bot.el.classList.contains('is-typing')) {
+      clear(bot);
+      bot.idle = false;
+      bot.el.classList.add('is-typing');
+      lookTo(bot, 3.5, 4.5);
+    }
+    bot.timers.forEach(clearTimeout);
+    bot.timers = [];
+    const h = hand(bot);
+    h?.classList.remove('tap');
+    void bot.el.offsetWidth;
+    h?.classList.add('tap');
+    const keys = bot.svg.querySelectorAll('.keys rect');
+    const k = keys[Math.floor(Math.random() * keys.length)];
+    k?.classList.add('on');
+    window.setTimeout(() => k?.classList.remove('on'), 160);
+    after(bot, 900, () => {
+      h?.classList.remove('tap');
+      toIdle(bot);
+    });
+  };
+
+  // Held by the page (a block is being dragged): no idle eye-following.
+  const hold = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+  };
+
+  // Eyes narrow for a moment when the theme flips.
+  const squint = () => {
+    bots.forEach((bot) => {
+      bot.el.classList.add('is-squint');
+      window.setTimeout(() => bot.el.classList.remove('is-squint'), 900);
+    });
+  };
+  new MutationObserver(squint).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', squint);
+
+  const seenPeek = () => {
+    try {
+      return sessionStorage.getItem(PEEK_SEEN) === '1';
+    } catch {
+      return false;
+    }
+  };
+  const markPeek = () => {
+    try {
+      sessionStorage.setItem(PEEK_SEEN, '1');
+    } catch {
+      /* private mode: the peek simply plays again */
+    }
+  };
+
+  const observer =
+    'IntersectionObserver' in window
+      ? new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              observer?.unobserve(entry.target);
+              const bot = bots.find((b) => b.el === entry.target);
+              if (!bot) return;
+              const entrance = bot.el.dataset.robot;
+              if (entrance === 'peek') {
+                markPeek();
+                peek(bot);
+              } else if (entrance === 'hello') {
+                greet(bot);
+              } else {
+                lost(bot);
+              }
+            });
+          },
+          { threshold: 0.6 },
+        )
+      : null;
+
+  document.querySelectorAll<HTMLElement>('[data-robot]').forEach((el) => {
+    const svg = el.querySelector('svg');
+    if (!svg) return;
+    const bot: Bot = { el, svg, idle: true, watching: false, timers: [], frame: 0 };
+    bots.push(bot);
+
+    const modes: Record<string, (b: Bot) => void> = {
+      idle: toIdle, hello, done: hop, work, think, assemble: greet, lost, peek,
+      poke, handhop, press, dizzy, sleep, wake, key, hold,
+    };
+    el.addEventListener('robot:play', (e) => {
+      const mode = (e as CustomEvent<string>).detail;
+      const play = modes[mode];
+      // Holding and idling are not motion, so they work with reduced motion too.
+      if (play && (!reduced || mode === 'hold' || mode === 'idle')) play(bot);
+    });
+    el.addEventListener('robot:look', (e) => {
+      const { x, y } = (e as CustomEvent<{ x: number; y: number }>).detail;
+      lookAtClient(bot, x, y);
+    });
+
+    // Without motion, or once the peek has played this visit, it just stands there.
+    const plays =
+      !reduced &&
+      observer &&
+      el.dataset.robot !== 'none' &&
+      (el.dataset.robot !== 'peek' || !seenPeek());
+    if (plays) {
+      // The peek waits below its ground line, so hide what hangs under it.
+      const clipper = svg.querySelector<SVGGElement>('.clipper');
+      if (el.dataset.robot === 'peek' && clipper) clipper.style.clipPath = clipper.dataset.clip ?? '';
+      el.classList.add('is-waiting');
+      bot.idle = false;
+      observer.observe(el);
+    }
+
+    const target = el.dataset.lookAt ? document.querySelector<HTMLElement>(el.dataset.lookAt) : null;
+    if (target) {
+      target.addEventListener('pointerenter', () => {
+        if (!bot.idle) return;
+        bot.watching = true;
+        const r = target.getBoundingClientRect();
+        lookAtClient(bot, r.left + r.width / 2, r.top + r.height / 2);
+      });
+      target.addEventListener('pointerleave', () => {
+        bot.watching = false;
+      });
+      if (!reduced) target.addEventListener('click', () => hop(bot));
+    }
+    if (!reduced && el.dataset.tap !== 'off') el.addEventListener('click', () => hello(bot));
+  });
+
+  if (bots.length && !reduced) {
+    // Blinks now and then, sometimes twice.
+    const scheduleBlink = () =>
+      window.setTimeout(() => {
+        bots.forEach((bot) => {
+          if (!bot.idle || Math.random() > 0.7) return;
+          blink(bot);
+          if (Math.random() < 0.25) window.setTimeout(() => blink(bot), 260);
+        });
+        scheduleBlink();
+      }, 2200 + Math.random() * 3200);
+    scheduleBlink();
+
+    if (finePointer) {
+      let frame = 0;
+      window.addEventListener('pointermove', (e) => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          bots.forEach((bot) => {
+            if (bot.idle && !bot.watching) lookAtClient(bot, e.clientX, e.clientY);
+          });
+        });
+      });
+    }
+  }
+</script>
+
+<style>
+  .robot {
+    /* Light ground takes the logo's colours, dark ground the on-navy version. */
+    --b-head: light-dark(#0a1a33, #e3e7ea);
+    --b-arm: light-dark(#315d8e, #70acda);
+    --b-hand: light-dark(#70acda, #1f3a5c);
+    --b-body: light-dark(#e3e7ea, #315d8e);
+    --eye: light-dark(#70acda, #0a1a33);
+    --eye-on-body: light-dark(#0a1a33, #e3e7ea);
+
+    width: var(--robot-size, 7.5rem);
+    flex: none;
+    cursor: pointer;
+    /* Its ground line: the peek rises from behind it. */
+    border-bottom: 1px solid var(--color-rule);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* --robot-size is the size of the four blocks themselves. The viewBox has
+     room around them for the wave and the hop (10 left, 31 right, 30 above,
+     on a 101 mark), which spills outside the box instead of shrinking it. */
+  .robot svg {
+    --u: calc(var(--robot-size, 7.5rem) / 101);
+    display: block;
+    width: calc(var(--u) * 142);
+    height: auto;
+    margin: calc(var(--u) * -30) calc(var(--u) * -31) 0 calc(var(--u) * -10);
+    overflow: visible;
+  }
+
+  .head .blk { fill: var(--b-head); }
+  .arm .blk { fill: var(--b-arm); }
+  .hand .blk { fill: var(--b-hand); }
+  .body .blk { fill: var(--b-body); }
+  .keys rect { fill: var(--eye-on-body); opacity: 0; }
+
+  .eye {
+    fill: var(--eye);
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 70ms ease-in;
+  }
+
+  .happy {
+    opacity: 0;
+    transition: opacity 120ms;
+  }
+
+  .happy path {
+    fill: none;
+    stroke: var(--eye);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .look { transition: transform 180ms ease-out; }
+
+  .rise, .bot, .head, .arm, .hand, .body { transform-box: fill-box; }
+  .bot, .head, .body { transform-origin: 50% 100%; }
+  .arm { transform-origin: 0% 100%; }
+  .hand { transform-origin: 50% 50%; }
+
+  .is-happy .happy { opacity: 1; }
+  .is-happy .eyes { opacity: 0; }
+  .is-blink .eye, .is-closed .eye { transform: scaleY(0.12); }
+
+  /* Waiting off-stage until it scrolls into view. */
+  [data-robot='lost'].is-waiting .bot,
+  [data-robot='hello'].is-waiting .bot { opacity: 0; }
+  [data-robot='peek'].is-waiting .rise,
+  .is-sunk .rise { transform: translateY(124px); }
+
+  /* idle: a slow breath */
+  .head { animation: bob 3.2s ease-in-out infinite; }
+  .arm { animation: bob 3.2s ease-in-out 0.25s infinite; }
+
+  /* hello: the tall bar waves from its bottom corner */
+  .is-hello .arm { animation: wave 1.5s cubic-bezier(0.4, 0, 0.3, 1) both; }
+  .is-hello .head { animation: lean 1.5s ease-in-out both; }
+
+  /* done: one hop with a squash on landing */
+  .is-done .head, .is-done .arm { animation: none; }
+  .is-done .bot { animation: hop 0.9s cubic-bezier(0.3, 0, 0.3, 1) both; }
+
+  /* working: the small square types on the wide bar, keys light up in turn */
+  .is-work .hand { animation: tap 0.42s ease-in-out infinite; }
+  .is-work .body { animation: press 0.42s ease-in-out infinite; }
+  .is-work .head { animation: nod 0.84s ease-in-out infinite; }
+  .is-work .keys rect { animation: key 2.52s steps(1) infinite; }
+  .is-work .keys rect:nth-child(2) { animation-delay: 0.42s; }
+  .is-work .keys rect:nth-child(3) { animation-delay: 0.84s; }
+  .is-work .keys rect:nth-child(4) { animation-delay: 1.26s; }
+
+  /* Playground reactions */
+  .is-wobble .head { animation: wobble 0.7s ease-in-out both; }
+  .is-handhop .hand { animation: handhop 0.7s cubic-bezier(0.3, 0, 0.3, 1) both; }
+  .is-press .body { animation: squash 0.65s cubic-bezier(0.3, 0, 0.3, 1) both; }
+  .is-press .head, .is-press .arm { animation: jolt 0.65s cubic-bezier(0.3, 0, 0.3, 1) both; }
+  .is-press .keys rect { opacity: 0.9; transition: opacity 0.4s 0.2s; }
+  .is-shake .bot { animation: shake 0.6s ease-in-out both; }
+  .is-startle .bot { animation: startle 0.5s cubic-bezier(0.3, 0, 0.3, 1) both; }
+  .is-startle .eye { transform: scale(1.25); }
+  .is-squint .eye { transform: scaleY(0.45); }
+  .is-typing .head { animation: nod 0.84s ease-in-out infinite; }
+  .is-typing .hand.tap { animation: tap 0.3s ease-in-out; }
+  .keys rect.on { opacity: 0.9; }
+
+  /* sleep: slower, deeper breaths, head tilted, z's drifting up */
+  .is-sleep .head { animation: snooze 3.6s ease-in-out infinite; }
+  .is-sleep .arm { animation: snooze 3.6s ease-in-out 0.3s infinite; }
+  .zz text {
+    font: 600 11px/1 var(--font-mono, ui-monospace, monospace);
+    fill: var(--b-arm);
+    opacity: 0;
+  }
+  .is-sleep .zz text { animation: zz 3s ease-out infinite; }
+  .is-sleep .zz text:nth-child(2) { animation-delay: 1s; }
+  .is-sleep .zz text:nth-child(3) { animation-delay: 2s; }
+
+  /* shrug: tall bar and small square lift together, head tilts */
+  .is-shrug .arm, .is-shrug .hand { animation: shrug 0.7s ease-in-out both; }
+  .is-shrug .head { animation: shrug-head 0.7s ease-in-out both; }
+
+  /* assemble: the blocks drop in one by one and settle into the mark */
+  .is-assemble .body { animation: drop 0.62s cubic-bezier(0.5, 0, 0.4, 1) both; }
+  .is-assemble .hand { animation: drop 0.62s cubic-bezier(0.5, 0, 0.4, 1) 0.14s both; transform-origin: 50% 100%; }
+  .is-assemble .head { animation: drop 0.66s cubic-bezier(0.5, 0, 0.4, 1) 0.3s both; }
+  .is-assemble .arm { animation: drop 0.62s cubic-bezier(0.5, 0, 0.4, 1) 0.48s both; transform-origin: 50% 100%; }
+
+  /* peek: up to the eyes, then all the way */
+  .rise { transition: transform 0.55s cubic-bezier(0.3, 1.5, 0.5, 1); }
+  .is-waiting .rise,
+  .is-sunk .rise { transition: none; }
+  .is-peek .rise { transform: translateY(46px); }
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-1.6px); }
+  }
+
+  @keyframes wave {
+    0% { transform: rotate(0); }
+    18% { transform: rotate(22deg); }
+    34% { transform: rotate(6deg); }
+    50% { transform: rotate(22deg); }
+    66% { transform: rotate(6deg); }
+    82% { transform: rotate(14deg); }
+    100% { transform: rotate(0); }
+  }
+
+  @keyframes lean {
+    0%, 100% { transform: rotate(0); }
+    20%, 80% { transform: rotate(-3deg); }
+  }
+
+  @keyframes hop {
+    0% { transform: translateY(0) scale(1, 1); }
+    14% { transform: translateY(0) scale(1.06, 0.9); }
+    40% { transform: translateY(-22px) scale(0.96, 1.05); }
+    66% { transform: translateY(0) scale(1.08, 0.88); }
+    80% { transform: translateY(-3px) scale(0.98, 1.02); }
+    100% { transform: translateY(0) scale(1, 1); }
+  }
+
+  @keyframes tap {
+    0%, 100% { transform: translate(0, 0); }
+    45% { transform: translate(3px, -7px) rotate(-6deg); }
+    70% { transform: translate(5px, 0); }
+  }
+
+  @keyframes press {
+    0%, 60%, 100% { transform: scaleY(1); }
+    72% { transform: scaleY(0.93); }
+  }
+
+  @keyframes nod {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(1.2px); }
+  }
+
+  @keyframes key {
+    0% { opacity: 0.9; }
+    66% { opacity: 0; }
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(0); }
+    20% { transform: rotate(-6deg); }
+    45% { transform: rotate(5deg); }
+    70% { transform: rotate(-2deg); }
+  }
+
+  @keyframes handhop {
+    0% { transform: translateY(0) rotate(0); }
+    15% { transform: translateY(0) scale(1.1, 0.85); }
+    50% { transform: translateY(-34px) rotate(180deg); }
+    80% { transform: translateY(0) rotate(360deg) scale(1.1, 0.88); }
+    100% { transform: translateY(0) rotate(360deg); }
+  }
+
+  @keyframes squash {
+    0%, 100% { transform: scaleY(1); }
+    25% { transform: scale(1.06, 0.72); }
+    60% { transform: scale(0.98, 1.06); }
+  }
+
+  @keyframes jolt {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(8px); }
+    55% { transform: translateY(-7px); }
+    80% { transform: translateY(1px); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-4px) rotate(-2deg); }
+    40% { transform: translateX(4px) rotate(2deg); }
+    60% { transform: translateX(-3px) rotate(-1deg); }
+    80% { transform: translateX(2px); }
+  }
+
+  @keyframes startle {
+    0%, 100% { transform: translateY(0) scale(1, 1); }
+    30% { transform: translateY(-14px) scale(0.96, 1.06); }
+    60% { transform: translateY(0) scale(1.06, 0.92); }
+  }
+
+  @keyframes snooze {
+    0%, 100% { transform: translateY(1px) rotate(3deg); }
+    50% { transform: translateY(-2.5px) rotate(3deg); }
+  }
+
+  @keyframes zz {
+    0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translate(18px, -30px) scale(1.3); opacity: 0; }
+  }
+
+  @keyframes shrug {
+    0%, 100% { transform: translateY(0); }
+    35%, 60% { transform: translateY(-6px); }
+  }
+
+  @keyframes shrug-head {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    35%, 60% { transform: translateY(1.5px) rotate(4deg); }
+  }
+
+  @keyframes drop {
+    0% { transform: translateY(-110px) scale(0.9, 1.1); opacity: 0; }
+    12% { opacity: 1; }
+    62% { transform: translateY(0) scale(0.94, 1.06); }
+    74% { transform: translateY(0) scale(1.1, 0.86); }
+    88% { transform: translateY(-3px) scale(0.98, 1.02); }
+    100% { transform: translateY(0) scale(1, 1); opacity: 1; }
+  }
+
+  /* While the playground has blocks pulled apart, inline transforms rule. */
+  .is-apart .head, .is-apart .arm, .is-apart .hand, .is-apart .body, .is-apart .bot {
+    animation: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .robot *,
+    .robot {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>

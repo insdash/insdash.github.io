@@ -18,8 +18,8 @@ export default defineConfig({
       sitemap({
         // Was `() => true`, which is the same as no filter and left ESLint
         // flagging an unused `page`. The human-readable index duplicates this
-        // file, so keep it out.
-        filter: (page) => !page.endsWith('/sitemap/'),
+        // file, so keep it out; /robot/ is a noindex playground.
+        filter: (page) => !page.endsWith('/sitemap/') && !page.endsWith('/robot/'),
       }),
   ],
   vite: {
