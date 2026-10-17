@@ -13,7 +13,9 @@
  *
  * Any mode can be played from outside by dispatching a `robot:play` event on
  * the element, with the mode as `detail`: idle, hello, done, work, think,
- * assemble, lost, peek.
+ * assemble, lost, peek, and the playground's reactions (poke, handhop, press,
+ * dizzy, sleep, wake, key, hold). `robot:look` with { x, y } in client
+ * coordinates points the eyes. data-tap="off" stops a click from waving.
  *
  * lookAt: a selector the robot watches on hover and hops for on click (the
  * contact email).
@@ -21,11 +23,13 @@
 interface Props {
   entrance: 'lost' | 'hello' | 'peek' | 'none';
   lookAt?: string;
+  /** false when the page handles taps itself (the playground). */
+  tap?: boolean;
   class?: string;
 }
 
 // rest carries the parent's style scope, so its --robot-size rule reaches here.
-const { entrance, lookAt, class: className, ...rest } = Astro.props as Props;
+const { entrance, lookAt, tap = true, class: className, ...rest } = Astro.props as Props;
 const clipId = `robot-clip-${Math.random().toString(36).slice(2, 8)}`;
 
 // Corner radius, capped so the small square never turns into a circle.
@@ -43,6 +47,7 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
   class:list={['robot', className]}
   data-robot={entrance}
   data-look-at={lookAt}
+  data-tap={tap ? undefined : 'off'}
   aria-hidden="true"
   {...rest}>
   <svg viewBox="-10 -30 142 131.5">
@@ -82,6 +87,11 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
           </g>
         </g>
       </g>
+    </g>
+    <g class="zz">
+      <text x="58" y="-2">z</text>
+      <text x="58" y="-2">z</text>
+      <text x="58" y="-2">z</text>
     </g>
   </svg>
 </div>
@@ -137,7 +147,8 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     if (h) h.style.transform = '';
     const c = clipper(bot);
     if (c) c.style.clipPath = '';
-    bot.el.classList.remove('is-hello', 'is-done', 'is-happy', 'is-shrug', 'is-work', 'is-assemble', 'is-peek', 'is-sunk', 'is-closed');
+    bot.el.classList.remove('is-hello', 'is-done', 'is-happy', 'is-shrug', 'is-work', 'is-assemble', 'is-peek', 'is-sunk', 'is-closed',
+      'is-wobble', 'is-handhop', 'is-press', 'is-shake', 'is-sleep', 'is-startle', 'is-typing');
     void bot.el.offsetWidth; // restart CSS animations
   };
 
@@ -271,6 +282,105 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     after(bot, 2550, () => hello(bot));
   };
 
+  // One-off reactions: play a class for a while, then settle back to idle.
+  const react = (bot: Bot, cls: string[], ms: number, look?: [number, number]) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add(...cls);
+    if (look) lookTo(bot, look[0], look[1]);
+    after(bot, ms, () => toIdle(bot));
+  };
+
+  const poke = (bot: Bot) => {
+    react(bot, ['is-wobble'], 700, [0, 0]);
+    blink(bot);
+  };
+
+  const handhop = (bot: Bot) => {
+    react(bot, ['is-handhop'], 1700, [-3, 4]);
+    after(bot, 700, () => bot.el.classList.add('is-work'));
+  };
+
+  const press = (bot: Bot) => react(bot, ['is-press'], 650, [0, 2]);
+
+  // Eyes go round in circles, then it shakes it off.
+  const dizzy = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-wobble');
+    const t0 = performance.now();
+    const spin = (now: number) => {
+      const t = now - t0;
+      if (t > 1600) {
+        lookTo(bot, 0, 0);
+        bot.el.classList.remove('is-wobble');
+        void bot.el.offsetWidth;
+        bot.el.classList.add('is-shake');
+        after(bot, 600, () => toIdle(bot));
+        return;
+      }
+      const a = t / 140;
+      lookTo(bot, Math.cos(a) * 4, Math.sin(a) * 4);
+      bot.frame = requestAnimationFrame(spin);
+    };
+    bot.frame = requestAnimationFrame(spin);
+  };
+
+  const sleep = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-sleep', 'is-closed');
+    lookTo(bot, 0, 3);
+  };
+
+  const wake = (bot: Bot) => {
+    if (!bot.el.classList.contains('is-sleep')) return;
+    react(bot, ['is-startle'], 900, [0, -2]);
+  };
+
+  // Types along with the keyboard: one tap and one key per keystroke.
+  const key = (bot: Bot) => {
+    if (!bot.el.classList.contains('is-typing')) {
+      clear(bot);
+      bot.idle = false;
+      bot.el.classList.add('is-typing');
+      lookTo(bot, 3.5, 4.5);
+    }
+    bot.timers.forEach(clearTimeout);
+    bot.timers = [];
+    const h = hand(bot);
+    h?.classList.remove('tap');
+    void bot.el.offsetWidth;
+    h?.classList.add('tap');
+    const keys = bot.svg.querySelectorAll('.keys rect');
+    const k = keys[Math.floor(Math.random() * keys.length)];
+    k?.classList.add('on');
+    window.setTimeout(() => k?.classList.remove('on'), 160);
+    after(bot, 900, () => {
+      h?.classList.remove('tap');
+      toIdle(bot);
+    });
+  };
+
+  // Held by the page (a block is being dragged): no idle eye-following.
+  const hold = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+  };
+
+  // Eyes narrow for a moment when the theme flips.
+  const squint = () => {
+    bots.forEach((bot) => {
+      bot.el.classList.add('is-squint');
+      window.setTimeout(() => bot.el.classList.remove('is-squint'), 900);
+    });
+  };
+  new MutationObserver(squint).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', squint);
+
   const seenPeek = () => {
     try {
       return sessionStorage.getItem(PEEK_SEEN) === '1';
@@ -318,10 +428,17 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
 
     const modes: Record<string, (b: Bot) => void> = {
       idle: toIdle, hello, done: hop, work, think, assemble: greet, lost, peek,
+      poke, handhop, press, dizzy, sleep, wake, key, hold,
     };
     el.addEventListener('robot:play', (e) => {
-      const play = modes[(e as CustomEvent<string>).detail];
-      if (play && !reduced) play(bot);
+      const mode = (e as CustomEvent<string>).detail;
+      const play = modes[mode];
+      // Holding and idling are not motion, so they work with reduced motion too.
+      if (play && (!reduced || mode === 'hold' || mode === 'idle')) play(bot);
+    });
+    el.addEventListener('robot:look', (e) => {
+      const { x, y } = (e as CustomEvent<{ x: number; y: number }>).detail;
+      lookAtClient(bot, x, y);
     });
 
     // Without motion, or once the peek has played this visit, it just stands there.
@@ -352,7 +469,7 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
       });
       if (!reduced) target.addEventListener('click', () => hop(bot));
     }
-    if (!reduced) el.addEventListener('click', () => hello(bot));
+    if (!reduced && el.dataset.tap !== 'off') el.addEventListener('click', () => hello(bot));
   });
 
   if (bots.length && !reduced) {
@@ -476,6 +593,32 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
   .is-work .keys rect:nth-child(3) { animation-delay: 0.84s; }
   .is-work .keys rect:nth-child(4) { animation-delay: 1.26s; }
 
+  /* Playground reactions */
+  .is-wobble .head { animation: wobble 0.7s ease-in-out both; }
+  .is-handhop .hand { animation: handhop 0.7s cubic-bezier(0.3, 0, 0.3, 1) both; }
+  .is-press .body { animation: squash 0.65s cubic-bezier(0.3, 0, 0.3, 1) both; }
+  .is-press .head, .is-press .arm { animation: jolt 0.65s cubic-bezier(0.3, 0, 0.3, 1) both; }
+  .is-press .keys rect { opacity: 0.9; transition: opacity 0.4s 0.2s; }
+  .is-shake .bot { animation: shake 0.6s ease-in-out both; }
+  .is-startle .bot { animation: startle 0.5s cubic-bezier(0.3, 0, 0.3, 1) both; }
+  .is-startle .eye { transform: scale(1.25); }
+  .is-squint .eye { transform: scaleY(0.45); }
+  .is-typing .head { animation: nod 0.84s ease-in-out infinite; }
+  .is-typing .hand.tap { animation: tap 0.3s ease-in-out; }
+  .keys rect.on { opacity: 0.9; }
+
+  /* sleep: slower, deeper breaths, head tilted, z's drifting up */
+  .is-sleep .head { animation: snooze 3.6s ease-in-out infinite; }
+  .is-sleep .arm { animation: snooze 3.6s ease-in-out 0.3s infinite; }
+  .zz text {
+    font: 600 11px/1 var(--font-mono, ui-monospace, monospace);
+    fill: var(--b-arm);
+    opacity: 0;
+  }
+  .is-sleep .zz text { animation: zz 3s ease-out infinite; }
+  .is-sleep .zz text:nth-child(2) { animation-delay: 1s; }
+  .is-sleep .zz text:nth-child(3) { animation-delay: 2s; }
+
   /* shrug: tall bar and small square lift together, head tilts */
   .is-shrug .arm, .is-shrug .hand { animation: shrug 0.7s ease-in-out both; }
   .is-shrug .head { animation: shrug-head 0.7s ease-in-out both; }
@@ -542,6 +685,59 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     66% { opacity: 0; }
   }
 
+  @keyframes wobble {
+    0%, 100% { transform: rotate(0); }
+    20% { transform: rotate(-6deg); }
+    45% { transform: rotate(5deg); }
+    70% { transform: rotate(-2deg); }
+  }
+
+  @keyframes handhop {
+    0% { transform: translateY(0) rotate(0); }
+    15% { transform: translateY(0) scale(1.1, 0.85); }
+    50% { transform: translateY(-34px) rotate(180deg); }
+    80% { transform: translateY(0) rotate(360deg) scale(1.1, 0.88); }
+    100% { transform: translateY(0) rotate(360deg); }
+  }
+
+  @keyframes squash {
+    0%, 100% { transform: scaleY(1); }
+    25% { transform: scale(1.06, 0.72); }
+    60% { transform: scale(0.98, 1.06); }
+  }
+
+  @keyframes jolt {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(8px); }
+    55% { transform: translateY(-7px); }
+    80% { transform: translateY(1px); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-4px) rotate(-2deg); }
+    40% { transform: translateX(4px) rotate(2deg); }
+    60% { transform: translateX(-3px) rotate(-1deg); }
+    80% { transform: translateX(2px); }
+  }
+
+  @keyframes startle {
+    0%, 100% { transform: translateY(0) scale(1, 1); }
+    30% { transform: translateY(-14px) scale(0.96, 1.06); }
+    60% { transform: translateY(0) scale(1.06, 0.92); }
+  }
+
+  @keyframes snooze {
+    0%, 100% { transform: translateY(1px) rotate(3deg); }
+    50% { transform: translateY(-2.5px) rotate(3deg); }
+  }
+
+  @keyframes zz {
+    0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translate(18px, -30px) scale(1.3); opacity: 0; }
+  }
+
   @keyframes shrug {
     0%, 100% { transform: translateY(0); }
     35%, 60% { transform: translateY(-6px); }
@@ -559,6 +755,11 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     74% { transform: translateY(0) scale(1.1, 0.86); }
     88% { transform: translateY(-3px) scale(0.98, 1.02); }
     100% { transform: translateY(0) scale(1, 1); opacity: 1; }
+  }
+
+  /* While the playground has blocks pulled apart, inline transforms rule. */
+  .is-apart .head, .is-apart .arm, .is-apart .hand, .is-apart .body, .is-apart .bot {
+    animation: none !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
