@@ -1,0 +1,198 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import RobotMark from '@/components/UI/RobotMark.astro';
+
+// A playground for the robot mark: every mode it has, one button each. Not
+// linked from the nav, kept out of the sitemap and out of search.
+const modes = [
+  { mode: 'hello', key: '1', label: 'Hello', note: 'Waves twice' },
+  { mode: 'done', key: '2', label: 'Happy', note: 'One hop, ^ ^ eyes' },
+  { mode: 'work', key: '3', label: 'Working', note: 'Types on the wide bar' },
+  { mode: 'think', key: '4', label: 'Thinking', note: 'The small square circles it' },
+  { mode: 'idle', key: '5', label: 'Idle', note: 'Breathes and watches you' },
+];
+
+const entrances = [
+  { mode: 'assemble', key: 'A', label: 'Assemble', note: 'Drops in block by block' },
+  { mode: 'peek', key: 'P', label: 'Peek', note: 'Rises from behind the line' },
+  { mode: 'lost', key: 'L', label: 'Lost', note: 'Looks around, shrugs' },
+];
+---
+
+<Layout
+  title="Robot playground"
+  noindex={true}
+  description="Play with the insdash robot: every mode and entrance it has.">
+  <section class="playground">
+    <p class="eyebrow">Playground</p>
+    <h1>Meet the robot.</h1>
+    <p class="lead">
+      The four blocks of the insdash mark, with eyes. Pick a mode, or click the
+      robot to make it wave. Move your mouse and it watches.
+    </p>
+
+    <div class="playground_grid">
+      <div class="playground_stage">
+        <RobotMark entrance="none" class="playground_robot" />
+        <p class="playground_now" aria-live="polite"><span class="meta-label">Now</span> <span id="robot-now">Idle</span></p>
+      </div>
+
+      <div class="playground_controls">
+        <div class="playground_group">
+          <p class="eyebrow">Modes</p>
+          <ul>
+            {modes.map((m) => (
+              <li>
+                <button type="button" class="mode" data-mode={m.mode} data-key={m.key} aria-pressed={m.mode === 'idle' ? 'true' : 'false'}>
+                  <kbd>{m.key}</kbd>
+                  <span class="mode_label">{m.label}</span>
+                  <span class="mode_note">{m.note}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="playground_group">
+          <p class="eyebrow">Entrances</p>
+          <ul>
+            {entrances.map((m) => (
+              <li>
+                <button type="button" class="mode" data-mode={m.mode} data-key={m.key} aria-pressed="false">
+                  <kbd>{m.key}</kbd>
+                  <span class="mode_label">{m.label}</span>
+                  <span class="mode_note">{m.note}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <p class="playground_still" id="robot-still" hidden>
+          Your system asks for reduced motion, so the robot stays still here.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const robot = document.querySelector<HTMLElement>('.playground_robot');
+  const now = document.getElementById('robot-now');
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.mode')];
+  const still = document.getElementById('robot-still');
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && still) {
+    still.hidden = false;
+  }
+
+  // Modes that loop stay lit; the one-off ones light up while they play.
+  const length: Record<string, number> = {
+    hello: 2000, done: 2000, assemble: 3400, peek: 4600, lost: 3800,
+  };
+  let reset = 0;
+
+  const play = (mode: string) => {
+    if (!robot) return;
+    robot.dispatchEvent(new CustomEvent('robot:play', { detail: mode }));
+    const button = buttons.find((b) => b.dataset.mode === mode);
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+    if (now && button) now.textContent = button.querySelector('.mode_label')?.textContent ?? mode;
+    clearTimeout(reset);
+    if (length[mode]) reset = window.setTimeout(() => {
+      const idle = buttons.find((b) => b.dataset.mode === 'idle');
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === idle)));
+      if (now) now.textContent = 'Idle';
+    }, length[mode]);
+  };
+
+  buttons.forEach((b) => b.addEventListener('click', () => play(b.dataset.mode ?? 'idle')));
+  robot?.addEventListener('click', () => play('hello'));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const button = buttons.find((b) => b.dataset.key?.toLowerCase() === e.key.toLowerCase());
+    if (button) play(button.dataset.mode ?? 'idle');
+  });
+</script>
+
+<style>
+  @reference "@/styles/global.css";
+
+  .playground {
+    @apply px-[2.5rem] my-[var(--space-section)] mx-auto max-w-[80rem];
+  }
+
+  .playground_grid {
+    @apply grid grid-cols-1 lg:grid-cols-12 gap-10 mt-12 items-start;
+  }
+
+  .playground_stage {
+    @apply lg:col-span-7 flex flex-col items-center justify-center gap-6;
+    min-height: 26rem;
+    padding: 4rem 1rem 2rem;
+    background: var(--color-work-background);
+    border-radius: 1rem;
+  }
+
+  .playground_robot {
+    --robot-size: min(15rem, 55vw);
+  }
+
+  .playground_now {
+    @apply m-0 font-mono text-meta uppercase;
+    color: var(--color-text-caption);
+  }
+
+  .playground_controls {
+    @apply lg:col-span-5 flex flex-col gap-8;
+  }
+
+  .playground_group ul {
+    @apply list-none p-0 m-0 mt-3 flex flex-col gap-2;
+  }
+
+  .mode {
+    @apply w-full grid items-baseline gap-x-4 text-left cursor-pointer;
+    grid-template-columns: 1.75rem minmax(0, auto) minmax(0, 1fr);
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-rule);
+    border-radius: 0.75rem;
+    background: transparent;
+    color: var(--color-text-primary);
+    font: inherit;
+  }
+
+  .mode:hover {
+    border-color: var(--color-text-link);
+  }
+
+  .mode:focus-visible {
+    outline: 2px solid var(--color-text-link);
+    outline-offset: 2px;
+  }
+
+  .mode[aria-pressed='true'] {
+    border-color: var(--color-text-link);
+    box-shadow: inset 3px 0 0 var(--color-text-link);
+  }
+
+  .mode kbd {
+    @apply font-mono text-meta;
+    color: var(--color-text-secondary);
+  }
+
+  .mode_label {
+    @apply font-medium;
+  }
+
+  .mode_note {
+    @apply text-sm;
+    color: var(--color-text-secondary);
+  }
+
+  .playground_still {
+    @apply text-sm m-0;
+    color: var(--color-text-secondary);
+  }
+</style>

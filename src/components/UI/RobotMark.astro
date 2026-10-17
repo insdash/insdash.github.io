@@ -5,19 +5,27 @@
  * animation starts and ends on the four blocks, so at rest it is still the mark.
  *
  * entrance="lost"  assembles block by block, looks around, shrugs (404 page).
+ * entrance="hello" assembles, then waves (about page).
  * entrance="peek"  rises from behind its ground line, looks around, waves.
  *                  Plays once per visit; on later pages it is already standing.
+ *
+ * entrance="none"  just stands there (the /robot/ playground).
+ *
+ * Any mode can be played from outside by dispatching a `robot:play` event on
+ * the element, with the mode as `detail`: idle, hello, done, work, think,
+ * assemble, lost, peek.
  *
  * lookAt: a selector the robot watches on hover and hops for on click (the
  * contact email).
  */
 interface Props {
-  entrance: 'lost' | 'peek';
+  entrance: 'lost' | 'hello' | 'peek' | 'none';
   lookAt?: string;
   class?: string;
 }
 
-const { entrance, lookAt, class: className } = Astro.props as Props;
+// rest carries the parent's style scope, so its --robot-size rule reaches here.
+const { entrance, lookAt, class: className, ...rest } = Astro.props as Props;
 const clipId = `robot-clip-${Math.random().toString(36).slice(2, 8)}`;
 
 // Corner radius, capped so the small square never turns into a circle.
@@ -35,7 +43,8 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
   class:list={['robot', className]}
   data-robot={entrance}
   data-look-at={lookAt}
-  aria-hidden="true">
+  aria-hidden="true"
+  {...rest}>
   <svg viewBox="-10 -30 142 131.5">
     <defs>
       <clipPath id={clipId}><rect x="-80" y="-300" width="320" height="401.5" /></clipPath>
@@ -45,6 +54,12 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
         <g class="bot">
           <g class="body">
             <rect class="blk" x={blocks.body.x} y={blocks.body.y} width={blocks.body.w} height={blocks.body.h} rx={rx(blocks.body)} />
+            <g class="keys">
+              <rect x="49" y="83.4" width="5" height="5" rx="1.6" />
+              <rect x="58" y="83.4" width="5" height="5" rx="1.6" />
+              <rect x="67" y="83.4" width="5" height="5" rx="1.6" />
+              <rect x="76" y="83.4" width="5" height="5" rx="1.6" />
+            </g>
           </g>
           <g class="arm">
             <rect class="blk" x={blocks.arm.x} y={blocks.arm.y} width={blocks.arm.w} height={blocks.arm.h} rx={rx(blocks.arm)} />
@@ -82,6 +97,7 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     idle: boolean;
     watching: boolean;
     timers: number[];
+    frame: number;
   };
 
   const bots: Bot[] = [];
@@ -110,10 +126,18 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     bot.timers.push(window.setTimeout(fn, ms));
   };
 
+  const clipper = (bot: Bot) => bot.svg.querySelector<SVGGElement>('.clipper');
+  const hand = (bot: Bot) => bot.svg.querySelector<SVGGElement>('.hand');
+
   const clear = (bot: Bot) => {
     bot.timers.forEach(clearTimeout);
     bot.timers = [];
-    bot.el.classList.remove('is-hello', 'is-done', 'is-happy', 'is-shrug');
+    cancelAnimationFrame(bot.frame);
+    const h = hand(bot);
+    if (h) h.style.transform = '';
+    const c = clipper(bot);
+    if (c) c.style.clipPath = '';
+    bot.el.classList.remove('is-hello', 'is-done', 'is-happy', 'is-shrug', 'is-work', 'is-assemble', 'is-peek', 'is-sunk', 'is-closed');
     void bot.el.offsetWidth; // restart CSS animations
   };
 
@@ -145,13 +169,75 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     after(bot, 2000, () => toIdle(bot));
   };
 
-  const lost = (bot: Bot) => {
+  // The small square types on the wide bar until another mode starts.
+  const work = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-work');
+    lookTo(bot, 3.5, 4.5);
+  };
+
+  // The small square circles the robot and the eyes follow it.
+  const think = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    const h = hand(bot);
+    if (!h) return;
+    const c = { x: 50.5, y: 50.5 };
+    const home = { x: 15.15, y: 85.87 };
+    const a0 = Math.atan2(home.y - c.y, home.x - c.x);
+    const r0 = Math.hypot(home.x - c.x, home.y - c.y);
+    const loop = 2600;
+    const rest = 500;
+    const t0 = performance.now();
+    const step = (now: number) => {
+      const t = (now - t0) % (loop + rest);
+      let dx = 0;
+      let dy = 0;
+      let turn = 0;
+      if (t < loop) {
+        const u = t / loop;
+        const e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+        const a = a0 + e * Math.PI * 2;
+        const r = r0 + Math.sin(u * Math.PI) * 34;
+        const x = c.x + Math.cos(a) * r;
+        const y = c.y + Math.sin(a) * r;
+        dx = x - home.x;
+        dy = y - home.y;
+        turn = e * 180;
+        const lx = x - 30.3;
+        const ly = y - 28;
+        const d = Math.hypot(lx, ly) || 1;
+        lookTo(bot, (lx / d) * 4.5, (ly / d) * 4.5);
+      } else {
+        lookTo(bot, -3, 3);
+      }
+      h.style.transform = `translate(${dx}px, ${dy}px) rotate(${turn}deg)`;
+      bot.frame = requestAnimationFrame(step);
+    };
+    bot.frame = requestAnimationFrame(step);
+  };
+
+  // The blocks drop in one by one, then the eyes open.
+  const assemble = (bot: Bot) => {
     clear(bot);
     bot.idle = false;
     bot.el.classList.remove('is-waiting');
     bot.el.classList.add('is-assemble', 'is-closed');
     after(bot, 1150, () => bot.el.classList.remove('is-closed'));
     after(bot, 1500, () => blink(bot));
+  };
+
+  const greet = (bot: Bot) => {
+    assemble(bot);
+    after(bot, 1900, () => {
+      bot.el.classList.remove('is-assemble');
+      hello(bot);
+    });
+  };
+
+  const lost = (bot: Bot) => {
+    assemble(bot);
     after(bot, 1800, () => lookTo(bot, -4.5, 0));
     after(bot, 2400, () => lookTo(bot, 4.5, 0));
     after(bot, 3000, () => {
@@ -163,13 +249,16 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
   };
 
   const peek = (bot: Bot) => {
-    const clipper = bot.svg.querySelector<SVGGElement>('.clipper');
     clear(bot);
     bot.idle = false;
-    if (clipper) clipper.style.clipPath = clipper.dataset.clip ?? '';
+    const c = clipper(bot);
+    if (c) c.style.clipPath = c.dataset.clip ?? '';
+    // Replayed from the playground it starts standing, so drop out of sight first.
+    bot.el.classList.add('is-sunk');
+    void bot.el.offsetWidth;
     lookTo(bot, 0, -2);
     after(bot, 60, () => {
-      bot.el.classList.remove('is-waiting');
+      bot.el.classList.remove('is-waiting', 'is-sunk');
       bot.el.classList.add('is-peek');
     });
     after(bot, 750, () => lookTo(bot, -4.5, -1));
@@ -179,10 +268,7 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
       lookTo(bot, 0, 0);
       bot.el.classList.remove('is-peek');
     });
-    after(bot, 2550, () => {
-      if (clipper) clipper.style.clipPath = '';
-      hello(bot);
-    });
+    after(bot, 2550, () => hello(bot));
   };
 
   const seenPeek = () => {
@@ -209,9 +295,12 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
               observer?.unobserve(entry.target);
               const bot = bots.find((b) => b.el === entry.target);
               if (!bot) return;
-              if (bot.el.dataset.robot === 'peek') {
+              const entrance = bot.el.dataset.robot;
+              if (entrance === 'peek') {
                 markPeek();
                 peek(bot);
+              } else if (entrance === 'hello') {
+                greet(bot);
               } else {
                 lost(bot);
               }
@@ -224,11 +313,23 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
   document.querySelectorAll<HTMLElement>('[data-robot]').forEach((el) => {
     const svg = el.querySelector('svg');
     if (!svg) return;
-    const bot: Bot = { el, svg, idle: true, watching: false, timers: [] };
+    const bot: Bot = { el, svg, idle: true, watching: false, timers: [], frame: 0 };
     bots.push(bot);
 
+    const modes: Record<string, (b: Bot) => void> = {
+      idle: toIdle, hello, done: hop, work, think, assemble: greet, lost, peek,
+    };
+    el.addEventListener('robot:play', (e) => {
+      const play = modes[(e as CustomEvent<string>).detail];
+      if (play && !reduced) play(bot);
+    });
+
     // Without motion, or once the peek has played this visit, it just stands there.
-    const plays = !reduced && observer && (el.dataset.robot !== 'peek' || !seenPeek());
+    const plays =
+      !reduced &&
+      observer &&
+      el.dataset.robot !== 'none' &&
+      (el.dataset.robot !== 'peek' || !seenPeek());
     if (plays) {
       // The peek waits below its ground line, so hide what hangs under it.
       const clipper = svg.querySelector<SVGGElement>('.clipper');
@@ -289,6 +390,7 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     --b-hand: light-dark(#70acda, #1f3a5c);
     --b-body: light-dark(#e3e7ea, #315d8e);
     --eye: light-dark(#70acda, #0a1a33);
+    --eye-on-body: light-dark(#0a1a33, #e3e7ea);
 
     width: var(--robot-size, 7.5rem);
     flex: none;
@@ -298,10 +400,15 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     -webkit-tap-highlight-color: transparent;
   }
 
+  /* --robot-size is the size of the four blocks themselves. The viewBox has
+     room around them for the wave and the hop (10 left, 31 right, 30 above,
+     on a 101 mark), which spills outside the box instead of shrinking it. */
   .robot svg {
+    --u: calc(var(--robot-size, 7.5rem) / 101);
     display: block;
-    width: 100%;
+    width: calc(var(--u) * 142);
     height: auto;
+    margin: calc(var(--u) * -30) calc(var(--u) * -31) 0 calc(var(--u) * -10);
     overflow: visible;
   }
 
@@ -309,6 +416,7 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
   .arm .blk { fill: var(--b-arm); }
   .hand .blk { fill: var(--b-hand); }
   .body .blk { fill: var(--b-body); }
+  .keys rect { fill: var(--eye-on-body); opacity: 0; }
 
   .eye {
     fill: var(--eye);
@@ -342,8 +450,10 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
   .is-blink .eye, .is-closed .eye { transform: scaleY(0.12); }
 
   /* Waiting off-stage until it scrolls into view. */
-  [data-robot='lost'].is-waiting .bot { opacity: 0; }
-  [data-robot='peek'].is-waiting .rise { transform: translateY(124px); }
+  [data-robot='lost'].is-waiting .bot,
+  [data-robot='hello'].is-waiting .bot { opacity: 0; }
+  [data-robot='peek'].is-waiting .rise,
+  .is-sunk .rise { transform: translateY(124px); }
 
   /* idle: a slow breath */
   .head { animation: bob 3.2s ease-in-out infinite; }
@@ -357,6 +467,15 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
   .is-done .head, .is-done .arm { animation: none; }
   .is-done .bot { animation: hop 0.9s cubic-bezier(0.3, 0, 0.3, 1) both; }
 
+  /* working: the small square types on the wide bar, keys light up in turn */
+  .is-work .hand { animation: tap 0.42s ease-in-out infinite; }
+  .is-work .body { animation: press 0.42s ease-in-out infinite; }
+  .is-work .head { animation: nod 0.84s ease-in-out infinite; }
+  .is-work .keys rect { animation: key 2.52s steps(1) infinite; }
+  .is-work .keys rect:nth-child(2) { animation-delay: 0.42s; }
+  .is-work .keys rect:nth-child(3) { animation-delay: 0.84s; }
+  .is-work .keys rect:nth-child(4) { animation-delay: 1.26s; }
+
   /* shrug: tall bar and small square lift together, head tilts */
   .is-shrug .arm, .is-shrug .hand { animation: shrug 0.7s ease-in-out both; }
   .is-shrug .head { animation: shrug-head 0.7s ease-in-out both; }
@@ -369,7 +488,8 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
 
   /* peek: up to the eyes, then all the way */
   .rise { transition: transform 0.55s cubic-bezier(0.3, 1.5, 0.5, 1); }
-  .is-waiting .rise { transition: none; }
+  .is-waiting .rise,
+  .is-sunk .rise { transition: none; }
   .is-peek .rise { transform: translateY(46px); }
 
   @keyframes bob {
@@ -399,6 +519,27 @@ const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
     66% { transform: translateY(0) scale(1.08, 0.88); }
     80% { transform: translateY(-3px) scale(0.98, 1.02); }
     100% { transform: translateY(0) scale(1, 1); }
+  }
+
+  @keyframes tap {
+    0%, 100% { transform: translate(0, 0); }
+    45% { transform: translate(3px, -7px) rotate(-6deg); }
+    70% { transform: translate(5px, 0); }
+  }
+
+  @keyframes press {
+    0%, 60%, 100% { transform: scaleY(1); }
+    72% { transform: scaleY(0.93); }
+  }
+
+  @keyframes nod {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(1.2px); }
+  }
+
+  @keyframes key {
+    0% { opacity: 0.9; }
+    66% { opacity: 0; }
   }
 
   @keyframes shrug {

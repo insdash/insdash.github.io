@@ -61,8 +61,12 @@ const {
     @apply mb-0;
   }
 
+  /* Keeps the room around the mark inside its box, so the ground line runs
+     wider than the blocks — the look this spot was first approved in. */
   .contact_robot {
-    --robot-size: clamp(5.5rem, 4.5rem + 4vw, 8rem);
+    --robot-size: 5.33rem;
+    box-sizing: content-box;
+    padding: 0 calc(var(--robot-size) * 31 / 101) 0 calc(var(--robot-size) * 10 / 101);
   }
 
   .contact_email {

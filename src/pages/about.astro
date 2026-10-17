@@ -2,21 +2,7 @@
 import { getEntry, render } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import ContactSection from '@/components/layout/ContactSection.astro';
-
-interface Props {
-  profileImage?: string;
-  gifImage?: string;
-}
-
-const base = import.meta.env.BASE_URL;
-
-const {
-  profileImage = 'images/logo/insdash-badge.svg',
-  gifImage = 'images/logo/insdash-badge-white.svg',
-} = Astro.props;
-
-const profileImagePath = `${base}${profileImage}`;
-const gifImagePath = `${base}${gifImage}`;
+import RobotMark from '@/components/UI/RobotMark.astro';
 
 // All page copy lives in src/content/about/about.md — edit the prose there, not
 // here. Links in that file are root-relative, which is correct while `base` is
@@ -44,19 +30,7 @@ const { Content } = await render(about);
       </div>
 
       <div class="about_portrait">
-        <div class="static_image group">
-          <img
-            src={profileImagePath}
-            alt="insdash"
-            class="profile_image group-hover:opacity-0"
-          />
-          <img
-            src={gifImagePath}
-            alt=""
-            aria-hidden="true"
-            class="profile_image absolute top-0 left-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          />
-        </div>
+        <RobotMark entrance="hello" class="about_robot" />
       </div>
     </div>
 
@@ -65,7 +39,8 @@ const { Content } = await render(about);
     </div>
   </section>
 
-  <ContactSection lead={contactLead} />
+  {/* The robot already introduces itself at the top of this page. */}
+  <ContactSection lead={contactLead} robot={false} />
 </Layout>
 
 <style>
@@ -113,11 +88,7 @@ const { Content } = await render(about);
     color: var(--color-text-caption);
   }
 
-  .static_image {
-    @apply relative w-72 h-72;
-  }
-
-  .profile_image {
-    @apply w-full h-full rounded-full transition-opacity duration-500;
+  .about_robot {
+    --robot-size: min(15rem, 60vw);
   }
 </style>
