@@ -1,12 +1,16 @@
 ---
 import { site, socials } from '@/ts/site';
+import RobotMark from '@/components/UI/RobotMark.astro';
 
 interface Props {
   /** Overrides the default line above the address. */
   lead?: string;
+  /** The robot peeks up beside the heading. Off where the page has its own. */
+  robot?: boolean;
 }
 
 const {
+  robot = true,
   lead = 'Tell us what you are trying to make work. A rough sketch and a deadline is enough to start — we will come back with scope, a written estimate, and a straight answer on whether building it is the right call.',
 } = Astro.props as Props;
 ---
@@ -14,8 +18,13 @@ const {
 {/* id="contact" is the target for links that already existed on the site but
     pointed at nothing. */}
 <section id="contact" class="contact">
-  <p class="eyebrow">Contact</p>
-  <h2>Start a project</h2>
+  <div class="contact_head">
+    <div>
+      <p class="eyebrow">Contact</p>
+      <h2>Start a project</h2>
+    </div>
+    {robot && <RobotMark entrance="peek" lookAt="#contact .contact_email a" class="contact_robot" />}
+  </div>
   <p class="lead">{lead}</p>
 
   <p class="contact_email">
@@ -42,6 +51,18 @@ const {
 
   .contact {
     @apply px-[2.5rem] mx-auto max-w-[80rem] my-[var(--space-section)];
+  }
+
+  .contact_head {
+    @apply flex items-end justify-between gap-6 mb-5;
+  }
+
+  .contact_head h2 {
+    @apply mb-0;
+  }
+
+  .contact_robot {
+    --robot-size: clamp(5.5rem, 4.5rem + 4vw, 8rem);
   }
 
   .contact_email {

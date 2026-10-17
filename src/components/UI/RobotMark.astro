@@ -1,0 +1,430 @@
+---
+/**
+ * The insdash mark as a small robot: the four logo blocks with two eyes in the
+ * navy square and rounder corners (14 instead of the logo's 5). Every
+ * animation starts and ends on the four blocks, so at rest it is still the mark.
+ *
+ * entrance="lost"  assembles block by block, looks around, shrugs (404 page).
+ * entrance="peek"  rises from behind its ground line, looks around, waves.
+ *                  Plays once per visit; on later pages it is already standing.
+ *
+ * lookAt: a selector the robot watches on hover and hops for on click (the
+ * contact email).
+ */
+interface Props {
+  entrance: 'lost' | 'peek';
+  lookAt?: string;
+  class?: string;
+}
+
+const { entrance, lookAt, class: className } = Astro.props as Props;
+const clipId = `robot-clip-${Math.random().toString(36).slice(2, 8)}`;
+
+// Corner radius, capped so the small square never turns into a circle.
+const R = 14;
+const blocks = {
+  body: { x: 40.41, y: 70.72, w: 60.62, h: 30.31 },
+  arm: { x: 70.72, y: 0, w: 30.31, h: 60.62 },
+  head: { x: 0, y: 0, w: 60.62, h: 60.62 },
+  hand: { x: 0, y: 70.72, w: 30.31, h: 30.31 },
+};
+const rx = (b: { w: number; h: number }) => Math.min(R, b.w / 2, b.h / 2);
+---
+
+<div
+  class:list={['robot', className]}
+  data-robot={entrance}
+  data-look-at={lookAt}
+  aria-hidden="true">
+  <svg viewBox="-10 -30 142 131.5">
+    <defs>
+      <clipPath id={clipId}><rect x="-80" y="-300" width="320" height="401.5" /></clipPath>
+    </defs>
+    <g class="clipper" data-clip={`url(#${clipId})`}>
+      <g class="rise">
+        <g class="bot">
+          <g class="body">
+            <rect class="blk" x={blocks.body.x} y={blocks.body.y} width={blocks.body.w} height={blocks.body.h} rx={rx(blocks.body)} />
+          </g>
+          <g class="arm">
+            <rect class="blk" x={blocks.arm.x} y={blocks.arm.y} width={blocks.arm.w} height={blocks.arm.h} rx={rx(blocks.arm)} />
+          </g>
+          <g class="head">
+            <rect class="blk" x={blocks.head.x} y={blocks.head.y} width={blocks.head.w} height={blocks.head.h} rx={rx(blocks.head)} />
+            <g class="look">
+              <g class="eyes">
+                <rect class="eye" x="16.6" y="21" width="8.4" height="14" rx="4.2" />
+                <rect class="eye" x="35.6" y="21" width="8.4" height="14" rx="4.2" />
+              </g>
+              <g class="happy">
+                <path d="M16.4 31.5 L20.8 26.5 L25.2 31.5" />
+                <path d="M35.4 31.5 L39.8 26.5 L44.2 31.5" />
+              </g>
+            </g>
+          </g>
+          <g class="hand">
+            <rect class="blk" x={blocks.hand.x} y={blocks.hand.y} width={blocks.hand.w} height={blocks.hand.h} rx={rx(blocks.hand)} />
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<script>
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
+  const PEEK_SEEN = 'insdash-robot-peeked';
+
+  type Bot = {
+    el: HTMLElement;
+    svg: SVGSVGElement;
+    idle: boolean;
+    watching: boolean;
+    timers: number[];
+  };
+
+  const bots: Bot[] = [];
+
+  const lookTo = (bot: Bot, x: number, y: number) => {
+    const look = bot.svg.querySelector<SVGGElement>('.look');
+    if (!look) return;
+    const cx = Math.max(-4.5, Math.min(4.5, x));
+    const cy = Math.max(-4, Math.min(5, y));
+    look.style.transform = `translate(${cx}px, ${cy}px)`;
+  };
+
+  // Point the eyes at a spot on screen, measured from the head's centre.
+  const lookAtClient = (bot: Bot, clientX: number, clientY: number) => {
+    const ctm = bot.svg.getScreenCTM();
+    if (!ctm) return;
+    const p = new DOMPoint(clientX, clientY).matrixTransform(ctm.inverse());
+    const dx = p.x - 30.3;
+    const dy = p.y - 28;
+    const d = Math.hypot(dx, dy) || 1;
+    const k = Math.min(1, d / 90);
+    lookTo(bot, (dx / d) * 4.5 * k, (dy / d) * 4.5 * k);
+  };
+
+  const after = (bot: Bot, ms: number, fn: () => void) => {
+    bot.timers.push(window.setTimeout(fn, ms));
+  };
+
+  const clear = (bot: Bot) => {
+    bot.timers.forEach(clearTimeout);
+    bot.timers = [];
+    bot.el.classList.remove('is-hello', 'is-done', 'is-happy', 'is-shrug');
+    void bot.el.offsetWidth; // restart CSS animations
+  };
+
+  const toIdle = (bot: Bot) => {
+    clear(bot);
+    bot.idle = true;
+    lookTo(bot, 0, 0);
+  };
+
+  const blink = (bot: Bot) => {
+    bot.el.classList.add('is-blink');
+    window.setTimeout(() => bot.el.classList.remove('is-blink'), 130);
+  };
+
+  const hello = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-hello');
+    lookTo(bot, 3, -1);
+    after(bot, 1100, () => bot.el.classList.add('is-happy'));
+    after(bot, 2000, () => toIdle(bot));
+  };
+
+  const hop = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.add('is-done', 'is-happy');
+    lookTo(bot, 0, 0);
+    after(bot, 2000, () => toIdle(bot));
+  };
+
+  const lost = (bot: Bot) => {
+    clear(bot);
+    bot.idle = false;
+    bot.el.classList.remove('is-waiting');
+    bot.el.classList.add('is-assemble', 'is-closed');
+    after(bot, 1150, () => bot.el.classList.remove('is-closed'));
+    after(bot, 1500, () => blink(bot));
+    after(bot, 1800, () => lookTo(bot, -4.5, 0));
+    after(bot, 2400, () => lookTo(bot, 4.5, 0));
+    after(bot, 3000, () => {
+      lookTo(bot, 0, 1);
+      bot.el.classList.remove('is-assemble');
+      bot.el.classList.add('is-shrug');
+    });
+    after(bot, 3800, () => toIdle(bot));
+  };
+
+  const peek = (bot: Bot) => {
+    const clipper = bot.svg.querySelector<SVGGElement>('.clipper');
+    clear(bot);
+    bot.idle = false;
+    if (clipper) clipper.style.clipPath = clipper.dataset.clip ?? '';
+    lookTo(bot, 0, -2);
+    after(bot, 60, () => {
+      bot.el.classList.remove('is-waiting');
+      bot.el.classList.add('is-peek');
+    });
+    after(bot, 750, () => lookTo(bot, -4.5, -1));
+    after(bot, 1250, () => lookTo(bot, 4.5, -1));
+    after(bot, 1700, () => blink(bot));
+    after(bot, 1950, () => {
+      lookTo(bot, 0, 0);
+      bot.el.classList.remove('is-peek');
+    });
+    after(bot, 2550, () => {
+      if (clipper) clipper.style.clipPath = '';
+      hello(bot);
+    });
+  };
+
+  const seenPeek = () => {
+    try {
+      return sessionStorage.getItem(PEEK_SEEN) === '1';
+    } catch {
+      return false;
+    }
+  };
+  const markPeek = () => {
+    try {
+      sessionStorage.setItem(PEEK_SEEN, '1');
+    } catch {
+      /* private mode: the peek simply plays again */
+    }
+  };
+
+  const observer =
+    'IntersectionObserver' in window
+      ? new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              observer?.unobserve(entry.target);
+              const bot = bots.find((b) => b.el === entry.target);
+              if (!bot) return;
+              if (bot.el.dataset.robot === 'peek') {
+                markPeek();
+                peek(bot);
+              } else {
+                lost(bot);
+              }
+            });
+          },
+          { threshold: 0.6 },
+        )
+      : null;
+
+  document.querySelectorAll<HTMLElement>('[data-robot]').forEach((el) => {
+    const svg = el.querySelector('svg');
+    if (!svg) return;
+    const bot: Bot = { el, svg, idle: true, watching: false, timers: [] };
+    bots.push(bot);
+
+    // Without motion, or once the peek has played this visit, it just stands there.
+    const plays = !reduced && observer && (el.dataset.robot !== 'peek' || !seenPeek());
+    if (plays) {
+      // The peek waits below its ground line, so hide what hangs under it.
+      const clipper = svg.querySelector<SVGGElement>('.clipper');
+      if (el.dataset.robot === 'peek' && clipper) clipper.style.clipPath = clipper.dataset.clip ?? '';
+      el.classList.add('is-waiting');
+      bot.idle = false;
+      observer.observe(el);
+    }
+
+    const target = el.dataset.lookAt ? document.querySelector<HTMLElement>(el.dataset.lookAt) : null;
+    if (target) {
+      target.addEventListener('pointerenter', () => {
+        if (!bot.idle) return;
+        bot.watching = true;
+        const r = target.getBoundingClientRect();
+        lookAtClient(bot, r.left + r.width / 2, r.top + r.height / 2);
+      });
+      target.addEventListener('pointerleave', () => {
+        bot.watching = false;
+      });
+      if (!reduced) target.addEventListener('click', () => hop(bot));
+    }
+    if (!reduced) el.addEventListener('click', () => hello(bot));
+  });
+
+  if (bots.length && !reduced) {
+    // Blinks now and then, sometimes twice.
+    const scheduleBlink = () =>
+      window.setTimeout(() => {
+        bots.forEach((bot) => {
+          if (!bot.idle || Math.random() > 0.7) return;
+          blink(bot);
+          if (Math.random() < 0.25) window.setTimeout(() => blink(bot), 260);
+        });
+        scheduleBlink();
+      }, 2200 + Math.random() * 3200);
+    scheduleBlink();
+
+    if (finePointer) {
+      let frame = 0;
+      window.addEventListener('pointermove', (e) => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          bots.forEach((bot) => {
+            if (bot.idle && !bot.watching) lookAtClient(bot, e.clientX, e.clientY);
+          });
+        });
+      });
+    }
+  }
+</script>
+
+<style>
+  .robot {
+    /* Light ground takes the logo's colours, dark ground the on-navy version. */
+    --b-head: light-dark(#0a1a33, #e3e7ea);
+    --b-arm: light-dark(#315d8e, #70acda);
+    --b-hand: light-dark(#70acda, #1f3a5c);
+    --b-body: light-dark(#e3e7ea, #315d8e);
+    --eye: light-dark(#70acda, #0a1a33);
+
+    width: var(--robot-size, 7.5rem);
+    flex: none;
+    cursor: pointer;
+    /* Its ground line: the peek rises from behind it. */
+    border-bottom: 1px solid var(--color-rule);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .robot svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .head .blk { fill: var(--b-head); }
+  .arm .blk { fill: var(--b-arm); }
+  .hand .blk { fill: var(--b-hand); }
+  .body .blk { fill: var(--b-body); }
+
+  .eye {
+    fill: var(--eye);
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 70ms ease-in;
+  }
+
+  .happy {
+    opacity: 0;
+    transition: opacity 120ms;
+  }
+
+  .happy path {
+    fill: none;
+    stroke: var(--eye);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .look { transition: transform 180ms ease-out; }
+
+  .rise, .bot, .head, .arm, .hand, .body { transform-box: fill-box; }
+  .bot, .head, .body { transform-origin: 50% 100%; }
+  .arm { transform-origin: 0% 100%; }
+  .hand { transform-origin: 50% 50%; }
+
+  .is-happy .happy { opacity: 1; }
+  .is-happy .eyes { opacity: 0; }
+  .is-blink .eye, .is-closed .eye { transform: scaleY(0.12); }
+
+  /* Waiting off-stage until it scrolls into view. */
+  [data-robot='lost'].is-waiting .bot { opacity: 0; }
+  [data-robot='peek'].is-waiting .rise { transform: translateY(124px); }
+
+  /* idle: a slow breath */
+  .head { animation: bob 3.2s ease-in-out infinite; }
+  .arm { animation: bob 3.2s ease-in-out 0.25s infinite; }
+
+  /* hello: the tall bar waves from its bottom corner */
+  .is-hello .arm { animation: wave 1.5s cubic-bezier(0.4, 0, 0.3, 1) both; }
+  .is-hello .head { animation: lean 1.5s ease-in-out both; }
+
+  /* done: one hop with a squash on landing */
+  .is-done .head, .is-done .arm { animation: none; }
+  .is-done .bot { animation: hop 0.9s cubic-bezier(0.3, 0, 0.3, 1) both; }
+
+  /* shrug: tall bar and small square lift together, head tilts */
+  .is-shrug .arm, .is-shrug .hand { animation: shrug 0.7s ease-in-out both; }
+  .is-shrug .head { animation: shrug-head 0.7s ease-in-out both; }
+
+  /* assemble: the blocks drop in one by one and settle into the mark */
+  .is-assemble .body { animation: drop 0.62s cubic-bezier(0.5, 0, 0.4, 1) both; }
+  .is-assemble .hand { animation: drop 0.62s cubic-bezier(0.5, 0, 0.4, 1) 0.14s both; transform-origin: 50% 100%; }
+  .is-assemble .head { animation: drop 0.66s cubic-bezier(0.5, 0, 0.4, 1) 0.3s both; }
+  .is-assemble .arm { animation: drop 0.62s cubic-bezier(0.5, 0, 0.4, 1) 0.48s both; transform-origin: 50% 100%; }
+
+  /* peek: up to the eyes, then all the way */
+  .rise { transition: transform 0.55s cubic-bezier(0.3, 1.5, 0.5, 1); }
+  .is-waiting .rise { transition: none; }
+  .is-peek .rise { transform: translateY(46px); }
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-1.6px); }
+  }
+
+  @keyframes wave {
+    0% { transform: rotate(0); }
+    18% { transform: rotate(22deg); }
+    34% { transform: rotate(6deg); }
+    50% { transform: rotate(22deg); }
+    66% { transform: rotate(6deg); }
+    82% { transform: rotate(14deg); }
+    100% { transform: rotate(0); }
+  }
+
+  @keyframes lean {
+    0%, 100% { transform: rotate(0); }
+    20%, 80% { transform: rotate(-3deg); }
+  }
+
+  @keyframes hop {
+    0% { transform: translateY(0) scale(1, 1); }
+    14% { transform: translateY(0) scale(1.06, 0.9); }
+    40% { transform: translateY(-22px) scale(0.96, 1.05); }
+    66% { transform: translateY(0) scale(1.08, 0.88); }
+    80% { transform: translateY(-3px) scale(0.98, 1.02); }
+    100% { transform: translateY(0) scale(1, 1); }
+  }
+
+  @keyframes shrug {
+    0%, 100% { transform: translateY(0); }
+    35%, 60% { transform: translateY(-6px); }
+  }
+
+  @keyframes shrug-head {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    35%, 60% { transform: translateY(1.5px) rotate(4deg); }
+  }
+
+  @keyframes drop {
+    0% { transform: translateY(-110px) scale(0.9, 1.1); opacity: 0; }
+    12% { opacity: 1; }
+    62% { transform: translateY(0) scale(0.94, 1.06); }
+    74% { transform: translateY(0) scale(1.1, 0.86); }
+    88% { transform: translateY(-3px) scale(0.98, 1.02); }
+    100% { transform: translateY(0) scale(1, 1); opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .robot *,
+    .robot {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ContactSection from '@/components/layout/ContactSection.astro';
+import RobotMark from '@/components/UI/RobotMark.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -10,8 +11,13 @@ const base = import.meta.env.BASE_URL;
   noindex={true}
   description="That page doesn't exist. Here's the way back to the work.">
   <section class="notfound">
-    <p class="eyebrow">404</p>
-    <h1>That page doesn't exist.</h1>
+    <div class="notfound_head">
+      <div>
+        <p class="eyebrow">404</p>
+        <h1>That page doesn't exist.</h1>
+      </div>
+      <RobotMark entrance="lost" class="notfound_robot" />
+    </div>
     <p class="lead">
       It may have moved, or the link may be out of date. The work is all still
       here.
@@ -24,7 +30,10 @@ const base = import.meta.env.BASE_URL;
     </ul>
   </section>
 
-  <ContactSection lead="Or if you were looking for something specific, just ask." />
+  <ContactSection
+    lead="Or if you were looking for something specific, just ask."
+    robot={false}
+  />
 </Layout>
 
 <style>
@@ -32,6 +41,18 @@ const base = import.meta.env.BASE_URL;
 
   .notfound {
     @apply px-[2.5rem] my-[var(--space-section)] mx-auto max-w-[80rem];
+  }
+
+  .notfound_head {
+    @apply flex items-end justify-between gap-6 mb-6;
+  }
+
+  .notfound_head h1 {
+    @apply mb-0;
+  }
+
+  .notfound_robot {
+    --robot-size: clamp(6.5rem, 5rem + 6vw, 11rem);
   }
 
   .notfound_links {
