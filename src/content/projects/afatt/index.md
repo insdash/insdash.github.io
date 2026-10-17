@@ -155,19 +155,21 @@ print-ready PDF — multilingual content, dietary tagging, modular layouts. It i
 built for the general problem rather than for A Fatt, who work in Canva and are
 happily still on the system above.
 
-Their website is where a tool did fit. A Fatt's site runs on WordPress, so we
-built **MenuDash**, a plugin that runs their online menu from the same kind of
-spreadsheet, in three languages and filterable by diet.
+![MenuGen](./menuGen.webp)
 
 <div>
   <a href="/projects/menugen/">Read the menuGen case study →</a>
 </div>
 
+Their website is where a tool did fit. A Fatt's site runs on WordPress, so we
+built **MenuDash**, a plugin that runs their online menu from the same kind of
+spreadsheet, in three languages and filterable by diet.
+
+![A Fatt's menu on a phone, run by MenuDash: language switch, diet filters with Vegetarisch turned on, and dishes with German and Chinese names, prices and photos](./menudash-afatt-menu.webp)
+
 <div>
   <a href="/projects/menudash/">Read the MenuDash case study →</a>
 </div>
-
-![MenuGen](./menuGen.webp)
 
 </div>
 
