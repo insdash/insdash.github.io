@@ -141,9 +141,9 @@ Two years later A Fatt returned as a paying client. The menu system was still ru
 
 Unlike the 2024 menu, these pieces stay with us, so we built them from one dish list. When a price changes, it changes once, and every poster follows.
 
-![The two A2 posters: the recommended dishes, and every vegan and vegetarian dish](./posters.webp)
+![The A2 poster of the recommended dishes](./a2-picks.webp)
 
-![The gift card, front and back](./gift-card.webp)
+![The gift card](./gift-card.webp)
 
 </div>
 
