@@ -4,6 +4,8 @@ import Layout from '@/layouts/Layout.astro';
 import ContactSection from '@/components/layout/ContactSection.astro';
 import RobotMark from '@/components/UI/RobotMark.astro';
 
+const base = import.meta.env.BASE_URL;
+
 // All page copy lives in src/content/about/about.md — edit the prose there, not
 // here. Links in that file are root-relative, which is correct while `base` is
 // '/' in astro.config.mjs.
@@ -30,7 +32,15 @@ const { Content } = await render(about);
       </div>
 
       <div class="about_portrait">
-        <RobotMark entrance="hello" class="about_robot" />
+        {/* A small secret: the third tap on the robot makes it say hi and
+            points to its playground. Nobody sees it unless they poke it. */}
+        <div class="about_robot_wrap">
+          <p class="dashili_bubble" id="dashili-bubble" hidden>
+            <span>I'm Dashili.</span>
+            <a href={`${base}robot/`}>Play with me →</a>
+          </p>
+          <RobotMark entrance="hello" class="about_robot" />
+        </div>
       </div>
     </div>
 
@@ -42,6 +52,42 @@ const { Content } = await render(about);
   {/* The robot already introduces itself at the top of this page. */}
   <ContactSection lead={contactLead} robot={false} />
 </Layout>
+
+<script>
+  const robot = document.querySelector<HTMLElement>('.about_robot');
+  const bubble = document.getElementById('dashili-bubble');
+
+  if (robot && bubble) {
+    let taps: number[] = [];
+    let fade = 0;
+
+    const hide = () => {
+      bubble.classList.remove('is-open');
+      fade = window.setTimeout(() => (bubble.hidden = true), 250);
+    };
+    // Stays while the pointer or keyboard focus is on it, fades six seconds after.
+    const later = () => {
+      clearTimeout(fade);
+      fade = window.setTimeout(hide, 6000);
+    };
+
+    robot.addEventListener('click', () => {
+      const now = performance.now();
+      taps = [...taps.filter((t) => now - t < 4000), now];
+      if (taps.length < 3) return;
+      taps = [];
+      clearTimeout(fade);
+      bubble.hidden = false;
+      requestAnimationFrame(() => bubble.classList.add('is-open'));
+      later();
+    });
+
+    bubble.addEventListener('pointerenter', () => clearTimeout(fade));
+    bubble.addEventListener('pointerleave', later);
+    bubble.addEventListener('focusin', () => clearTimeout(fade));
+    bubble.addEventListener('focusout', later);
+  }
+</script>
 
 <style>
   @reference "@/styles/global.css";
@@ -88,7 +134,68 @@ const { Content } = await render(about);
     color: var(--color-text-caption);
   }
 
-  .about_robot {
+  .about_robot_wrap {
     --robot-size: min(15rem, 60vw);
+    @apply relative;
+  }
+
+  /* Flush right, the waving arm would swing past the page edge and scroll it
+     sideways; leave it the room the wave needs (31 of the mark's 101 units). */
+  @media (min-width: 64rem) {
+    .about_robot_wrap {
+      margin-right: calc(var(--robot-size) * 31 / 101);
+    }
+  }
+
+  /* Sits over the head, with its tail pointing down at it. */
+  .dashili_bubble {
+    @apply absolute m-0 flex flex-col gap-0.5 text-sm whitespace-nowrap;
+    bottom: calc(100% + 1.75rem);
+    left: 0;
+    padding: 0.6rem 0.9rem;
+    background: var(--background-color);
+    border: 1px solid var(--color-rule);
+    border-radius: 0.9rem;
+    box-shadow: 0 0.5rem 1.5rem rgb(10 26 51 / 0.12);
+    opacity: 0;
+    transform: translateY(0.4rem) scale(0.92);
+    transform-origin: 1.5rem 100%;
+    transition:
+      opacity 0.2s ease-out,
+      transform 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
+    z-index: 1;
+  }
+
+  .dashili_bubble.is-open {
+    opacity: 1;
+    transform: none;
+  }
+
+  .dashili_bubble::after {
+    content: '';
+    position: absolute;
+    left: 1.5rem;
+    bottom: -0.4rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    background: inherit;
+    border-right: 1px solid var(--color-rule);
+    border-bottom: 1px solid var(--color-rule);
+    transform: rotate(45deg);
+  }
+
+  .dashili_bubble span {
+    @apply font-medium;
+  }
+
+  .dashili_bubble a {
+    color: var(--color-text-link);
+    @apply underline underline-offset-4;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dashili_bubble {
+      transition: none;
+    }
   }
 </style>
