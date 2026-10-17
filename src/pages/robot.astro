@@ -2,7 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import RobotMark from '@/components/UI/RobotMark.astro';
 
-// A toy for the robot mark. Not linked from the nav (the 404 page points here),
+// A toy for Dashili, the robot mark. Not linked from the nav (the 404 page points here),
 // kept out of the sitemap and out of search.
 const tries = [
   { what: 'Drag a block away', then: 'It springs back. Pull all four apart and it rebuilds itself.' },
@@ -26,15 +26,15 @@ const modes = [
 ---
 
 <Layout
-  title="Robot playground"
+  title="Meet Dashili"
   noindex={true}
-  description="Play with the insdash robot: drag it apart, poke it, type with it.">
+  description="Play with Dashili, the insdash robot: drag it apart, poke it, type with it.">
   <section class="playground">
     <p class="eyebrow">Playground</p>
-    <h1>Meet the robot.</h1>
+    <h1>Meet Dashili.</h1>
     <p class="lead">
-      The four blocks of the insdash mark, with eyes. Pull it apart, poke it,
-      or just type.
+      Little Dash, in Swiss German: the four blocks of the insdash mark, with
+      eyes. Pull it apart, poke it, or just type.
     </p>
 
     <div class="playground_grid">
@@ -69,7 +69,7 @@ const modes = [
         </ul>
 
         <p class="playground_still" id="robot-still" hidden>
-          Your system asks for reduced motion, so the robot only moves when you
+          Your system asks for reduced motion, so Dashili only moves when you
           drag it.
         </p>
       </div>
