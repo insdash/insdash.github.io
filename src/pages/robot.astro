@@ -38,11 +38,24 @@ const modes = [
     </p>
 
     <div class="playground_grid">
-      <div class="playground_stage" id="robot-stage">
-        <RobotMark entrance="hello" tap={false} class="playground_robot" />
-        <p class="playground_now" aria-live="polite">
-          <span class="meta-label">Now</span> <span id="robot-now">Idle</span>
-        </p>
+      {/* The modes sit right under the robot, so on a phone they are on screen
+          with it rather than below the whole list. */}
+      <div class="playground_main">
+        <div class="playground_stage" id="robot-stage">
+          <RobotMark entrance="hello" tap={false} class="playground_robot" />
+          <p class="playground_now" aria-live="polite">
+            <span class="meta-label">Now</span> <span id="robot-now">Idle</span>
+          </p>
+        </div>
+
+        <div class="modes">
+          <p class="eyebrow">Modes</p>
+          <ul>
+            {modes.map((m) => (
+              <li><button type="button" class="mode" data-mode={m.mode}>{m.label}</button></li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div class="playground_side">
@@ -54,15 +67,6 @@ const modes = [
             </li>
           ))}
         </ul>
-
-        <div class="modes">
-          <p class="eyebrow">Modes</p>
-          <ul>
-            {modes.map((m) => (
-              <li><button type="button" class="mode" data-mode={m.mode}>{m.label}</button></li>
-            ))}
-          </ul>
-        </div>
 
         <p class="playground_still" id="robot-still" hidden>
           Your system asks for reduced motion, so the robot only moves when you
@@ -287,10 +291,15 @@ const modes = [
   }
 
   /* Room to drag the blocks around; anything pulled past the edge is clipped. */
+  .playground_main {
+    @apply lg:col-span-7 flex flex-col gap-6;
+  }
+
   .playground_stage {
-    @apply lg:col-span-7 flex flex-col items-center justify-center gap-8 overflow-hidden;
-    min-height: 30rem;
-    padding: 5rem 1rem 2rem;
+    @apply flex flex-col items-center justify-center gap-8 overflow-hidden;
+    /* Shorter on phones so the modes below stay in view. */
+    min-height: clamp(20rem, 60vw, 30rem);
+    padding: 4rem 1rem 1.5rem;
     background: var(--color-work-background);
     border-radius: 1rem;
   }
@@ -335,6 +344,10 @@ const modes = [
   .tries_then {
     @apply text-sm;
     color: var(--color-text-secondary);
+  }
+
+  .modes .eyebrow {
+    @apply m-0;
   }
 
   .modes ul {
