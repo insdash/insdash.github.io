@@ -149,27 +149,31 @@ Unlike the 2024 menu, these pieces stay with us, so we built them from one dish 
 
 ## What happened next
 
+### menuGen
+
 After the Figma and Canva delivery we took the idea further on our own time.
 **menuGen** turns structured menu data into an interactive editor and a
 print-ready PDF — multilingual content, dietary tagging, modular layouts. It is
 built for the general problem rather than for A Fatt, who work in Canva and are
 happily still on the system above.
 
-![MenuGen](./menuGen.webp)
-
 <div>
   <a href="/projects/menugen/">Read the menuGen case study →</a>
 </div>
+
+![MenuGen](./menuGen.webp)
+
+### MenuDash
 
 Their website is where a tool did fit. A Fatt's site runs on WordPress, so we
 built **MenuDash**, a plugin that runs their online menu from the same kind of
 spreadsheet, in three languages and filterable by diet.
 
-![A Fatt's menu on a phone, run by MenuDash: language switch, diet filters with Vegetarisch turned on, and dishes with German and Chinese names, prices and photos](./menudash-afatt-menu.webp)
-
 <div>
   <a href="/projects/menudash/">Read the MenuDash case study →</a>
 </div>
+
+![A Fatt's menu on a phone, run by MenuDash: language switch, diet filters with Vegetarisch turned on, and dishes with German and Chinese names, prices and photos](./menudash-afatt-menu.webp)
 
 </div>
 
