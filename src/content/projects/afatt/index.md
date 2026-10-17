@@ -16,10 +16,10 @@ hoverImage: './afatt-menu.webp'
 thumbnail: './afatt.jpg'
 seoTitle: 'Multilingual menu design for a restaurant'
 info: 'Inclusive, dietary-friendly, multilingual menu with intuitive layout for customers to enjoy Malaysian Chinese Home Favourites.'
-description: 'We designed a scalable, modular menu system for a Zürich restaurant — multilingual content, dietary tagging and a reusable layout, delivered in Figma and Canva so the restaurant team could maintain dishes, translations and labels themselves without recreating a layout. They still use it. Doing this job is what exposed the repeating problem behind it, and menuGen came afterwards for the general case.'
+description: 'We designed a scalable, modular menu system for a Zürich restaurant — multilingual content, dietary tagging and a reusable layout, delivered in Figma and Canva so the restaurant team could maintain dishes, translations and labels themselves without recreating a layout. They still use it. In 2026 they came back as a paying client for their posters, flyer, gift cards and name cards.'
 scope: 'Menu system, multilingual content structure, dietary tagging, production files the client maintains'
-timeline: '1 month'
-completed: '08/2024'
+timeline: '2024 – 2026'
+completed: 'Menu system 08/2024 · Print work 09/2026'
 client: 'A Fatt'
 clientLink: 'https://afatt.ch/'
 tools: ['Figma', 'Canva']
@@ -133,6 +133,20 @@ Transferring the Figma design into a Canva file created a **flexible menu system
 
 </div>
 
+<div class="contentSection">
+
+## 2026: they came back
+
+Two years later A Fatt returned as a paying client. The menu system was still running, so this time the work was everything around it: a third menu for vegan and vegetarian guests, a dessert section, an exterior flyer with a QR code, A2 posters, signs for the door and the tables, gift cards and name cards.
+
+Unlike the 2024 menu, these pieces stay with us, so we built them from one dish list. When a price changes, it changes once, and every poster follows.
+
+![The two A2 posters: the recommended dishes, and every vegan and vegetarian dish](./posters.webp)
+
+![The gift card, front and back](./gift-card.webp)
+
+</div>
+
 <div class="contentSection border rounded-sm">
 
 ## What happened next
@@ -143,8 +157,16 @@ print-ready PDF — multilingual content, dietary tagging, modular layouts. It i
 built for the general problem rather than for A Fatt, who work in Canva and are
 happily still on the system above.
 
+Their website is where a tool did fit. A Fatt's site runs on WordPress, so we
+built **MenuDash**, a plugin that runs their online menu from the same kind of
+spreadsheet, in three languages and filterable by diet.
+
 <div>
   <a href="/projects/menugen/">Read the menuGen case study →</a>
+</div>
+
+<div>
+  <a href="/projects/menudash/">Read the MenuDash case study →</a>
 </div>
 
 ![MenuGen](./menuGen.webp)
@@ -157,9 +179,10 @@ happily still on the system above.
 
 #### Who did the work
 
-A design engagement, run by one of us end to end — the content structure, the
-modular system and the production files the restaurant still edits today. No
-specialist was brought in, because at this size none was needed. We say that
+Both engagements were run by one of us end to end — the content structure, the
+modular system and the production files the restaurant still edits today, then
+the 2026 print work and the web menu. No specialist was brought in, because at
+this size none was needed. We say that
 here for the same reason we [say which of us did what on Sprachschule
 Yang](/projects/sprachschule-yang/): you should always know who did what before
 you hire anybody.
