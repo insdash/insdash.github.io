@@ -173,7 +173,7 @@ We set MenuDash up for restaurants. Each package is a one-time setup; the add-on
 
 Add-ons can be added to any package later. Every package is a fixed price, agreed in writing before we start.
 
-**Opening a restaurant or café?** Two packages start from nothing: a website on the MenuDash Theme with the menu and the Restaurant add-on, the Google Business Profile, a domain and e-mail, drafts of the Impressum and privacy policy, and QR table cards. The larger one adds Specials, Gift Cards, the meat origin and allergy note, a gift card design and an hour of training.
+**Opening a restaurant or café?** Two packages start from nothing: a website on the MenuDash Theme with the menu and the Restaurant add-on, the Google Business Profile, a domain and e-mail, drafts of the Impressum and privacy policy, and QR table cards. The larger one adds Specials, Gift Cards, Statistics, the meat origin and allergy note, a gift card design and an hour of training.
 
 **Also on request:** a theme designed for the restaurant, like afatt.ch’s own; a monthly care plan with WordPress updates, backups and monitoring, and hours for changes; and print design for gift cards, flyers or a printed menu.
 
