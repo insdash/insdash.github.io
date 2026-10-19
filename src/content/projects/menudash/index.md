@@ -18,7 +18,7 @@ hoverImage: './cover-hover.webp'
 thumbnail: './thumbnail.webp'
 seoTitle: 'MenuDash, a restaurant menu plugin for WordPress'
 info: 'A WordPress plugin that turns a restaurant’s menu spreadsheet into its website menu, in three languages with diet filters. Live on afatt.ch; we set it up for restaurants.'
-description: 'A restaurant website’s menu is usually a copy that falls behind. MenuDash makes one spreadsheet the website menu: we set it up with the restaurant, the owner uploads it, and guests read the menu in German, English and Chinese, with photos and diet filters. The core plugin and theme are open source; we set them up, with paid add-ons for opening hours, specials and gift cards.'
+description: 'A restaurant website’s menu is usually a copy that falls behind. MenuDash makes one spreadsheet the website menu: we set it up with the restaurant, the owner uploads it, and guests read the menu in German, English and Chinese, with photos and diet filters. The core plugin and theme are open source; we set them up, with paid add-ons for opening hours, specials, gift cards and statistics.'
 scope: 'Product, design and development, setup for restaurants'
 timeline: '2026'
 completed: 'Live on afatt.ch 09/2026'
@@ -125,9 +125,17 @@ A gift card order form in the website’s language. The order arrives by e-mail 
 
 ### Statistics
 
-What guests do on the menu page, counted without watching anyone. The owner sees which dishes guests stop at (a dish counts when it stays on the screen for two seconds, not when it is scrolled past), whose photo they open, which diet filters they turn on and which language they switch to, over the last week, month or year. A dish that is often looked at but whose photo is rarely opened gets flagged: a better photo or a clearer name may help. The counts stay with each dish when a new menu is uploaded.
+What guests do on the website, counted without watching anyone. The owner sees which dishes guests stop at (a dish counts when it stays on the screen for two seconds, not when it is scrolled past), whose photo they open, which diet filters they turn on and which language they switch to, over the last week, month or year. Dishes that are often looked at but whose photo is rarely opened are suggested for a fresh photo or a clearer name. The counts stay with each dish when a new menu is uploaded.
 
-**Built for privacy first.** No cookies. Nothing is stored in the guest’s browser and no IP address is saved; MenuDash keeps only the totals per dish, button and day, for at most 25 months. To keep out fake counts, a scrambled form of the visitor’s address is held for ten minutes and deleted within a day at the latest, made with a key that changes every day, so it can’t be traced back to anyone. Guests whose browser asks not to be tracked are not counted at all, and neither are the owner and staff while logged in. A paragraph for the privacy policy comes with it, ready to copy.
+It also shows where menu visits come from (the QR code on the table, search engines, the restaurant’s own website or elsewhere), what guests do next (call, open the way in Google Maps, order, book a table, order a gift card) and how fast the menu opens on their phones. Charts show it day by day, and any period can be downloaded as a spreadsheet.
+
+**Before and after.** The owner marks the day something changed, such as new photos, a new menu or a new website, and sees the weeks after it next to the same number of weeks before. Too few counts to compare are labelled as such, not shown as a big jump.
+
+![Before and after a change: visits, dishes seen, photos opened, filters, speed, where visits come from, calls, directions, orders and bookings, 14 days before and after a marked day](./addon-statistics.webp)
+
+*Sample numbers.*
+
+**Built for privacy first.** No cookies. Nothing is stored in the guest’s browser and no IP address is saved; MenuDash keeps only the totals per dish, button and day, for at most 25 months. Where a visit comes from is sent only as its kind, never the address it came from, and the speed only as fast, medium or slow. To keep out fake counts, a scrambled form of the visitor’s address is held for ten minutes and deleted within a day at the latest, made with a key that changes every day, so it can’t be traced back to anyone. Guests whose browser asks not to be tracked are not counted at all, and neither are the owner and staff while logged in. A paragraph for the privacy policy comes with it, ready to copy.
 
 </div>
 
@@ -160,7 +168,7 @@ We set MenuDash up for restaurants. Each package is a one-time setup; the add-on
 | **Menu** | MenuDash: the menu, photos, filters, QR cards and colours | One-time setup. Care plan optional. |
 | **Menu + Restaurant** | MenuDash with the Restaurant add-on | One-time setup, plus a yearly fee |
 | **Menu + Gift Cards** | MenuDash with the Gift Cards add-on | One-time setup, plus a yearly fee |
-| **Complete** | MenuDash with Restaurant, Specials and Gift Cards | One-time setup, plus a yearly fee |
+| **Complete** | MenuDash with Restaurant, Specials, Gift Cards and Statistics | One-time setup, plus a yearly fee |
 | **Complete + website** | Everything above, on the MenuDash Theme or on a design made for the restaurant | One-time setup, plus a yearly fee |
 
 Add-ons can be added to any package later. Every package is a fixed price, agreed in writing before we start.
