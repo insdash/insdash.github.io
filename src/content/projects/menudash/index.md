@@ -135,7 +135,7 @@ It also shows where menu visits come from (the QR code on the table, search engi
 
 *Sample numbers.*
 
-**Built for privacy first.** No cookies. Nothing is stored in the guest’s browser and no IP address is saved; MenuDash keeps only the totals per dish, button and day, for at most 25 months. Where a visit comes from is sent only as its kind, never the address it came from, and the speed only as fast, medium or slow. To keep out fake counts, a scrambled form of the visitor’s address is held for ten minutes and deleted within a day at the latest, made with a key that changes every day, so it can’t be traced back to anyone. Guests whose browser asks not to be tracked are not counted at all, and neither are the owner and staff while logged in. A paragraph for the privacy policy comes with it, ready to copy.
+**Built for privacy first.** No cookies. Nothing is stored in the guest’s browser and no IP address is saved; MenuDash keeps only the totals per dish, button and day, for at most 25 months. Where a visit comes from is sent only as its kind, never the address it came from, and the speed only as fast, medium or slow. To keep out fake counts, a scrambled form of the visitor’s address is held for ten minutes and deleted within a day at the latest, made with a key that changes every day, so nothing that is kept points to anyone. Guests whose browser asks not to be tracked are not counted at all, and neither are the owner and staff while logged in. A paragraph for the privacy policy comes with it, ready to copy.
 
 </div>
 
