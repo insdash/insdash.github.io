@@ -53,7 +53,7 @@ MenuDash makes one spreadsheet the website menu. When we set it up, we put the m
 
 ## Running on afatt.ch
 
-A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 110 dishes in three languages, with photos and diet marks, from one spreadsheet the owner uploads. Today’s specials sit above the menu with the Specials add-on, and the Statistics add-on counts which dishes guests look at. Guests never see it. [See the menu on afatt.ch](https://afatt.ch/menu/).
+A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 110 dishes in three languages, with photos and diet marks, from one spreadsheet the owner uploads. Today’s specials sit above the menu with the Specials add-on, and the Statistics add-on counts which dishes guests look at, in the restaurant’s WordPress dashboard and without cookies. [See the menu on afatt.ch](https://afatt.ch/menu/).
 
 ![A Fatt’s menu on a phone: language switch, diet filters with Vegetarisch turned on (“48 von 110 Gerichten · Vegetarisch” and an Alle zeigen button), category tabs, and dishes with German and Chinese names, prices and photos](./afatt-menu-iphone-wide.webp)
 
