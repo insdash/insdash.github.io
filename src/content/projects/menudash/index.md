@@ -53,7 +53,7 @@ MenuDash makes one spreadsheet the website menu. When we set it up, we put the m
 
 ## Running on afatt.ch
 
-A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 110 dishes in three languages, with photos and diet marks, from one spreadsheet the owner uploads. [See the menu on afatt.ch](https://afatt.ch/menu/).
+A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 110 dishes in three languages, with photos and diet marks, from one spreadsheet the owner uploads. Today’s specials sit above the menu with the Specials add-on, and the Statistics add-on counts which dishes guests look at, for the owner’s eyes only. [See the menu on afatt.ch](https://afatt.ch/menu/).
 
 ![A Fatt’s menu on a phone: language switch, diet filters with Vegetarisch turned on (“48 von 110 Gerichten · Vegetarisch” and an Alle zeigen button), category tabs, and dishes with German and Chinese names, prices and photos](./afatt-menu-iphone-wide.webp)
 
@@ -64,7 +64,7 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 ## What guests get
 
 - The menu in German, English and Chinese, all at once or one language at a time. The choice is remembered.
-- Filters for vegetarian, vegan, gluten-free, spicy and not spicy, plus the dishes the restaurant recommends.
+- Filters for vegetarian, vegan, gluten-free, lactose-free, spicy and not spicy, plus the dishes the restaurant recommends.
 - A photo next to each dish, large with one tap.
 - A page that reads well on a phone, and that search engines can read too: the menu is real text, not a PDF or a picture, and each dish is also marked up for search engines, with its names in three languages, its price and its diet marks.
 
@@ -80,10 +80,10 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 - A file that is not a menu is refused, so the live menu never breaks. The last five uploads can be put back with one click.
 - Download the live menu back as a CSV, with the same columns they uploaded: change it in Excel or Numbers and upload it again, or open it in [menuGen](/projects/menugen/) to print it.
 - Upload all dish photos at once. A check list shows every dish with its photo, and which ones are still missing.
-- Print QR table cards or a poster straight from the dashboard, with the Wi-Fi on them if they like.
+- Print QR table cards or a poster straight from the dashboard, with the Wi-Fi on them if they like. With the Statistics add-on, scans of the card are counted apart from visits where the address was typed in.
 - Fill in where the meat and fish come from, as Swiss rules require in writing. It is translated into the menu languages and shown under the menu.
 - Show the recommended dishes, with their photos, on any page, such as the home page. Each one links to the menu. They can be split into groups, like meat and fish or vegan and vegetarian.
-- Leave the menu in the website’s own colours and fonts, or pick their own, and their own diet icons if they want, so the menu looks like their restaurant.
+- Leave the menu in the website’s own colours and fonts, or pick their own, and their own diet icons if they want, so the menu looks like their restaurant. A filter button only appears when a dish has that mark, and any of them can be hidden.
 - Use the dashboard in German, English or Chinese. It follows each user’s WordPress language.
 - Update MenuDash with one click, like any other plugin, when a new version comes out.
 
@@ -125,7 +125,7 @@ A gift card order form in the website’s language. The order arrives by e-mail 
 
 ### Statistics
 
-What guests do on the website, counted without watching anyone. The owner sees which dishes guests stop at (a dish counts when it stays on the screen for two seconds, not when it is scrolled past), whose photo they open, which diet filters they turn on and which language they switch to, over the last week, month or year. Dishes that are often looked at but whose photo is rarely opened are suggested for a fresh photo or a clearer name. The counts stay with each dish when a new menu is uploaded.
+What guests do on the website, counted without watching anyone. The owner sees which dishes guests stop at (a dish counts when it stays on the screen for two seconds, not when it is scrolled past), whose photo they open, which categories they jump to, which diet filters they turn on and which language they switch to, over the last week, month or year. Dishes that are often looked at but whose photo is rarely opened are pointed out, so the owner can decide whether the photo needs to change. The counts stay with each dish when a new menu is uploaded.
 
 It also shows where menu visits come from (the QR code on the table, search engines, the restaurant’s own website or elsewhere), what guests do next (call, open the way in Google Maps, order, book a table, order a gift card) and how fast the menu opens on their phones. Charts show it day by day, and any period can be downloaded as a spreadsheet.
 
