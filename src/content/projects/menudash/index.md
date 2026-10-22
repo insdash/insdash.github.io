@@ -18,7 +18,7 @@ hoverImage: './cover-hover.webp'
 thumbnail: './thumbnail.webp'
 seoTitle: 'MenuDash, a restaurant menu plugin for WordPress'
 info: 'A WordPress plugin that turns a restaurant’s menu spreadsheet into its website menu, in three languages with diet filters. Live on afatt.ch; we set it up for restaurants.'
-description: 'A restaurant website’s menu is usually a copy that falls behind. MenuDash makes one spreadsheet the website menu: we set it up with the restaurant, the owner uploads it, and guests read the menu in German, English and Chinese, with photos and diet filters. The core plugin and theme are open source; we set them up, with paid add-ons for opening hours, specials, gift cards and statistics.'
+description: 'A restaurant website’s menu is usually a copy that falls behind. MenuDash makes one spreadsheet the website menu: we set it up with the restaurant, the owner uploads it, and guests read the menu in German, English and Chinese, with photos and diet filters. The core plugin and theme are open source; we set them up, with paid add-ons for opening hours, specials, gift cards, a shop and statistics.'
 scope: 'Product, design and development, setup for restaurants'
 timeline: '2026'
 completed: 'Live on afatt.ch 09/2026'
@@ -101,11 +101,11 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, runs its menu on MenuDash: 11
 
 ## Add-ons
 
-MenuDash covers the menu. Four add-ons keep the rest of what guests look up on a restaurant website current, from the same dashboard page, which is in German, English or Chinese too.
+MenuDash covers the menu. Five add-ons keep the rest of what guests look up on a restaurant website current, from the same dashboard page, which is in German, English or Chinese too.
 
 ### Restaurant
 
-Address, phone, logo, delivery and reservation links, entered once. Opening hours with an “open now” badge, and a holiday notice that appears and disappears by itself. Links to Instagram, Facebook, TikTok, YouTube and WhatsApp, and to the restaurant’s Google and Tripadvisor reviews. A ready-made “Visit us” page with the address, the way there and the opening hours.
+Address, phone, logo, delivery and reservation links, entered once. Opening hours with an “open now” badge, and a notice for a holiday or a temporary closure, as a banner or a pop-up, that appears and disappears by itself. Links to Instagram, Facebook, TikTok, YouTube and WhatsApp, and to the restaurant’s Google and Tripadvisor reviews. A ready-made “Visit us” page with the address, the way there and the opening hours.
 
 It also looks after what Google and chat apps show of the website. Search engines get the restaurant’s address, phone and opening hours as data, linked to its menu. Each page gets a short description, and a link shared on WhatsApp or Facebook shows a picture, on the menu page made from the recommended dishes. No SEO plugin needed; if the site already has one, MenuDash leaves it in charge.
 
@@ -123,11 +123,21 @@ A gift card order form in the website’s language. The order arrives by e-mail 
 
 ![The gift card page: the card picture beside a form with amounts, pickup or post, name, e-mail and an order button](./addon-giftcards.webp)
 
+### Shop
+
+A page for things guests take home: a jar of the house chili oil, cookies, or chairs the restaurant no longer needs. Each item has photos, a price, how many are left and whether it is available, reserved or sold, in German, English and Chinese. Guests call or write with one tap and pick up at the restaurant; there is no cart and no online payment. Food can carry a best-before date and leaves the page by itself after it. Sold items stay at the end, greyed, for 30 days. The home page can show the three newest items.
+
+![The shop page with sample items: category buttons, and a jar of chili oil, a bag of cookies and a set of chairs marked Reserved, each with its price and how many are left](./addon-shop.webp)
+
+![An item’s page in German: the photo and more photos, the price, how many are left, the best-before date, and Call and E-mail buttons](./addon-shop-item.webp)
+
+*Shop screenshots show sample items.*
+
 ### Statistics
 
 What guests do on the website, counted without watching anyone. The owner sees which dishes guests stop at (a dish counts when it stays on the screen for two seconds, not when it is scrolled past), whose photo they open, which categories they jump to, which diet filters they turn on and which language they switch to, over the last week, month or year. Dishes that are often looked at but whose photo is rarely opened are pointed out, so the owner can decide whether the photo needs to change. The counts stay with each dish when a new menu is uploaded.
 
-It also shows where menu visits come from (the QR code on the table, search engines, the restaurant’s own website or elsewhere), what guests do next (call, open the way in Google Maps, order, book a table, order a gift card) and how fast the menu opens on their phones. Charts show it day by day, and any period can be downloaded as a spreadsheet.
+It also shows where menu visits come from (the QR code on the table, search engines, the restaurant’s own website or elsewhere), what guests do next (call, open the way in Google Maps, order, book a table, order a gift card, open a shop item and call or write about it) and how fast the menu opens on their phones. Charts show it day by day, and any period can be downloaded as a spreadsheet.
 
 **Before and after.** The owner marks the day something changed, such as new photos, a new menu or a new website, and sees the weeks after it next to the same number of weeks before. Too few counts to compare are labelled as such, not shown as a big jump.
 
