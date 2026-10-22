@@ -85,7 +85,7 @@ A Fatt, a Malaysian Chinese restaurant in Zürich, kept an English, a German and
 
 ## Add-ons
 
-MenuDash covers the menu. Five add-ons keep the rest of what guests look up current, from the same dashboard page. Each works on its own, so you add one when you need it.
+MenuDash covers the menu. Five add-ons keep the rest of what guests look up current, from the same dashboard page. Add one when you need it; Shop needs Restaurant, and the others work on their own.
 
 ### Restaurant
 
@@ -107,7 +107,7 @@ A gift card order form in the website’s language. Orders arrive by e-mail with
 
 ### Shop
 
-A page for things guests take home: a jar of the house chili oil, cookies, or chairs you no longer need. Each item has photos, a price, how many are left and whether it is available, reserved or sold. Guests call or write and pick up at the restaurant; there is no cart and no online payment.
+A page for things guests take home: a jar of the house chili oil, cookies, or chairs you no longer need. Each item has photos, a price, how many are left and whether it is available, reserved or sold. Guests call or write and pick up at the restaurant; there is no cart and no online payment. Shop works together with the Restaurant add-on.
 
 ![The shop page with sample items: category buttons, and a jar of chili oil, a bag of cookies and a set of chairs marked Reserved, each with its price and how many are left](./addon-shop.webp)
 
@@ -123,35 +123,50 @@ Which dishes guests stop at, which filters and languages they use, where menu vi
 
 <div class="contentSection">
 
-## A whole website, if you need one
+## Packages
 
-The MenuDash Theme builds a restaurant website around the menu: a home page with the recommended dishes, opening hours and a map, the specials above the menu, and a Call · Directions · Menu bar on phones. The address and hours are typed once, in MenuDash, and every page shows them. It works with MenuDash alone and fills in more as add-ons are added.
+We set MenuDash up for restaurants. Each package is a one-time installation; the add-ons come with a yearly maintenance fee, which pays for their updates, installed by us, and for help by e-mail when something changes. The first year is paid with the installation. MenuDash itself is free and updates from the WordPress dashboard.
 
-![The MenuDash Theme home page with sample content: an “opens today” badge, the address, a headline, and Menu, Reserve and Order online buttons](./theme-home.webp)
+**For a website you already have**
+
+| Package | What’s in it | Fees |
+|---|---|---|
+| **Menu** | MenuDash: the menu, photos, filters, diet icons, colours and QR table cards | Installation only |
+| **Menu + Restaurant** | The menu, with address, logo, opening hours, holidays and the “open now” badge | Installation, plus a yearly fee |
+| **Menu + Gift Cards** | The menu, with gift card orders by e-mail | Installation, plus a yearly fee |
+| **Complete** | The menu and all five add-ons: Restaurant, Specials, Gift Cards, Shop and Statistics | Installation, plus a yearly fee |
+
+**Ready-made combinations:** Menu + Restaurant with Specials for a lunch restaurant, with Shop for take-home items, with Gift Cards, or with Statistics to know your guests. Any add-on can also be added to any package later.
+
+**Opening a restaurant or café?** Two packages start from nothing. *Café Start*: a website on the MenuDash Theme with the menu and the Restaurant add-on, the Google Business Profile, a domain and e-mail, drafts of the Impressum and privacy policy, and QR table cards. *Restaurant Opening* adds Specials, Gift Cards, the meat origin and allergen page, a gift card design and an hour of training.
 
 </div>
 
 <div class="contentSection">
 
-## Packages
+## Your website: the MenuDash Theme or your own design
 
-We set MenuDash up for restaurants. Each package is a one-time setup; the add-ons come with a yearly fee, which pays for their updates, installed by us, and for help when something changes. MenuDash itself updates from the WordPress dashboard.
+MenuDash fits into the website you have. If you want the whole site to work with it, there are two ways.
 
-| Package | What’s in it | Fees |
-|---|---|---|
-| **Menu** | MenuDash: the menu, photos, filters, QR cards and colours | One-time setup. Care plan optional. |
-| **Menu + Restaurant** | MenuDash with the Restaurant add-on | One-time setup, plus a yearly fee |
-| **Menu + Gift Cards** | MenuDash with the Gift Cards add-on | One-time setup, plus a yearly fee |
-| **Complete** | MenuDash with Restaurant, Specials, Gift Cards and Statistics | One-time setup, plus a yearly fee |
-| **Complete + website** | Everything above, on the MenuDash Theme or on a design made for the restaurant | One-time setup, plus a yearly fee |
+**The MenuDash Theme.** A complete restaurant website, ready to fill in: a home page with the recommended dishes, opening hours and a map, the specials above the menu, and a Call · Directions · Menu bar on phones. Your logo, colours, pages and photos go in. It comes with the Complete package, or on its own for a site that already runs MenuDash.
 
-Add-ons can be added to any package later. Every package is a fixed price, agreed in writing before we start.
+![The MenuDash Theme home page with sample content: an “opens today” badge, the address, a headline, and Menu, Reserve and Order online buttons](./theme-home.webp)
 
-**Opening a restaurant or café?** Two packages start from nothing: a website on the MenuDash Theme with the menu and the Restaurant add-on, the Google Business Profile, a domain and e-mail, drafts of the Impressum and privacy policy, and QR table cards. The larger one adds Specials, Gift Cards, Statistics, the meat origin and allergy note, a gift card design and an hour of training.
+**A theme designed for your restaurant.** Your own design, built on MenuDash, like the theme we made for A Fatt. On top of any package, with a fixed quote first, and looked after with a monthly care plan.
 
-**Also on request:** a theme designed for the restaurant, like afatt.ch’s own; a monthly care plan with WordPress updates, backups and monitoring, and hours for changes; and print design for gift cards, flyers or a printed menu.
+Either way, the address and hours are typed once, in MenuDash, and every page shows them, filling in more as add-ons are added.
 
-For prices, write to us with your current menu and your website address. We send the price list and a written estimate for your restaurant.
+</div>
+
+<div class="contentSection">
+
+## Care plans and extras
+
+**Care plans** are monthly and optional, except with a custom theme. *Basic*: WordPress, theme and plugin updates, daily backups and uptime monitoring. *Standard* adds security monitoring and an hour of content changes. *Premium* adds three hours of changes and a reply within one working day.
+
+**Also on request:** setting up or tidying your Google Business Profile; domain, hosting and e-mail with a Swiss provider; drafts of the Impressum and privacy policy; the meat origin list and allergy note in German, English and Chinese; and print design for gift cards, flyers or a printed menu.
+
+For prices, write to us with your current menu and your website address. We send the price list and a written estimate for your restaurant. Every package is a fixed price, agreed in writing before we start.
 
 </div>
 
