@@ -51,13 +51,40 @@ MenuDash makes your menu spreadsheet the website menu. You upload the file, and 
 
 ## What changes for you
 
-- **One file for every menu.** A new price, a new dish, a dish that’s gone: change it once in Excel and upload it. The same file also goes into [menuGen](/projects/menugen/), our tool for printed menus, so the print PDF is current too.
-- **Every guest finds their menu.** One QR code on the table. Each guest picks their language and filters for vegetarian, vegan, gluten-free, lactose-free or spicy on their own phone, instead of you keeping a separate menu for each.
-- **A wrong file never breaks the page.** Every upload gets a short report. A file that isn’t a menu is refused and the live menu stays online, and the last five uploads can be put back with one click.
+**For you**
 
-Also in MenuDash: the note on where the meat and fish come from that Swiss rules require, translated into the menu languages; a block of recommended dishes for the home page; your own colours, fonts and diet icons; and all dish photos uploaded at once, with a list of the ones still missing.
+- **One file for every menu.** A new price, a new dish, a dish that’s gone: change it once in Excel and upload it. The same file goes into [menuGen](/projects/menugen/), our tool for printed menus, so the print PDF is current too.
+- **A wrong file never breaks the page.** Every upload gets a short report. A file that isn’t a menu is refused while the live menu stays online, and the last five uploads come back with one click.
+
+**For your guests**
+
+- **One QR code, their own menu.** Each guest picks their language and filters for vegetarian, vegan, gluten-free, lactose-free or spicy on their own phone, so you don’t keep a separate menu for each.
+- **They order knowing what they want.** They put dishes on a selection while they browse and show it to your staff, [as below](#your-staff-still-take-the-order).
+
+**Also included**
+
+- The note on where the meat and fish come from that Swiss rules require, in the menu languages
+- A block of recommended dishes for the home page
+- Your own colours, fonts and diet icons
+- All dish photos uploaded at once, with a list of the ones still missing
 
 ![The MenuDash page in the WordPress dashboard after an upload: a confirmation, the menu and photo upload boxes, the Download menu (CSV) button, and the check list of dishes](./dashboard-upload.webp)
+
+</div>
+
+<div class="contentSection">
+
+## Your staff still take the order
+
+A busy room and two languages are where orders go wrong. Most QR menus fix that by letting the guest order from the menu on their phone. MenuDash does the opposite: the phone helps the guest talk to your staff.
+
+1. **Guests tap + while they browse.** Nothing to remember by the time your staff come over.
+2. **They show the selection to your staff.** Each dish has its number and its German name under the guest’s language, so it is shown, not pronounced, and easy to check against the order. A dish can carry a question for your staff.
+3. **They can share it as a picture.** With your address and a QR code to your menu: for the group chat before a dinner, or sent to you with a takeaway order. It carries no prices, because prices change.
+
+![The guest’s selection on three iPhones, with sample dishes: 1, the menu with a + beside each dish; 2, the selection with each dish’s German name under the English one; 3, the selection as a picture with the restaurant’s address and a QR code](./menudash-selection.webp)
+
+**Nothing is ordered online, and the selection stays private.** A person still takes the order. The selection stays on the guest’s phone and is gone when they close the page, with no account and no name. With the Statistics add-on, your site counts only how often each dish is chosen. It stays off until you switch it on in the dashboard, and the share picture can be switched off on its own.
 
 </div>
 
@@ -113,7 +140,7 @@ A page for things guests take home: a jar of the house chili oil, cookies, or ch
 
 ### Statistics
 
-Which dishes guests stop at, which filters and languages they use, where menu visits come from, and what they do next: call, find the way, order, book. Mark the day something changed, such as new photos or a new menu, and see the weeks after it next to the weeks before. No cookies.
+Which dishes guests stop at, which filters and languages they use, which dishes they choose for their selection, where menu visits come from, including from a shared selection, and what they do next: call, find the way, order, book. Mark the day something changed, such as new photos or a new menu, and see the weeks after it next to the weeks before. No cookies.
 
 ![Before and after a change: visits, dishes seen, photos opened, filters, speed, where visits come from, calls, directions, orders and bookings, 14 days before and after a marked day](./addon-statistics.webp)
 
@@ -131,7 +158,7 @@ We set MenuDash up for restaurants. Each package is a one-time installation; the
 
 | Package | What’s in it | Fees |
 |---|---|---|
-| **Menu** | MenuDash: the menu, photos, filters, diet icons, colours and QR table cards | Installation only |
+| **Menu** | MenuDash: the menu, photos, filters, diet icons, colours, QR table cards and the guest’s selection | Installation only |
 | **Menu + Restaurant** | The menu, with address, logo, opening hours, holidays and the “open now” badge | Installation, plus a yearly fee |
 | **Menu + Gift Cards** | The menu, with gift card orders by e-mail | Installation, plus a yearly fee |
 | **Complete** | The menu and all five add-ons: Restaurant, Specials, Gift Cards, Shop and Statistics | Installation, plus a yearly fee |
