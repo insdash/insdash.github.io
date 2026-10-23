@@ -54,11 +54,27 @@ MenuDash makes your menu spreadsheet the website menu. You upload the file, and 
 - **One file for every menu.** A new price, a new dish, a dish that’s gone: change it once in Excel and upload it. The same file also goes into [menuGen](/projects/menugen/), our tool for printed menus, so the print PDF is current too.
 - **Every guest finds their menu.** One QR code on the table. Each guest picks their language and filters for vegetarian, vegan, gluten-free, lactose-free or spicy on their own phone, instead of you keeping a separate menu for each.
 - **A wrong file never breaks the page.** Every upload gets a short report. A file that isn’t a menu is refused and the live menu stays online, and the last five uploads can be put back with one click.
-- **Guests can make their own selection.** Switch it on, and guests tap + on the dishes they want while they browse, so nothing is forgotten by the time they order. They show the selection to your staff, with each dish’s number and German name, so your staff can read it whatever language the guest reads the menu in, and the guest can check the order against it. The order still goes through your staff: a dish marked with a question starts a conversation at the table instead of ending one. One tap turns it into a picture with your address and a QR code to your menu: for the group chat before a dinner, or sent to you with a takeaway order. Nothing is ordered online, and the selection itself is never sent or stored: it stays on the guest’s phone.
+- **Guests order knowing what they want.** They put dishes on a selection while they browse and show it to your staff. [More below](#your-staff-still-take-the-order).
 
 Also in MenuDash: the note on where the meat and fish come from that Swiss rules require, translated into the menu languages; a block of recommended dishes for the home page; your own colours, fonts and diet icons; and all dish photos uploaded at once, with a list of the ones still missing.
 
 ![The MenuDash page in the WordPress dashboard after an upload: a confirmation, the menu and photo upload boxes, the Download menu (CSV) button, and the check list of dishes](./dashboard-upload.webp)
+
+</div>
+
+<div class="contentSection">
+
+## Your staff still take the order
+
+A busy room and two languages are where orders go wrong. Most QR menus fix that by letting the guest order on the phone. MenuDash does the opposite: the phone helps the guest talk to your staff.
+
+- **Nothing to remember.** Guests tap + on the dishes they want while they browse.
+- **Easy for your staff to read.** Each dish shows its number and its German name under the guest’s language, so the guest shows it instead of pronouncing it, and both can check the order against it.
+- **A question starts a conversation.** A guest can mark a dish with a question for your staff.
+- **Shared as a picture.** With your address and a QR code to your menu: for the group chat before a dinner, or sent to you with a takeaway order. It carries no prices, because prices change.
+- **Nothing is ordered online.** The selection stays on the guest’s phone and is never sent or stored. You switch it on in the dashboard.
+
+![The guest’s selection on three iPhones, with sample dishes: the menu with a + beside each dish, the selection with each dish’s German name under the English one, and the selection as a picture with the restaurant’s address and a QR code](./menudash-selection.webp)
 
 </div>
 
@@ -132,7 +148,7 @@ We set MenuDash up for restaurants. Each package is a one-time installation; the
 
 | Package | What’s in it | Fees |
 |---|---|---|
-| **Menu** | MenuDash: the menu, photos, filters, diet icons, colours and QR table cards | Installation only |
+| **Menu** | MenuDash: the menu, photos, filters, diet icons, colours, QR table cards and the guest’s selection | Installation only |
 | **Menu + Restaurant** | The menu, with address, logo, opening hours, holidays and the “open now” badge | Installation, plus a yearly fee |
 | **Menu + Gift Cards** | The menu, with gift card orders by e-mail | Installation, plus a yearly fee |
 | **Complete** | The menu and all five add-ons: Restaurant, Specials, Gift Cards, Shop and Statistics | Installation, plus a yearly fee |
