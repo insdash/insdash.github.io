@@ -72,7 +72,8 @@ A busy room and two languages are where orders go wrong. Most QR menus fix that 
 - **Easy for your staff to read.** Each dish shows its number and its German name under the guest’s language, so the guest shows it instead of pronouncing it, and both can check the order against it.
 - **A question starts a conversation.** A guest can mark a dish with a question for your staff.
 - **Shared as a picture.** With your address and a QR code to your menu: for the group chat before a dinner, or sent to you with a takeaway order. It carries no prices, because prices change.
-- **Nothing is ordered online.** The selection stays on the guest’s phone and is never sent or stored. You switch it on in the dashboard.
+- **Nothing is ordered online.** A person still takes the order. You switch it on in the dashboard.
+- **Your guests’ privacy stays on their phone.** The selection is kept on the guest’s phone only, gone when they close the page, with no account, no name and no phone number. The picture is made on the phone and goes only to whoever the guest sends it to. With the Statistics add-on, your site counts how often each dish is chosen, as a daily total, never anyone’s selection.
 
 ![The guest’s selection on three iPhones, with sample dishes: the menu with a + beside each dish, the selection with each dish’s German name under the English one, and the selection as a picture with the restaurant’s address and a QR code](./menudash-selection.webp)
 
