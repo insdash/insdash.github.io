@@ -51,12 +51,22 @@ MenuDash makes your menu spreadsheet the website menu. You upload the file, and 
 
 ## What changes for you
 
-- **One file for every menu.** A new price, a new dish, a dish that’s gone: change it once in Excel and upload it. The same file also goes into [menuGen](/projects/menugen/), our tool for printed menus, so the print PDF is current too.
-- **Every guest finds their menu.** One QR code on the table. Each guest picks their language and filters for vegetarian, vegan, gluten-free, lactose-free or spicy on their own phone, instead of you keeping a separate menu for each.
-- **A wrong file never breaks the page.** Every upload gets a short report. A file that isn’t a menu is refused and the live menu stays online, and the last five uploads can be put back with one click.
-- **Guests order knowing what they want.** They put dishes on a selection while they browse and show it to your staff. [More below](#your-staff-still-take-the-order).
+**For you**
 
-Also in MenuDash: the note on where the meat and fish come from that Swiss rules require, translated into the menu languages; a block of recommended dishes for the home page; your own colours, fonts and diet icons; and all dish photos uploaded at once, with a list of the ones still missing.
+- **One file for every menu.** A new price, a new dish, a dish that’s gone: change it once in Excel and upload it. The same file goes into [menuGen](/projects/menugen/), our tool for printed menus, so the print PDF is current too.
+- **A wrong file never breaks the page.** Every upload gets a short report. A file that isn’t a menu is refused while the live menu stays online, and the last five uploads come back with one click.
+
+**For your guests**
+
+- **One QR code, their own menu.** Each guest picks their language and filters for vegetarian, vegan, gluten-free, lactose-free or spicy on their own phone, so you don’t keep a separate menu for each.
+- **They order knowing what they want.** They put dishes on a selection while they browse and show it to your staff, [as below](#your-staff-still-take-the-order).
+
+**Also included**
+
+- The note on where the meat and fish come from that Swiss rules require, in the menu languages
+- A block of recommended dishes for the home page
+- Your own colours, fonts and diet icons
+- All dish photos uploaded at once, with a list of the ones still missing
 
 ![The MenuDash page in the WordPress dashboard after an upload: a confirmation, the menu and photo upload boxes, the Download menu (CSV) button, and the check list of dishes](./dashboard-upload.webp)
 
