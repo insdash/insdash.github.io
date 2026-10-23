@@ -54,6 +54,7 @@ MenuDash makes your menu spreadsheet the website menu. You upload the file, and 
 - **One file for every menu.** A new price, a new dish, a dish that’s gone: change it once in Excel and upload it. The same file also goes into [menuGen](/projects/menugen/), our tool for printed menus, so the print PDF is current too.
 - **Every guest finds their menu.** One QR code on the table. Each guest picks their language and filters for vegetarian, vegan, gluten-free, lactose-free or spicy on their own phone, instead of you keeping a separate menu for each.
 - **A wrong file never breaks the page.** Every upload gets a short report. A file that isn’t a menu is refused and the live menu stays online, and the last five uploads can be put back with one click.
+- **Guests can make their own selection.** Switch it on, and guests tap + on the dishes they want. Their selection shows each dish with its number and German name, so your staff can read it whatever language the guest reads the menu in. One tap turns it into a picture with your address and a QR code to your menu: for the group chat before a dinner, or sent to you with a takeaway order. Nothing is ordered online, and the selection itself is never sent or stored: it stays on the guest’s phone.
 
 Also in MenuDash: the note on where the meat and fish come from that Swiss rules require, translated into the menu languages; a block of recommended dishes for the home page; your own colours, fonts and diet icons; and all dish photos uploaded at once, with a list of the ones still missing.
 
@@ -113,7 +114,7 @@ A page for things guests take home: a jar of the house chili oil, cookies, or ch
 
 ### Statistics
 
-Which dishes guests stop at, which filters and languages they use, where menu visits come from, and what they do next: call, find the way, order, book. Mark the day something changed, such as new photos or a new menu, and see the weeks after it next to the weeks before. No cookies.
+Which dishes guests stop at, which filters and languages they use, which dishes they choose for their selection, where menu visits come from, including from a shared selection, and what they do next: call, find the way, order, book. Mark the day something changed, such as new photos or a new menu, and see the weeks after it next to the weeks before. No cookies.
 
 ![Before and after a change: visits, dishes seen, photos opened, filters, speed, where visits come from, calls, directions, orders and bookings, 14 days before and after a marked day](./addon-statistics.webp)
 
