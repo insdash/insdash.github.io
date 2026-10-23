@@ -66,7 +66,7 @@ Also in MenuDash: the note on where the meat and fish come from that Swiss rules
 
 ## Your staff still take the order
 
-A busy room and two languages are where orders go wrong. Most QR menus fix that by letting the guest order on the phone. MenuDash does the opposite: the phone helps the guest talk to your staff.
+A busy room and two languages are where orders go wrong. Most QR menus fix that by letting the guest order from the menu on their phone. MenuDash does the opposite: the phone helps the guest talk to your staff.
 
 - **Nothing to remember.** Guests tap + on the dishes they want while they browse.
 - **Easy for your staff to read.** Each dish shows its number and its German name under the guest’s language, so the guest shows it instead of pronouncing it, and both can check the order against it.
