@@ -84,7 +84,7 @@ A busy room and two languages are where orders go wrong. Most QR menus fix that 
 
 ![The guest’s selection on three iPhones, with sample dishes: 1, the menu with a + beside each dish; 2, the selection with each dish’s German name under the English one; 3, the selection as a picture with the restaurant’s address and a QR code](./menudash-selection.webp)
 
-**Nothing is ordered online, and the selection stays private.** A person still takes the order. The selection stays on the guest’s phone and is gone when they close the page, with no account and no name. With the Statistics add-on, your site counts only how often each dish is chosen. You switch it on in the dashboard.
+**Nothing is ordered online, and the selection stays private.** A person still takes the order. The selection stays on the guest’s phone and is gone when they close the page, with no account and no name. With the Statistics add-on, your site counts only how often each dish is chosen. It stays off until you switch it on in the dashboard, and the share picture can be switched off on its own.
 
 </div>
 
