@@ -70,27 +70,36 @@ const { Content } = await render(project);
     }
 
     /* Lists */
+    /* The same space after a list as after a paragraph (`p` has mb-4 in global.css). */
     :global(.content ul) {
-      @apply list-none pl-0;
+      @apply list-none pl-0 mb-4;
     }
 
+    /* The marker hangs in the padding, so the item's text flows as one paragraph. With
+       `display: flex` here, a bold lead, the text after it and a link each became their
+       own column. */
     :global(.content ul li) {
-      @apply before:content-['-'] before:mr-2 flex items-start;
+      @apply relative pl-4;
+    }
+
+    :global(.content ul li::before) {
+      content: '-';
+      @apply absolute left-0;
     }
 
     :global(.content ol) {
-      @apply list-none pl-0;
+      @apply list-none pl-0 mb-4;
       counter-reset: item;
     }
 
     :global(.content ol li) {
       counter-increment: item;
-      @apply flex items-start;
+      @apply relative pl-6;
     }
 
     :global(.content ol li::before) {
       content: counter(item) '.';
-      @apply mr-2 font-semibold flex-shrink-0;
+      @apply absolute left-0 font-semibold;
     }
 
     /* Links */

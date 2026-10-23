@@ -53,17 +53,13 @@ MenuDash makes your menu spreadsheet the website menu. You upload the file, and 
 
 **For you**
 
-- **One file for every menu.**\
-  A new price, a new dish, a dish that’s gone: change it once in Excel and upload it. The same file goes into [menuGen](/projects/menugen/), our tool for printed menus, so the print PDF is current too.
-- **A wrong file never breaks the page.**\
-  Every upload gets a short report. A file that isn’t a menu is refused while the live menu stays online, and the last five uploads come back with one click.
+- **One file for every menu.** A new price, a new dish, a dish that’s gone: change it once in Excel and upload it. The same file goes into [menuGen](/projects/menugen/), our tool for printed menus, so the print PDF is current too.
+- **A wrong file never breaks the page.** Every upload gets a short report. A file that isn’t a menu is refused while the live menu stays online, and the last five uploads come back with one click.
 
 **For your guests**
 
-- **One QR code, their own menu.**\
-  Each guest picks their language and filters for vegetarian, vegan, gluten-free, lactose-free or spicy on their own phone, so you don’t keep a separate menu for each.
-- **They order knowing what they want.**\
-  They put dishes on a selection while they browse and show it to your staff, [as below](#your-staff-still-take-the-order).
+- **One QR code, their own menu.** Each guest picks their language and filters for vegetarian, vegan, gluten-free, lactose-free or spicy on their own phone, so you don’t keep a separate menu for each.
+- **They order knowing what they want.** They put dishes on a selection while they browse and show it to your staff, [as below](#your-staff-still-take-the-order).
 
 **Also included**
 
@@ -82,12 +78,9 @@ MenuDash makes your menu spreadsheet the website menu. You upload the file, and 
 
 A busy room and two languages are where orders go wrong. Most QR menus fix that by letting the guest order from the menu on their phone. MenuDash does the opposite: the phone helps the guest talk to your staff.
 
-1. **Guests tap + while they browse.**\
-   Nothing to remember by the time your staff come over.
-2. **They show the selection to your staff.**\
-   Each dish has its number and its German name under the guest’s language, so it is shown, not pronounced, and easy to check against the order. A dish can carry a question for your staff.
-3. **They can share it as a picture.**\
-   With your address and a QR code to your menu: for the group chat before a dinner, or sent to you with a takeaway order. It carries no prices, because prices change.
+1. **Guests tap + while they browse.** Nothing to remember by the time your staff come over.
+2. **They show the selection to your staff.** Each dish has its number and its German name under the guest’s language, so it is shown, not pronounced, and easy to check against the order. A dish can carry a question for your staff.
+3. **They can share it as a picture.** With your address and a QR code to your menu: for the group chat before a dinner, or sent to you with a takeaway order. It carries no prices, because prices change.
 
 ![The guest’s selection on three iPhones, with sample dishes: 1, the menu with a + beside each dish; 2, the selection with each dish’s German name under the English one; 3, the selection as a picture with the restaurant’s address and a QR code](./menudash-selection.webp)
 
