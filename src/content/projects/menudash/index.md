@@ -104,7 +104,7 @@ A busy room and two languages are where orders go wrong. Most QR menus fix that 
 
 ## Running at A Fatt
 
-A Fatt, a Malaysian Chinese restaurant in Zürich, kept an English, a German and a vegan and vegetarian menu as PDFs, each behind its own QR code. One price change meant three edits. Now one QR code on the table opens one online menu: 110 dishes in three languages, with photos and diet marks. The owner uploads the menu herself, today’s specials sit above it, and the Statistics add-on counts which dishes guests look at. [See the menu on afatt.ch](https://afatt.ch/menu/).
+A Fatt, a Malaysian Chinese restaurant in Zürich, kept an English, a German and a vegan and vegetarian menu as PDFs, each behind its own QR code. One price change meant three edits. Now one QR code on the table opens one online menu: 110 dishes in three languages, with photos and diet marks. The owner uploads the menu herself, today’s specials sit above it, and the Statistics add-on counts which dishes guests look at. Guests can put dishes on a selection to show when they order. Since October 2026 the whole site runs on a theme we made for A Fatt, with the opening hours and an “open now” badge on every page. [See the menu on afatt.ch](https://afatt.ch/menu/).
 
 </div>
 
@@ -179,7 +179,7 @@ MenuDash fits into the website you have. If you want the whole site to work with
 
 ![The MenuDash Theme home page with sample content: an “opens today” badge, the address, a headline, and Menu, Reserve and Order online buttons](./theme-home.webp)
 
-**A theme designed for your restaurant.** Your own design, built on MenuDash, like the theme we made for A Fatt. On top of any package, with a fixed quote first, and looked after with a monthly care plan.
+**A theme designed for your restaurant.** Your own design, built on MenuDash, like [the theme we made for A Fatt](https://afatt.ch/). On top of any package, with a fixed quote first, and looked after with a monthly care plan.
 
 Either way, the address and hours are typed once, in MenuDash, and every page shows them, filling in more as add-ons are added.
 
