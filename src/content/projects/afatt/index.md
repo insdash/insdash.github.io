@@ -173,7 +173,7 @@ spreadsheet, in three languages and filterable by diet.
   <a href="/projects/menudash/">Read the MenuDash case study →</a>
 </div>
 
-![A Fatt's menu on a phone, run by MenuDash: language switch, diet filters with Vegetarisch turned on, and dishes with German and Chinese names, prices and photos](./menudash-afatt-menu.webp)
+![A Fatt's menu on a phone, run by MenuDash: language switch, diet filters with Vegetarisch turned on, and dishes with German and Chinese names, prices, photos and a + beside each dish](./menudash-afatt-menu.webp)
 
 </div>
 
