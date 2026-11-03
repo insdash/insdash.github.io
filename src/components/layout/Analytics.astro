@@ -78,7 +78,7 @@ const gtagInit = `
       const store = {
         // "accepted", "rejected", or null when there is no live choice.
         read() {
-          let raw = null;
+          let raw;
           try {
             raw = localStorage.getItem(KEY);
           } catch {
