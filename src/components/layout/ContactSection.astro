@@ -1,5 +1,5 @@
 ---
-import { site, socials } from '@/ts/site';
+import { site } from '@/ts/site';
 import RobotMark from '@/components/UI/RobotMark.astro';
 
 interface Props {
@@ -31,19 +31,7 @@ const {
     <a href={`mailto:${site.email}`}>{site.email}</a>
   </p>
 
-  <p class="contact_meta">
-    {site.location}
-    {
-      socials.map((s) => (
-        <>
-          <span aria-hidden="true"> · </span>
-          <a href={s.href} rel="noopener noreferrer" target="_blank">
-            {s.label}
-          </a>
-        </>
-      ))
-    }
-  </p>
+  <p class="contact_meta">{site.location}</p>
 </section>
 
 <style>
@@ -84,15 +72,5 @@ const {
   .contact_meta {
     @apply font-mono text-meta uppercase;
     color: var(--color-text-caption);
-  }
-
-  /* These sit inside the address line rather than in a nav, so colour alone is
-     not enough to mark them as links — same underline as the email above. */
-  .contact_meta a {
-    @apply underline underline-offset-4;
-  }
-
-  .contact_meta a:hover {
-    color: var(--color-text-hover);
   }
 </style>
