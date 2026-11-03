@@ -21,33 +21,30 @@ const footerLinks = [
         <p class="footer_meta">{site.location}</p>
         {/* Written out, not hidden behind the wordmark: a mailto link does
             nothing for anyone on webmail, and they need an address to copy. */}
-        <p class="footer_email">
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-        </p>
+        {/* Socials sit with the contact address: with only LinkedIn listed, a
+            column of its own read as an unfinished list.
+            No link to the personal portfolio. It is written for employers and
+            says so up front, which is not where a client weighing a maintenance
+            contract should be sent. The portfolio links to this site instead. */}
+        <ul class="footer_contact">
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          {
+            socials.map((s) => (
+              <li>
+                <a href={s.href} rel="noopener noreferrer" target="_blank">
+                  {s.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
 
-      {/* Nav, socials and the sitemap link were all commented out, leaving the
-          footer with no navigation and no outbound proof at all. */}
       <nav aria-label="Footer">
         <ul class="footer_nav">
           {footerLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
         </ul>
       </nav>
-
-      <ul class="footer_nav">
-        {
-          socials.map((s) => (
-            <li>
-              <a href={s.href} rel="noopener noreferrer" target="_blank">
-                {s.label}
-              </a>
-            </li>
-          ))
-        }
-        {/* No link to the personal portfolio. It is written for employers and
-            says so up front, which is not where a client weighing a maintenance
-            contract should be sent. The portfolio links to this site instead. */}
-      </ul>
     </div>
 
     <hr />
@@ -103,19 +100,25 @@ const footerLinks = [
   }
 
   .footer_top {
-    @apply flex flex-col gap-6 mb-6 md:flex-row md:justify-between;
+    @apply flex flex-col gap-6 mb-6 md:flex-row md:items-end md:justify-between;
   }
 
   .footer_meta {
     @apply font-mono text-meta uppercase m-0 opacity-70;
   }
 
-  .footer_email {
-    @apply m-0 mt-2 text-sm;
+  /* Same divider as the legal row below, so the two rows read alike. */
+  .footer_contact {
+    @apply flex flex-wrap gap-3 list-none m-0 mt-2 p-0 text-sm;
+  }
+
+  .footer_contact li + li::before {
+    content: '·' / '';
+    margin-right: 0.75rem;
   }
 
   .footer_nav {
-    @apply flex flex-col gap-2 list-none m-0 p-0 text-sm;
+    @apply flex flex-wrap gap-6 list-none m-0 p-0 text-sm;
   }
 
   .footer_legal {
