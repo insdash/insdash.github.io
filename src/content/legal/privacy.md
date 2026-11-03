@@ -5,7 +5,7 @@ keywords: 'insdash privacy policy, cookies, Google Analytics consent, FADP, GDPR
 eyebrow: 'Privacy'
 heading: 'What this site collects, and what it does not.'
 lead: 'This is a studio website. There are no accounts, no forms and no newsletter — the only thing here that could track you is one analytics tag, and it stays switched off until you say otherwise.'
-updated: '10 September 2026'
+updated: '3 November 2026'
 ---
 
 ## The short version
@@ -17,7 +17,7 @@ long version, written to be checked rather than skimmed.
 
 ## Who is responsible
 
-insdash, Zürich, Switzerland — <insdash.io@gmail.com>.
+insdash, Zürich, Switzerland — <hello@insdash.ch>.
 
 We are a small studio, and the person who built this site answers anything you
 write to us about it. We have not appointed a data protection
@@ -95,7 +95,8 @@ and here it is not.
 
 The address on this site is a plain `mailto:` link. There is no form and nothing
 is submitted through the site, so an email to us is an ordinary email: it
-reaches a Google-hosted mailbox, and Google processes it as our mail provider.
+reaches a mailbox hosted by Infomaniak in Switzerland, and Infomaniak processes
+it as our mail provider.
 
 We keep project correspondence for as long as the engagement runs, and afterwards
 for as long as Swiss bookkeeping rules require. Enquiries that do not turn into
@@ -113,10 +114,10 @@ bar. If you would rather not load them, do not open those pages.
 
 ## Where the data goes
 
-Hosting, analytics, fonts, icons and mail are all United States providers.
-Switzerland recognises transfers to US companies certified under the Swiss–US
-Data Privacy Framework, and the EU–US framework covers visitors from the EEA on
-the same basis. Google and GitHub (Microsoft) are certified under those
+Mail stays in Switzerland, with Infomaniak. Hosting, analytics, fonts and icons
+are United States providers. Switzerland recognises transfers to US companies
+certified under the Swiss–US Data Privacy Framework, and the EU–US framework
+covers visitors from the EEA on the same basis. Google and GitHub (Microsoft) are certified under those
 frameworks.
 
 ## Your rights
@@ -127,7 +128,7 @@ deletion, restriction, a portable copy, and you can object to processing.
 
 In practice we hold almost nothing that identifies anyone, so most requests will
 get the answer "we have nothing on you" — which we will say plainly rather than
-sending you a form. Write to <insdash.io@gmail.com> and we will answer within 30
+sending you a form. Write to <hello@insdash.ch> and we will answer within 30
 days.
 
 If you are not satisfied, you can complain to the Federal Data Protection and

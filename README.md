@@ -6,7 +6,7 @@ out to need software, we are the ones who build the software.
 
 This repository is the source of our website, **[insdash.ch](https://insdash.ch)**.
 
-[Work](https://insdash.ch/projects) · [Services](https://insdash.ch/services) · [About](https://insdash.ch/about) · [Get in touch](mailto:insdash.io@gmail.com)
+[Work](https://insdash.ch/projects) · [Services](https://insdash.ch/services) · [About](https://insdash.ch/about) · [Get in touch](mailto:hello@insdash.ch)
 
 ## Who we are
 
@@ -85,7 +85,7 @@ Pushing to `main` deploys to GitHub Pages.
 If your problem is too specific for off-the-shelf software, tell us about it. A
 rough sketch and a deadline is enough to start.
 
-**[insdash.io@gmail.com](mailto:insdash.io@gmail.com)** · [LinkedIn](https://www.linkedin.com/company/insdash)
+**[hello@insdash.ch](mailto:hello@insdash.ch)** · [LinkedIn](https://www.linkedin.com/company/insdash)
 
 ## Author
 
