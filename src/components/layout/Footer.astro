@@ -16,9 +16,14 @@ const footerLinks = [
     <div class="footer_top">
       <div>
         <p class="wordmark">
-          <a href={`mailto:${site.email}`}>{site.name}</a>
+          <a href={baseUrl}>{site.name}</a>
         </p>
         <p class="footer_meta">{site.location}</p>
+        {/* Written out, not hidden behind the wordmark: a mailto link does
+            nothing for anyone on webmail, and they need an address to copy. */}
+        <p class="footer_email">
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
       </div>
 
       {/* Nav, socials and the sitemap link were all commented out, leaving the
@@ -103,6 +108,10 @@ const footerLinks = [
 
   .footer_meta {
     @apply font-mono text-meta uppercase m-0 opacity-70;
+  }
+
+  .footer_email {
+    @apply m-0 mt-2 text-sm;
   }
 
   .footer_nav {
