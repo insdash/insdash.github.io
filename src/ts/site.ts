@@ -2,12 +2,13 @@
  * Single source of truth for the studio's contact details and outbound links.
  *
  * The email is referenced from the footer, the contact section and the nav, so
- * moving to a domain address later is one edit here rather than a grep.
+ * changing it is one edit here rather than a grep. The privacy policy writes the
+ * address out in full and has to be updated by hand.
  */
 export const site = {
   name: 'insdash',
   location: 'Zürich, Switzerland',
-  email: 'insdash.io@gmail.com',
+  email: 'hello@insdash.ch',
 } as const;
 
 /**
