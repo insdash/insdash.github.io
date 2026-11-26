@@ -10,9 +10,9 @@
     "a11y": "astro build && node scripts/a11y.mjs"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/sitemap": "^3.7.6",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.3.2",
+    "astro": "^7.4.13",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
